@@ -1,0 +1,96 @@
+.app-container {
+  display: flex;
+  flex-wrap: nowrap;
+  background-color: #282c34;
+}
+
+.App {
+  text-align: center;
+  min-height: 80vh;
+  min-width: 70vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.navigate {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid black;
+  padding: 1vw;
+  width: 15vw;
+}
+
+.skill-screen {
+  width: 15vw;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  border-left: 1px solid black;
+  padding: 1vw;
+  color: white;
+}
+
+.console {
+  border-top: 1px solid black;
+  height: 20vh;
+  background-color: #282c34;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.console-box {
+  border: 1px solid black;
+  padding: 1em;
+  height: 80%;
+  width: 80%;
+}
+
+.exp {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  justify-content: flex-start;
+  width: 45%;
+}
+
+.pbars {
+  width: 50vw;
+}
+
+.progress-bar {
+  --bs-progress-bar-color: black;
+  --bs-progress-bar-transition: width 0.2s ease;
+}
+
+.progress-bar-skill {
+  
+  width: 50%;
+  color: black;
+  margin-left: 5%;
+}
+
+.container {
+  display: flex;
+  margin-top: 1em;
+}
+
+.tree {
+  border: 1px solid black;
+  width: 200px;
+  height: 200px;
+  margin: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

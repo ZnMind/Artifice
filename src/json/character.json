@@ -1,0 +1,12 @@
+{
+    "woodcutting": {
+        "level": 1,
+        "experience": 0,
+        "next": 80
+    },
+    "mining": {
+        "level": 1,
+        "experience": 0,
+        "next": 80
+    }
+}
