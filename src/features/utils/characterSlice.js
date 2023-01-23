@@ -3,12 +3,9 @@ import { createSlice } from '@reduxjs/toolkit';
 const characterSlice = createSlice({
     name: 'character',
     initialState: {
-        woodcutting: {
-            level: 1,
-            experience: 0,
-            last: 0,
-            next: 75
-        }
+        Woodcutting: { level: 1, experience: 0, last: 0, next: 75 },
+        Mining: { level: 1, experience: 0, last: 0, next: 75 },
+        Smithing: { level: 1, experience: 0, last: 0, next: 75 },
     },
     reducers: {
         levelUp(state) {
@@ -19,17 +16,28 @@ const characterSlice = createSlice({
             console.log(state.woodcutting.next) */
         },
         gainExp(state, action) {
-            state.woodcutting.experience += action.payload;
+            let skill = action.payload.skill;
+            state[skill].experience += action.payload.amount;
+            
+            if (state[skill].experience >= state[skill].next) {
+                state[skill].last = state[skill].next;
+                state[skill].next += Math.round(100 * Math.pow(2, (state[skill].level / 8)));
+                state[skill].level += 1;
+            }
         },
         getLast(state) {
             state.woodcutting.last = state.woodcutting.next;
         },
         calcNext(state, action) {
             state.woodcutting.next += action.payload;
+        },
+        // Having fun with preloadedState in store overriding initial state (for older saves) and newer skills are undefined. This should fix it
+        initialize(state, action) {
+            state[action.payload.skill] = { level : 1, experience: 0, last: 0, next: 75 };
         }
     }
 })
 
-export const { levelUp, gainExp, calcNext, getLast } = characterSlice.actions;
+export const { levelUp, gainExp, calcNext, getLast, initialize } = characterSlice.actions;
 
 export default characterSlice.reducer;

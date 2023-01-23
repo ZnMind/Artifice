@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { store } from './app/store';
-import { saveState } from './localStorage';
-import { Woodcut } from './features/skills/Woodcut';
-import { Skills } from './features/utils/Skills';
+import { saveState, loadState } from './localStorage';
+import { Woodcutting } from './features/skills/Woodcutting';
+import { Mining } from './features/skills/Mining';
+import { Smithing } from './features/skills/Smithing';
+import { Skills } from './features/skills/Skills';
 import { push } from './features/utils/consoleSlice';
-import BankScreen from './components/Bank';
+import Bank from './components/Bank';
 import './App.css';
 
 const App = () => {
@@ -14,65 +16,74 @@ const App = () => {
   const [backpack, setBackpack] = useState([]);
 
   const logs = useSelector(state => state.woodcut)
-  const char = useSelector(state => state.character)
+  const character = useSelector(state => state.character)
   const con = useSelector(state => state.console.console)
 
-const saveGame = () => {
-  //window.localStorage.setItem('Character', JSON.stringify(char));
-  store.subscribe(() => {
-    saveState({
-      character: store.getState().character,
-      woodcut: store.getState().woodcut
+  const saveGame = () => {
+    window.localStorage.setItem('Screen', JSON.stringify(screen));
+    store.subscribe(() => {
+      saveState({
+        character: store.getState().character,
+        bank: store.getState().bank,
+        woodcut: store.getState().woodcut
+      });
     });
-  });
-  dispatch(push(`Game Saved!~`))
-}
+    dispatch(push(`Game Saved!~`))
+  }
 
-useEffect(() => {
-  const data = window.localStorage.getItem('Character');
-  if (data !== null ) {
-    console.log(JSON.parse(data))
-  };
-}, [])
+  useEffect(() => {
+    const data = window.localStorage.getItem('Screen');
+    if (data !== null) {
+      setScreen(JSON.parse(data));
+    };
+  }, [])
+
+  const components = {
+    'bank': Bank,
+    'woodcut': Woodcutting,
+    'mining': Mining,
+    'smithing': Smithing,
+  }
+
+  const Display = components[screen]
 
   return (
     <>
-    <div className='app-container'>
-      <div className='navigate'>
-        <button onClick={() => setScreen('bank')}>Bank</button>
-        <button onClick={() => setScreen('woodcutting')}>{`Woodcutting (${char.woodcutting.level})`}</button>
+    <div className='header'><h2>Artifice</h2></div>
+      <div className='app-container'>
+        <div className='navigate'>
+          <button onClick={() => setScreen('bank')}>Bank</button>
+          <button onClick={() => setScreen('woodcut')}>{`Woodcutting (${character.Woodcutting.level})`}</button>
+          <button onClick={() => setScreen('mining')}>{`Mining (${character.Mining.level})`}</button>
+          <button onClick={() => setScreen('smithing')}>{`Smithing (${character.Smithing.level})`}</button>
 
-      </div>
-      <div className="App">
-        <h2>Pbars</h2>
-        <div className='pbars'>
-          
-          {screen === 'bank'
-            ? <BankScreen
-              backpack={backpack}
-            />
-            : <Woodcut />
-          }
+        </div>
+        <div className="App">
+          <div className='pbars'>
 
-          <p>{`Normal logs: ${logs.normal}`}</p>
-          <p>{`Oak logs: ${logs.oak}`}</p>
-          <p>{`Willow logs: ${logs.willow}`}</p>
+            {screen === 'bank'
+              ? <Bank
+                backpack={backpack}
+              />
+              : <Display />
+            }
+
+          </div>
           
         </div>
-        <button onClick={saveGame}>Save</button>
-      </div>
-      <div className='skill-screen'>
+        <div className='skill-screen'>
           <Skills />
+        </div>
       </div>
-    </div>
-    <div className='console'>
-      <div className='console-box'>
+      <div className='console'>
+        <div className='console-box'>
           {con.split("~").map((data, index) => (
             <div key={index}>{data}</div>
           ))}
-
+        </div>
+          <button onClick={saveGame} className='save'>Save</button>
+          <small className='save'>Autosave every 60s</small>
       </div>
-    </div>
     </>
   );
 }

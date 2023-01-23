@@ -34,6 +34,10 @@
   background-color: rgba(112, 76, 182, 0.1);
   border-radius: 2px;
   transition: all 0.15s;
+  margin-top: 0.5em;
+  margin-right: 0.25em;
+  margin-left: 0.25em;
+  margin-bottom: 0.5em;
 }
 
 .textbox {
@@ -54,7 +58,6 @@
 }
 
 .asyncButton {
-  
   position: relative;
 }
 

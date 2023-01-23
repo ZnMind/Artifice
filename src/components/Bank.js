@@ -1,36 +1,58 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Bank from '../json/bank.json';
-import Character from '../json/character.json';
-import ProgressBar from 'react-bootstrap/ProgressBar';
 import '../App.css';
 import { useSelector } from 'react-redux';
 
-const Progress = props => {
-    return <ProgressBar now={props.progress} label={`${props.type}: ${(100 - props.progress) / 20}s`} />;
-}
-
+/* UNFINISHED */
+/* Still working on mapping items from state object */
 const BankScreen = props => {
-    const [backpack, setBackpack] = useState(props.backpack);
-    const logs = useSelector(state => state.woodcut)
-    console.log(logs);
+  const [inventory, setInventory] = useState([]);
+  const logs = useSelector(state => state.woodcut);
+  const bank = useSelector(state => state.bank);
 
-    return (
-        <div>
-            Bank
-            {backpack.map((data, index) => (
-            <div key={index}>
-              {/* Object.keys(data).map((key, index) => (
-                <div key={index}>
-                  {key}
-                </div>
-              )) */}
+  useEffect(() => {
+    setInventory(updateBank());
+  }, []);
 
-              <p>{data.wood.normal}</p>
-              <p>{data.wood.oak}</p>
-            </div>
-          ))}
-        </div>
-    )
+  const updateBank = () => {
+    const keys = Object.keys(bank);
+    var objArr = [];
+
+    for (let i = 0; i < keys.length; i++) {
+      if (typeof bank[keys[i]] === 'object') {
+        var moreKeys = Object.keys(bank[keys[i]])
+        var nestedArr = [];
+
+        nestedArr.push(keys[i]);
+
+        for (let j = 0; j < moreKeys.length; j++) {
+          nestedArr.push(`${moreKeys[j]}`)
+        }
+
+        objArr.push(nestedArr);
+      }
+    }
+    console.log(objArr);
+    return objArr;
+  }
+
+  return (
+    <div>
+      Bank
+      <div className='grid'>
+
+        {inventory.map((data, index) => (
+          <div key={index} className='slot'>
+            {/* {
+              typeof data === 'object'
+                ? "Y"
+                : "N"
+            } */}
+            {data}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 export default BankScreen;

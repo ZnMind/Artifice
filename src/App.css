@@ -1,3 +1,13 @@
+.header {
+  text-align: center;
+  border-bottom: 1px solid goldenrod;
+  background-color: #282c34;
+  color: white;
+  height: 5vh;
+  color: goldenrod;
+  text-shadow: 1px 2px 2px black;
+}
+
 .app-container {
   display: flex;
   flex-wrap: nowrap;
@@ -6,7 +16,7 @@
 
 .App {
   text-align: center;
-  min-height: 80vh;
+  min-height: 75vh;
   min-width: 70vw;
   display: flex;
   flex-direction: column;
@@ -36,7 +46,7 @@
 }
 
 .console {
-  border-top: 1px solid black;
+  border-top: 1px solid goldenrod;
   height: 20vh;
   background-color: #282c34;
   color: white;
@@ -55,6 +65,7 @@
 .exp {
   display: flex;
   flex-direction: column;
+  margin-bottom: 10vh;
 }
 
 .row {
@@ -67,20 +78,38 @@
   width: 50vw;
 }
 
+.skill-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.skill {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sm {
+  margin-left: -0.5vw;
+}
+
 .progress-bar {
   --bs-progress-bar-color: black;
   --bs-progress-bar-transition: width 0.2s ease;
 }
 
 .progress-bar-skill {
-  
   width: 50%;
+  margin-top: 0.5vh;
   color: black;
-  margin-left: 5%;
+  text-align: center;
+  margin-right: -0.5em;
 }
 
 .container {
   display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
   margin-top: 1em;
 }
 
@@ -93,4 +122,45 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.save {
+  position: fixed;
+  right: 0;
+  margin-right: 4vw;
+}
+
+small.save {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  margin-right: 2.25vw;
+  margin-bottom: 5vh;
+}
+
+.craft-container {
+  width: 75%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+}
+
+.basic-multi-select {
+  color: black;
+  min-width: 200px;
+  margin-bottom: 2vh;
+  margin-top: 1em;
+  box-shadow: 2px 3px 0.5em black;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  border: 0.5px solid black;
+}
+
+.slot {
+  height: 100px;
+  width: 100px;
+  border: 0.5px solid black;
 }

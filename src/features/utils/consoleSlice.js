@@ -11,7 +11,6 @@ const consoleSlice = createSlice({
                 state.console = state.console.split("~").slice(1).join("~")
             }
             state.console += action.payload;
-            
         },
     }
 })

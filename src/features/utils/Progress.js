@@ -9,7 +9,6 @@ import {
 export const Progress = props => {
   const dispatch = useDispatch();
   const bar = useSelector(state => state.progress);
-  const pro = useSelector(state => state.progress.now)
   
   const progressTimer = useRef();
   
@@ -23,7 +22,7 @@ export const Progress = props => {
       progressTimer.current = setInterval(handleTime, 100);
       return () => clearInterval(progressTimer.current)
     }
-  }, [props.timing]);
+  }, [props.action]);
 
   useEffect(() => {
     if (bar.now >= 100) {
@@ -34,7 +33,6 @@ export const Progress = props => {
     return (
         <div>
           <ProgressBar now={bar.now} label={`Action: ${(100 - bar.now) / (props.timing * 10)}s`} />
-          
         </div>
     )
 }
