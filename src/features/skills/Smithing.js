@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Progress } from '../utils/Progress';
-import { gainExp, initialize } from '../utils/characterSlice';
-import { increment, decrement } from '../utils/bankSlice';
-import { push } from '../utils/consoleSlice';
+import { Progress } from '../slices/Progress';
+import { gainExp, initialize } from '../slices/characterSlice';
+import { increment, decrement } from '../slices/bankSlice';
+import { push } from '../slices/consoleSlice';
 import Select from 'react-select';
 import styles from './Counter.module.css';
 
@@ -112,7 +112,7 @@ export function Smithing() {
     }
 
     return (
-        <div>
+        <div className='pbars'>
             <h2>{skill}</h2>
             <Progress
                 action={progress}
@@ -126,6 +126,7 @@ export function Smithing() {
                     <button className={styles.button} onClick={() => setMaterial('Tin')}>Tin</button>
                     <button className={styles.button} onClick={() => setMaterial('Bronze')}>Bronze</button>
                     <button className={styles.button} onClick={() => setMaterial('Iron')}>Iron</button>
+                    {/* <button className={styles.button} onClick={() => setMaterial('Steel')}>Steel</button> */}
                 </div>
                 <small>{
                     items[material]

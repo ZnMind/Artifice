@@ -8,7 +8,7 @@ const equipmentSlice = createSlice({
         Gloves: '',
         Legs: '',
         Boots: '',
-        Weapon: '',
+        Weapon: 'Training Sword',
         Offhand: '',
     },
     reducers: {

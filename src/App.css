@@ -8,6 +8,11 @@
   text-shadow: 1px 2px 2px black;
 }
 
+.bank-header {
+  padding: 0.5em;
+  border-bottom: 1px solid white;
+}
+
 .app-container {
   display: flex;
   flex-wrap: nowrap;
@@ -33,6 +38,21 @@
   border-right: 1px solid black;
   padding: 1vw;
   width: 15vw;
+}
+
+.space {
+  margin-bottom: 2em;
+}
+
+.equip {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  width: 40vw;
+  margin: 0.25em;
+  padding: 0.25em;
+  border: 0.5px solid gray;
 }
 
 .skill-screen {
@@ -65,7 +85,7 @@
 .exp {
   display: flex;
   flex-direction: column;
-  margin-bottom: 10vh;
+  margin-bottom: 5vh;
 }
 
 .row {
@@ -75,12 +95,13 @@
 }
 
 .pbars {
-  width: 50vw;
+  width: 45vw;
 }
 
 .skill-container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 100%;
 }
 
@@ -156,11 +177,71 @@ small.save {
 .grid {
   display: flex;
   flex-wrap: wrap;
-  border: 0.5px solid black;
+  border-left: 0.5px solid black;
+  border-top: 0.5px solid black;
+  border-bottom: 0.5px solid black;
 }
 
 .slot {
-  height: 100px;
-  width: 100px;
-  border: 0.5px solid black;
+  min-height: 115px;
+  width: 115px;
+  border-right: 0.5px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bank-row {
+  display: flex;
+}
+
+.bank-text {
+  font-size: medium;
+  flex-wrap: wrap;
+  padding: 0.25em;
+}
+
+.btn-div {
+  margin-top: -1.25em;
+}
+
+.equip-btn {
+  appearance: none;
+  background: none;
+  font-size: 16px;
+  padding-left: 6px;
+  padding-right: 6px;
+  outline: none;
+  border: 2px solid transparent;
+  color: rgb(0, 76, 182);
+  padding-bottom: 2px;
+  cursor: pointer;
+  background-color: rgba(116, 85, 177, 0.1);
+  border-radius: 2px;
+  transition: all 0.15s;
+  margin-right: 0.25em;
+  margin-left: 0.25em;
+  margin-bottom: 0.5em;
+}
+
+.equip-btn:hover,
+.equip-btn:focus {
+  border: 2px solid rgba(0, 76, 182, 0.4);
+}
+
+.equip-btn:active {
+  background-color: rgba(0, 76, 182, 0.2);
+}
+
+.battle-screen {
+  display: flex;
+  justify-content: space-around;
+}
+
+.left, .right {
+  width: 40%;
+}
+
+.battle-pbar {
+  margin-bottom: 0.5em;
 }

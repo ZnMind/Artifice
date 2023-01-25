@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Progress } from '../utils/Progress';
-import { gainExp, initialize } from '../utils/characterSlice';
-import { increment } from '../utils/bankSlice';
-import { push } from '../utils/consoleSlice';
+import { Progress } from '../slices/Progress';
+import { gainExp, initialize } from '../slices/characterSlice';
+import { increment } from '../slices/bankSlice';
+import { push } from '../slices/consoleSlice';
 import styles from './Counter.module.css';
 
 export function Mining() {
@@ -17,7 +17,12 @@ export function Mining() {
     const [timing, setTiming] = useState(0);
     const [skill] = useState('Mining');
     const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
-    const [expTable] = useState({ 'Copper': 15, 'Tin': 15, 'Iron': 40, 'Coal': 60 });
+    const [expTable] = useState({
+        'Copper': { 'exp': 15, 'req': 1, 'timing': 5 },
+        'Tin': { 'exp': 20, 'req': 5, 'timing': 5 },
+        'Iron': { 'exp': 40, 'req': 15, 'timing': 10 },
+        'Coal': { 'exp': 60, 'req': 30, 'timing': 15 },
+    });
 
     // Attempting to initialize state for older saves
     useEffect(() => {
@@ -29,7 +34,7 @@ export function Mining() {
     // Adding experience && items when bar is full
     useEffect(() => {
         if (bar.now >= 100) {
-            dispatch(gainExp({ skill: 'Mining', amount: expTable[action]}));
+            dispatch(gainExp({ skill: 'Mining', amount: expTable[action].exp }));
             dispatch(increment({ material: action, item: 'Ore', amount: 1 }));
             dispatch(push(`Mined ${action} ore! Amount: ${items[action] ? items[action]['Ore'] + 1 : 1}~`))
         }
@@ -64,7 +69,7 @@ export function Mining() {
     }
 
     return (
-        <div>
+        <div className='pbars'>
             <h2>{skill}</h2>
             <Progress
                 action={action}
@@ -77,24 +82,17 @@ export function Mining() {
 
             <div className={styles.row}>
                 <div className='container'>
-                    <div className='tree'>
-                        <p>Copper</p>
-                        <small>5s</small>
-                        <button onClick={() => mine('Copper')} className={styles.button} id='tree'>Mine</button>
-                    </div>
-                    <div className='tree'>
-                        <p>Tin</p>
-                        <small>5s</small>
-                        <button onClick={() => mine('Tin')} className={styles.button} id='tree'>Mine</button>
-                    </div>
-                    <div className='tree'>
-                        <p>Iron</p>
-                        <small>10s</small>
-                        {character.level >= 30
-                            ? <button onClick={() => mine('Iron')} className={styles.button} id='tree'>Mine</button>
-                            : <small>Required: 15</small>
-                        }
-                    </div>
+                    {Object.keys(expTable).map((data, index) => (
+                        <div key={index} className='tree'>
+                            <p>{data}</p>
+                            <small>{`${expTable[data].timing}s`}</small>
+                            {
+                                lvl >= expTable[data].req
+                                    ? <button onClick={() => mine(data)} className={styles.button} id='tree'>Mine</button>
+                                    : <small>{`Required: ${expTable[data].req}`}</small>
+                            }
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

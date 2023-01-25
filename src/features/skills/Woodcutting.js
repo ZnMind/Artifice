@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Progress } from '../utils/Progress';
-import { gainExp, initialize } from '../utils/characterSlice';
-import { increment } from '../utils/bankSlice';
-import { push } from '../utils/consoleSlice';
+import { Progress } from '../slices/Progress';
+import { gainExp, initialize } from '../slices/characterSlice';
+import { increment } from '../slices/bankSlice';
+import { push } from '../slices/consoleSlice';
 import styles from './Counter.module.css';
 
 export function Woodcutting() {
@@ -64,7 +64,7 @@ export function Woodcutting() {
     }
 
     return (
-        <div>
+        <div className='pbars'>
             <h2>{skill}</h2>
             <Progress
                 action={action}
