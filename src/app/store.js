@@ -13,11 +13,13 @@ import consoleReducer from '../features/slices/consoleSlice';
 const combineStates = (() => {
   var persistedState = loadState();
 
-  Object.keys(initialSkills).forEach(element => {
-    if (persistedState.character[element] === undefined) {
-      persistedState.character[element] = initialSkills[element];
-    }
-  })
+  if (persistedState) {
+    Object.keys(initialSkills).forEach(element => {
+      if (persistedState.character[element] === undefined) {
+        persistedState.character[element] = initialSkills[element];
+      }
+    })
+  }
   return persistedState;
 })();
 
