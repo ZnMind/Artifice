@@ -15,6 +15,7 @@ import './App.css';
 
 const App = () => {
   const dispatch = useDispatch();
+  const saveTimer = useRef();
   const [screen, setScreen] = useState('woodcutting');
 
   const logs = useSelector(state => state.woodcut)
@@ -37,6 +38,9 @@ const App = () => {
     if (data !== null) {
       setScreen(JSON.parse(data));
     };
+
+    saveTimer.current = setTimeout(saveGame, 60000);
+    return () => clearInterval(saveTimer.current);
   }, [])
 
   useEffect(() => {
@@ -66,18 +70,11 @@ const App = () => {
           <div className='div-button' onClick={() => setScreen('bank')}>Bank</div>
           <div className='div-button' onClick={() => setScreen('equipment')}>Equipment</div>
           <div className='div-button space' onClick={() => setScreen('adventure')}>Adventure</div>
-          {/* <button onClick={() => setScreen('bank')}>Bank</button>
-          <button onClick={() => setScreen('equipment')}>Equipment</button>
-          <button onClick={() => setScreen('adventure')} className='space'>Adventure</button> */}
 
           <div className='div-button' onClick={() => setScreen('woodcutting')}>{`Woodcutting (${character.Woodcutting.level})`}</div>
-          {/* <div className='div-button' onClick={() => setScreen('smithing')}>{`Woodworking (${character.Woodworking.level})`}</div> */}
           <div className='div-button' onClick={() => setScreen('mining')}>{`Mining (${character.Mining.level})`}</div>
           <div className='div-button' onClick={() => setScreen('smithing')}>{`Smithing (${character.Smithing.level})`}</div>
           <div className='div-button' onClick={() => setScreen('artifice')}>{`Artifice (${character.Artifice.level})`}</div>
-          {/* <button onClick={() => setScreen('woodcutting')}>{`Woodcutting (${character.Woodcutting.level})`}</button>
-          <button onClick={() => setScreen('mining')}>{`Mining (${character.Mining.level})`}</button>
-          <button onClick={() => setScreen('smithing')}>{`Smithing (${character.Smithing.level})`}</button> */}
 
         </div>
         <div className="App">

@@ -19,6 +19,10 @@ const combineStates = (() => {
         persistedState.character[element] = initialSkills[element];
       }
     })
+
+    if (persistedState.bank.Coins === null) {
+      persistedState.bank.Coins = 0;
+    }
   }
   return persistedState;
 })();

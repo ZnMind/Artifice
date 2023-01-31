@@ -6,24 +6,13 @@ import '../../App.css';
 
 // Adding mouseovers to each individual item
 const Item = ({ data, index, select }) => {
-  const [hover, setHover] = useState(false);
-
-  const change = () => {
-    setHover(!hover);
-  }
+  const bank = useSelector(state => state.bank);
+  console.log(Price)
 
   return (
     <div key={index} className='slot' onClick={select}>
-      <p className='bank-text'>{`${data[0]} ${data[1]}`}</p>
-      <p className='bank-text'>{data[2]}</p>
-      {
-        hover
-          ? <div className='btn-div'>
-            <button className='equip-btn'>Sell</button>
-            <button className='equip-btn'>Equip</button>
-          </div>
-          : ""
-      }
+      <p className='bank-text'>{`${data}`}</p>
+      <p className='bank-text'>{`${bank[data.split(" ")[0]][data.split(" ")[1]]}`}</p>
     </div>
   )
 }
@@ -38,16 +27,24 @@ const Bank = () => {
   // Could probably be done cleaner but it works
   const objectToList = () => {
     return Object.keys(bank).map(key => {
-      return Object.keys(bank[key]).map(k => {
-        var temp = [key, k, bank[key][k]];
-        return temp;
+      // Array.prototype.flatMap is a way to add or remove items during a map
+      return Object.keys(bank[key]).flatMap(k => {
+        if (bank[key][k] > 0) {
+          var temp = `${key} ${k}`
+          return temp;
+        }
+        return [];
       })
     })
   }
 
   const handleSelect = event => {
-    var item = event.target.firstChild.innerText;
-    
+    if (event.target.children.length === 0) {
+      var item = event.target.parentElement.firstChild.innerText;
+    } else {
+      var item = event.target.firstChild.innerText;
+    }
+
     if (select === item) {
       setSelect("");
     } else {
@@ -55,63 +52,62 @@ const Bank = () => {
     }
   }
 
-  // Removing zero amounts from the array and setting inventory state
+  // Flattening array and setting inventory state
   useEffect(() => {
     var temp = objectToList();
+    var tempArray = [];
 
-    // Array.prototype.flatMap is a way to add or remove items during a map
-    var noZeroes = temp.map((data) => {
-      return data.flatMap(n => {
-        if (n[2] === 0) {
-          return [];
+    console.log(temp)
+    for (let i = 0; i < temp.length; i++) {
+
+      if (temp[i].length !== 0) {
+        for (let j = 0; j < temp[i].length; j++) {
+          tempArray.push(temp[i][j])
         }
-        return [n];
-      })
-    })
+      }
+    }
 
-    setInventory(noZeroes)
+    setInventory(tempArray);
   }, [bank]);
 
   return (
     <div>
       <h2 className='bank-header'>Bank</h2>
       <div className='exp'>
-        <small>{`Worth: ${bank.Coins}`}</small>
+        <small>{`Coins: ${bank.Coins}`}</small>
       </div>
-      <div className='bank-screen'>
 
-      {
-            select !== ""
-              ? <div className='selected'>
-                <small>{select}</small>
-                <p>{bank[select.split(" ")[0]][select.split(" ")[1]]}</p>
-                <button 
-                  className='equip-btn'
-                  onClick={() => dispatch(sell({ material: select.split(" ")[0], item: select.split(" ")[1], amount: 1, coins: 5 }))}
-                  >Sell</button>
-              </div>
-              : ""
-          }
+      <div className='bank-screen'>
         <div className='grid'>
-          
 
           {inventory.map((data, index) => (
-            <div key={index} className='bank-row'>
-              {data.map((d, i) => (
-                <div key={i}>
-                  <Item
-                    data={d}
-                    index={i}
-                    select={handleSelect}
-                  />
-                </div>
-              ))}
+            <div key={index}>
+              <Item
+                data={data}
+                index={index}
+                select={handleSelect}
+              />
             </div>
           ))}
         </div>
-        
-          
-        
+
+        {
+          select !== ""
+            ? <div className='selected'>
+              <small>{select}</small>
+              <p>{select ? bank[select.split(" ")[0]][select.split(" ")[1]] : ""}</p>
+              <button
+                className='equip-btn'
+                onClick={() => dispatch(sell({ 
+                  material: select.split(" ")[0], 
+                  item: select.split(" ")[1], 
+                  amount: 1, 
+                  coins: Price[select.split(" ")[0]][select.split(" ")[1]] 
+                }))}
+              >Sell</button>
+            </div>
+            : ""
+        }
       </div>
     </div>
   )

@@ -1,20 +1,42 @@
-{   
-    "Logs": {
-        "Normal": 1,
-        "Oak": 5,
-        "Willow": 10
+{
+    "Normal": {
+        "Log": 1
     },
-    "Ore": {
-        "Copper": 1,
-        "Tin": 2,
-        "Iron": 10
+    "Oak": {
+        "Log": 5
     },
-    "Metals": {
-        "Stone": 1,
-        "Copper": 5,
-        "Tin": 10,
-        "Bronze": 20,
-        "Iron": 22,
-        "Steel": 35
+    "Willow": {
+        "Log": 10
+    },
+    "Stone": {
+        "Axe": 1,
+        "Pickaxe": 1
+    },
+    "Copper": {
+        "Ore": 1,
+        "Bar": 2,
+        "Knife": 5,
+        "Sword": 5,
+        "Axe": 5
+    },
+    "Tin": {
+        "Ore": 2,
+        "Bar": 5,
+        "Knife": 10,
+        "Sword": 10,
+        "Axe": 10
+    },
+    "Iron": {
+        "Ore": 10,
+        "Bar": 15,
+        "Knife": 22,
+        "Sword": 22,
+        "Axe": 22
+    },
+    "Steel": {
+        "Bar": 25,
+        "Knife": 35,
+        "Sword": 35,
+        "Axe": 35
     }
 }

@@ -227,19 +227,24 @@ small.save {
 
 .grid {
   height: 100%;
-  
+  max-width: 806px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
+  position: relative;
+  top: 0;
+  
   border-left: 0.5px solid black;
   border-top: 0.5px solid black;
-  border-bottom: 0.5px solid black;
+  /* border-bottom: 0.5px solid black; */
 }
 
 .slot {
   min-height: 115px;
   width: 115px;
-  border-right: 0.5px solid black;
+  
+  border-right: 0.5px solid #000;
+  border-bottom: 0.5px solid #000;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -262,15 +267,18 @@ small.save {
 
 .bank-screen {
   display: flex;
-  flex-direction: column;
+  padding: 2em;
 }
 
 .selected {
   border: 1px solid #000;
   width: 10vw;
-  position: fixed;
-  top: 40vh;
-  right: 16vw;
+  height: 100%;
+  margin-left: 2em;
+  /* position: relative;
+  top: 0;
+  right: 0px; */
+  /* right: 16vw; */
 }
 
 .equip-btn {
