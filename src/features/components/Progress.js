@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   increment,
   reset
-} from './progressSlice';
+} from '../slices/progressSlice';
 
 export const Progress = props => {
   const dispatch = useDispatch();

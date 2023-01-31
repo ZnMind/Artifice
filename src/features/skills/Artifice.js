@@ -7,20 +7,37 @@ import { push } from '../slices/consoleSlice';
 import Select from 'react-select';
 import styles from './Counter.module.css';
 
-export function Smithing() {
+export function Artifice() {
     const dispatch = useDispatch();
 
     const bar = useSelector(state => state.progress);
     const items = useSelector(state => state.bank);
     const character = useSelector(state => state.character);
 
-    const [skill] = useState('Smithing');
+    const [skill] = useState('Artifice');
     const [material, setMaterial] = useState('Copper');
     const [action, setAction] = useState('Bar');
     const [progress, setProgress] = useState('none');
     const [timing, setTiming] = useState(0);
     const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
-    const [itemOptions] = useState(['Bar', 'Knife', 'Sword', 'Axe']);
+
+    // Setting materials and excluding certain keys for input options
+    const [materialOptions] = useState(
+        Object.keys(items).flatMap(element => {
+            if (element === 'Coins' || element === 'Stone') {
+                return [];
+            }
+            // Checking if materials actually have an enhanceable item
+            if (['Bow', 'Knife', 'Sword', 'Axe'].some(i => Object.keys(items[element]).includes(i))) {
+                return element;
+            } else {
+                return [];
+            }
+        }));
+
+
+    const [itemOptions, setItemOptions] = useState([]);
+
     const [expTable] = useState({
         'Copper': { 'exp': 15, 'req': 1 },
         'Tin': { 'exp': 25, 'req': 5 },
@@ -31,16 +48,33 @@ export function Smithing() {
 
     // Attempting to initialize state for older saves
     useEffect(() => {
-        if (character.Smithing === undefined) {
-            dispatch(initialize({ skill: "Smithing" }));
+        if (character.Artifice === undefined) {
+            dispatch(initialize({ skill: "Artifice" }));
         }
     }, []);
+
+    // Not showing options if player doesn't have item
+    useEffect(() => {
+        setItemOptions(Object.keys(items[material]).flatMap(element => {
+            if (['Bow', 'Knife', 'Sword', 'Axe'].includes(element)) {
+                if (items[material][element] > 0) {
+                    return element;
+                }
+            }
+            return [];
+        }))
+    }, [material]);
 
     // Adding experience && items when bar is full
     useEffect(() => {
         if (bar.now >= 100) {
             // Stopping progress if out of materials
-            if (action === 'Bar') {
+
+            
+
+
+
+            /* if (action === 'Bar') {
                 dispatch(decrement({ material: material, item: 'Ore' }));
                 dispatch(push(`Smithed ${material} ${action}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
                 if (items[material]['Ore'] <= 1) {
@@ -55,8 +89,8 @@ export function Smithing() {
                     dispatch(push(`You ran out of ${material} Bars.~`));
                 }
             }
-            dispatch(gainExp({ skill: 'Smithing', amount: expTable[material]['exp'] }));
-            dispatch(increment({ material: material, item: action, amount: 1 }));
+            dispatch(gainExp({ skill: 'Artifice', amount: expTable[material]['exp'] }));
+            dispatch(increment({ material: material, item: action, amount: 1 })); */
         }
     }, [bar]);
 
@@ -76,7 +110,7 @@ export function Smithing() {
     }, [character[skill]]);
 
     // Setting time for progress bar to fill
-    const smith = type => {
+    const upgrade = type => {
         if (action === 'Bar') {
             if (items[type]['Ore'] !== 0) {
                 setProgress(type);
@@ -106,6 +140,11 @@ export function Smithing() {
         }
     }
 
+    const handleMaterial = event => {
+        setProgress('none');
+        setMaterial(event.value);
+    }
+
     const handleAction = event => {
         setProgress('none');
         setAction(event.value);
@@ -121,13 +160,7 @@ export function Smithing() {
             <div className='exp'>
                 <small>Level: {`${character[skill] === undefined ? 1 : character[skill].level}`}</small>
                 <small>Exp: {character[skill] === undefined ? `0 / 75` : `${character[skill].experience} / ${character[skill].next}`}</small>
-                <div>
-                    <button className={styles.button} onClick={() => setMaterial('Copper')}>Copper</button>
-                    <button className={styles.button} onClick={() => setMaterial('Tin')}>Tin</button>
-                    <button className={styles.button} onClick={() => setMaterial('Bronze')}>Bronze</button>
-                    <button className={styles.button} onClick={() => setMaterial('Iron')}>Iron</button>
-                    {/* <button className={styles.button} onClick={() => setMaterial('Steel')}>Steel</button> */}
-                </div>
+                
                 <small>{
                     items[material]
                         ? action === 'Bar'
@@ -139,20 +172,30 @@ export function Smithing() {
 
             <div className={styles.row}>
                 <div className='craft-container'>
-                    <Select
-                        placeholder={itemOptions[0]}
-                        defaultValue={itemOptions[0]}
-                        onChange={handleAction}
-                        options={itemOptions.map(data => ({ value: data, label: data }))}
-                        className='basic-multi-select'
-                        classNamePrefix='select'
-                    />
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <Select
+                            placeholder={materialOptions[0]}
+                            defaultValue={materialOptions[0]}
+                            onChange={handleMaterial}
+                            options={materialOptions.map(data => ({ value: data, label: data }))}
+                            className='basic-multi-select'
+                            classNamePrefix='select'
+                        />
+                        <Select
+                            placeholder={itemOptions[0]}
+                            defaultValue={itemOptions[0]}
+                            onChange={handleAction}
+                            options={itemOptions.map(data => ({ value: data, label: data }))}
+                            className='basic-multi-select'
+                            classNamePrefix='select'
+                        />
+                    </div>
                     <div className='tree'>
                         <small>{`${material} ${action}`}</small>
-                        <small>5s</small>
+                        <small>{`Cost: 2`}</small>
                         {
                             lvl >= expTable[material].req
-                                ? <button onClick={() => smith(material)} className={styles.button} id='tree'>Smith</button>
+                                ? <button /* onClick={() => upgrade(material)} */ className={styles.button} id='tree'>Upgrade</button>
                                 : <small>{`Required: ${expTable[material].req}`}</small>
                         }
                     </div>

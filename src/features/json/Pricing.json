@@ -1,0 +1,20 @@
+{   
+    "Logs": {
+        "Normal": 1,
+        "Oak": 5,
+        "Willow": 10
+    },
+    "Ore": {
+        "Copper": 1,
+        "Tin": 2,
+        "Iron": 10
+    },
+    "Metals": {
+        "Stone": 1,
+        "Copper": 5,
+        "Tin": 10,
+        "Bronze": 20,
+        "Iron": 22,
+        "Steel": 35
+    }
+}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Progress } from '../slices/Progress';
+import { Progress } from '../components/Progress';
 import { gainExp, initialize } from '../slices/characterSlice';
 import { increment } from '../slices/bankSlice';
 import { push } from '../slices/consoleSlice';
@@ -13,6 +13,7 @@ export function Mining() {
     const items = useSelector(state => state.bank);
     const character = useSelector(state => state.character);
 
+    const [page, setPage] = useState(1);
     const [action, setAction] = useState('');
     const [timing, setTiming] = useState(0);
     const [skill] = useState('Mining');
@@ -22,6 +23,7 @@ export function Mining() {
         'Tin': { 'exp': 20, 'req': 5, 'timing': 5 },
         'Iron': { 'exp': 40, 'req': 15, 'timing': 10 },
         'Coal': { 'exp': 60, 'req': 30, 'timing': 15 },
+        'Mithril': { 'exp': 60, 'req': 30, 'timing': 15 },
     });
 
     // Attempting to initialize state for older saves
@@ -81,8 +83,9 @@ export function Mining() {
             </div>
 
             <div className={styles.row}>
+            <div className={`arrow ${page === 1 ? 'disabled' : 'arrow-left'}`} onClick={() => setPage(page - 1)}></div>
                 <div className='container'>
-                    {Object.keys(expTable).map((data, index) => (
+                    {Object.keys(expTable).slice(page * 4 - 4, page * 4).map((data, index) => (
                         <div key={index} className='tree'>
                             <p>{data}</p>
                             <small>{`${expTable[data].timing}s`}</small>
@@ -94,6 +97,7 @@ export function Mining() {
                         </div>
                     ))}
                 </div>
+                <div className={`arrow ${page === 2 ? 'disabled' : 'arrow-right'}`} onClick={() => setPage(page + 1)}></div>
             </div>
         </div>
     );

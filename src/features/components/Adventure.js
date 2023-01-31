@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Progress } from '../slices/Progress';
+import { Progress } from './Progress';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { push } from '../slices/consoleSlice';
+import multipliers from '../json/Multipliers.json';
 import '../../App.css';
 import styles from '../skills/Counter.module.css';
 
 const BattleArea = ({ area, index }) => {
     const dispatch = useDispatch();
-    const [enemy, setEnemy] = useState(0);
+    const [enemy, setEnemy] = useState([]);
     const [hp, setHp] = useState(1)
     const [fighting, setFighting] = useState(false);
     const [bar1, setBar1] = useState(0);
@@ -17,12 +18,15 @@ const BattleArea = ({ area, index }) => {
     const progressTimer = useRef();
     const enemyTimer = useRef();
 
-    // Setting monster current / max hp
+    console.log(area)
+    console.log(Object.values(area[index]))
+    console.log(index);
+
+    // Setting monster stats
     useEffect(() => {
-        var hp = 30 + ((index + 1) * 30);
         setFighting(false);
-        setEnemy(hp);
-        setHp(hp);
+        setEnemy([Object.values(area[index])[0][0], Object.values(area[index])[0][1], Object.values(area[index])[0][2]]);
+        setHp(Object.values(area[index])[0][0]);
         setBar1(0);
         setBar2(0);
     }, [index]);
@@ -57,8 +61,8 @@ const BattleArea = ({ area, index }) => {
     // Handling monster death
     useEffect(() => {
         if (hp <= 0) {
-            dispatch(push(`${area[index]} defeated!~`));
-            setHp(enemy);
+            dispatch(push(`${Object.keys(area[index])} defeated!~`));
+            setHp(enemy[0]);
             setBar1(0);
             setBar2(0);
         }
@@ -92,13 +96,19 @@ const BattleArea = ({ area, index }) => {
                         now={bar1}
                         label={`${Math.round(250 - 250 * (bar1 / 100)) / 100}s`}
                     />
-                    <small>80 / 100</small>
+                    <div className='stat-box'>
+                        <small>80 / 100</small>
+                        <div style={{display: 'flex', flexDirection: 'column'}}>
+                        <small>Accuracy: 5</small>
+                        <small>Evasion: 0</small>
+                        </div>
+                    </div>
                 </div>
                 <div className='right'>
-                    <p>{area[index]}</p>
+                    <p>{Object.keys(area[index])}</p>
 
                     <ProgressBar
-                        now={(hp / enemy) * 100}
+                        now={(hp / enemy[0]) * 100}
                         variant='danger'
                         className='battle-pbar'
                     />
@@ -106,7 +116,13 @@ const BattleArea = ({ area, index }) => {
                         now={bar2}
                         label={`${Math.round(200 - 200 * (bar2 / 100)) / 100}s`}
                     />
-                    <small>{`${hp} / ${enemy}`}</small>
+                    <div className='stat-box'>
+                        <small>{`${hp} / ${enemy[0]}`}</small>
+                        <div style={{display: 'flex', flexDirection: 'column'}}>
+                            <small>{`Accuracy: ${enemy[1]}`}</small>
+                            <small>{`Evasion: ${enemy[2]}`}</small>
+                        </div>
+                    </div>
                 </div>
             </div>
             {!fighting
@@ -118,7 +134,13 @@ const BattleArea = ({ area, index }) => {
 }
 
 const Adventure = () => {
-    const [areas] = useState(['Goblin', 'Wolf', 'Orc', 'Warg', 'Troll']);
+    const [areas] = useState([
+        { 'Goblin': [50, 5, 5] },
+        { 'Wolf': [80, 10, 5] },
+        { 'Orc': [120, 20, 10] },
+        { 'Warg': [150, 35, 5] },
+        { 'Troll': [250, 25, 25] }
+    ]);
     const [current, setCurrent] = useState(0);
 
     const changeArea = level => {

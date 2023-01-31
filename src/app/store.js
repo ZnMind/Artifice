@@ -1,12 +1,25 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { loadState } from '../localStorage';
+import { initialSkills } from '../features/slices/characterSlice';
 import progressReducer from '../features/slices/progressSlice';
 import characterReducer from '../features/slices/characterSlice';
 import bankReducer from '../features/slices/bankSlice';
 import equipmentReducer from '../features/slices/equipmentSlice';
 import consoleReducer from '../features/slices/consoleSlice';
 
-const persistedState = loadState();
+// I'm writing this function to combine a preloaded state and initial state.
+// It checks if initial state object has keys that persisted state doesn't and then adds those in.
+// This is to avoid errors in the case of adding new skills to the game.
+const combineStates = (() => {
+  var persistedState = loadState();
+
+  Object.keys(initialSkills).forEach(element => {
+    if (persistedState.character[element] === undefined) {
+      persistedState.character[element] = initialSkills[element];
+    }
+  })
+  return persistedState;
+})();
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +29,5 @@ export const store = configureStore({
     equipment: equipmentReducer,
     console: consoleReducer,
   },
-  preloadedState: persistedState
+  preloadedState: combineStates
 });

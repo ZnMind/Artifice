@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Progress } from '../slices/Progress';
+import { Progress } from '../components/Progress';
 import { gainExp, initialize } from '../slices/characterSlice';
 import { increment } from '../slices/bankSlice';
 import { push } from '../slices/consoleSlice';

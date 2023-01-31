@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { sell } from '../slices/bankSlice';
+import Price from '../json/Pricing.json';
 import '../../App.css';
 
 // Adding mouseovers to each individual item
-const Item = ({ data, index }) => {
+const Item = ({ data, index, select }) => {
   const [hover, setHover] = useState(false);
 
   const change = () => {
@@ -11,12 +13,15 @@ const Item = ({ data, index }) => {
   }
 
   return (
-    <div key={index} className='slot' onMouseEnter={change} onMouseLeave={change}>
+    <div key={index} className='slot' onClick={select}>
       <p className='bank-text'>{`${data[0]} ${data[1]}`}</p>
       <p className='bank-text'>{data[2]}</p>
       {
         hover
-          ? <div className='btn-div'><button className='equip-btn'>Sell</button><button className='equip-btn'>Equip</button></div>
+          ? <div className='btn-div'>
+            <button className='equip-btn'>Sell</button>
+            <button className='equip-btn'>Equip</button>
+          </div>
           : ""
       }
     </div>
@@ -24,8 +29,9 @@ const Item = ({ data, index }) => {
 }
 
 const Bank = () => {
+  const dispatch = useDispatch();
   const [inventory, setInventory] = useState([]);
-  const [hover, setHover] = useState(false);
+  const [select, setSelect] = useState("");
   const bank = useSelector(state => state.bank);
 
   // Converting state object into an array
@@ -37,6 +43,16 @@ const Bank = () => {
         return temp;
       })
     })
+  }
+
+  const handleSelect = event => {
+    var item = event.target.firstChild.innerText;
+    
+    if (select === item) {
+      setSelect("");
+    } else {
+      setSelect(item);
+    }
   }
 
   // Removing zero amounts from the array and setting inventory state
@@ -54,28 +70,48 @@ const Bank = () => {
     })
 
     setInventory(noZeroes)
-  }, []);
+  }, [bank]);
 
   return (
     <div>
       <h2 className='bank-header'>Bank</h2>
       <div className='exp'>
-        <small>{`Worth: `}</small>
+        <small>{`Worth: ${bank.Coins}`}</small>
       </div>
-      <div className='grid'>
+      <div className='bank-screen'>
 
-        {inventory.map((data, index) => (
-          <div key={index} className='bank-row'>
-            {data.map((d, i) => (
-              <>
-                <Item
-                  data={d}
-                  index={i}
-                />
-              </>
-            ))}
-          </div>
-        ))}
+      {
+            select !== ""
+              ? <div className='selected'>
+                <small>{select}</small>
+                <p>{bank[select.split(" ")[0]][select.split(" ")[1]]}</p>
+                <button 
+                  className='equip-btn'
+                  onClick={() => dispatch(sell({ material: select.split(" ")[0], item: select.split(" ")[1], amount: 1, coins: 5 }))}
+                  >Sell</button>
+              </div>
+              : ""
+          }
+        <div className='grid'>
+          
+
+          {inventory.map((data, index) => (
+            <div key={index} className='bank-row'>
+              {data.map((d, i) => (
+                <div key={i}>
+                  <Item
+                    data={d}
+                    index={i}
+                    select={handleSelect}
+                  />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+        
+          
+        
       </div>
     </div>
   )

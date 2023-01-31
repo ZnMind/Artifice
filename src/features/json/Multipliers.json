@@ -1,0 +1,35 @@
+{
+    "Materials": {
+        "Training": 5,
+        "Copper": 10,
+        "Tin": 20,
+        "Iron": 30,
+        "Steel": 40
+    },
+    "Style": {
+        "Dagger": {
+            "Attack": 0.8,
+            "Strength": 0.5,
+            "Defense": 1.5,
+            "Mult": 0.6
+        },
+        "Sword": {
+            "Attack": 1.4,
+            "Strength": 0.8,
+            "Defense": 0.8,
+            "Mult": 1
+        },
+        "Axe": {
+            "Attack": 0.8,
+            "Strength": 1.2,
+            "Defense": 0.8,
+            "Mult": 1.5
+        },
+        "Hammer": {
+            "Attack": 0.6,
+            "Strength": 1.8,
+            "Defense": 0.6,
+            "Mult": 2
+        }
+    }
+}

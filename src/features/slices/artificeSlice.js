@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const bankSlice = createSlice({
-    name: 'bank',
-    initialState: { Coins: 0, Stone: { Axe: 1, Pickaxe: 1 } },
+const artificeSlice = createSlice({
+    name: 'artifice',
+    initialState: {  },
     reducers: {
         increment(state, action) {
             const material = action.payload.material;
@@ -41,6 +41,6 @@ const bankSlice = createSlice({
     }
 })
 
-export const { increment, decrement, sell } = bankSlice.actions;
+export const { increment, decrement, sell } = artificeSlice.actions;
 
-export default bankSlice.reducer;
+export default artificeSlice.reducer;

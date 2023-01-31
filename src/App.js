@@ -5,6 +5,7 @@ import { saveState, loadState } from './localStorage';
 import { Woodcutting } from './features/skills/Woodcutting';
 import { Mining } from './features/skills/Mining';
 import { Smithing } from './features/skills/Smithing';
+import { Artifice } from './features/skills/Artifice';
 import { Skills } from './features/skills/Skills';
 import { push } from './features/slices/consoleSlice';
 import Bank from './features/components/Bank';
@@ -49,6 +50,7 @@ const App = () => {
     'woodcutting': Woodcutting,
     'mining': Mining,
     'smithing': Smithing,
+    'artifice': Artifice,
   }
 
   const Display = components[screen]
@@ -58,13 +60,24 @@ const App = () => {
     <div className='header'><h2>Artifice</h2></div>
       <div className='app-container'>
         <div className='navigate'>
-          <button onClick={() => setScreen('bank')}>Bank</button>
+          <div className='character'>
+            <p>Char</p>
+          </div>
+          <div className='div-button' onClick={() => setScreen('bank')}>Bank</div>
+          <div className='div-button' onClick={() => setScreen('equipment')}>Equipment</div>
+          <div className='div-button space' onClick={() => setScreen('adventure')}>Adventure</div>
+          {/* <button onClick={() => setScreen('bank')}>Bank</button>
           <button onClick={() => setScreen('equipment')}>Equipment</button>
-          <button onClick={() => setScreen('adventure')} className='space'>Adventure</button>
+          <button onClick={() => setScreen('adventure')} className='space'>Adventure</button> */}
 
-          <button onClick={() => setScreen('woodcutting')}>{`Woodcutting (${character.Woodcutting.level})`}</button>
+          <div className='div-button' onClick={() => setScreen('woodcutting')}>{`Woodcutting (${character.Woodcutting.level})`}</div>
+          {/* <div className='div-button' onClick={() => setScreen('smithing')}>{`Woodworking (${character.Woodworking.level})`}</div> */}
+          <div className='div-button' onClick={() => setScreen('mining')}>{`Mining (${character.Mining.level})`}</div>
+          <div className='div-button' onClick={() => setScreen('smithing')}>{`Smithing (${character.Smithing.level})`}</div>
+          <div className='div-button' onClick={() => setScreen('artifice')}>{`Artifice (${character.Artifice.level})`}</div>
+          {/* <button onClick={() => setScreen('woodcutting')}>{`Woodcutting (${character.Woodcutting.level})`}</button>
           <button onClick={() => setScreen('mining')}>{`Mining (${character.Mining.level})`}</button>
-          <button onClick={() => setScreen('smithing')}>{`Smithing (${character.Smithing.level})`}</button>
+          <button onClick={() => setScreen('smithing')}>{`Smithing (${character.Smithing.level})`}</button> */}
 
         </div>
         <div className="App">

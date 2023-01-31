@@ -1,20 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+export const initialSkills = {
+    Hitpoints: { level: 1, experience: 0, last: 0, next: 75 },
+    Attack: { level: 1, experience: 0, last: 0, next: 75 },
+    Strength: { level: 1, experience: 0, last: 0, next: 75 },
+    Defense: { level: 1, experience: 0, last: 0, next: 75 },
+    Woodcutting: { level: 1, experience: 0, last: 0, next: 75 },
+    Woodworking: { level: 1, experience: 0, last: 0, next: 75 },
+    Mining: { level: 1, experience: 0, last: 0, next: 75 },
+    Smithing: { level: 1, experience: 0, last: 0, next: 75 },
+    Fishing: { level: 1, experience: 0, last: 0, next: 75 },
+    Cooking: { level: 1, experience: 0, last: 0, next: 75 },
+    Artifice: { level: 1, experience: 0, last: 0, next: 75 },
+    Lapidary: { level: 1, experience: 0, last: 0, next: 75 },
+    Crafting: { level: 1, experience: 0, last: 0, next: 75 },
+};
+
 const characterSlice = createSlice({
     name: 'character',
-    initialState: {
-        Woodcutting: { level: 1, experience: 0, last: 0, next: 75 },
-        Mining: { level: 1, experience: 0, last: 0, next: 75 },
-        Smithing: { level: 1, experience: 0, last: 0, next: 75 },
-    },
+    initialState: initialSkills,
     reducers: {
-        levelUp(state) {
-            state.woodcutting.level++;
-            console.log(state.woodcutting.level)
-            /* let nextLv = 100 * Math.round(Math.pow(2, state.woodcutting.level / 8))
-            state.woodcutting.next += nextLv;
-            console.log(state.woodcutting.next) */
-        },
         gainExp(state, action) {
             let skill = action.payload.skill;
             state[skill].experience += action.payload.amount;
@@ -25,19 +30,14 @@ const characterSlice = createSlice({
                 state[skill].level += 1;
             }
         },
-        getLast(state) {
-            state.woodcutting.last = state.woodcutting.next;
-        },
-        calcNext(state, action) {
-            state.woodcutting.next += action.payload;
-        },
         // Having fun with preloadedState in store overriding initial state (for older saves) and newer skills are undefined. This should fix it
+        /* Update: added IIFE to store.js that should make this reducer superfluous */
         initialize(state, action) {
             state[action.payload.skill] = { level : 1, experience: 0, last: 0, next: 75 };
         }
     }
 })
 
-export const { levelUp, gainExp, calcNext, getLast, initialize } = characterSlice.actions;
+export const { gainExp, initialize } = characterSlice.actions;
 
 export default characterSlice.reducer;
