@@ -41,14 +41,14 @@ export function Smithing() {
         if (bar.now >= 100) {
             // Stopping progress if out of materials
             if (action === 'Bar') {
-                dispatch(decrement({ material: material, item: 'Ore' }));
+                dispatch(decrement({ material: material, item: 'Ore', amount: 1 }));
                 dispatch(push(`Smithed ${material} ${action}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
                 if (items[material]['Ore'] <= 1) {
                     setProgress('none');
                     dispatch(push(`You ran out of ${material} Ore.~`));
                 }
             } else {
-                dispatch(decrement({ material: material, item: 'Bar' }));
+                dispatch(decrement({ material: material, item: 'Bar', amount: 1 }));
                 dispatch(push(`Smithed ${material} ${action}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
                 if (items[material]['Bar'] <= 1) {
                     setProgress('none');

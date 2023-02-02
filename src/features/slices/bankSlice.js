@@ -29,7 +29,7 @@ const bankSlice = createSlice({
             const material = action.payload.material;
             const item = action.payload.item;
 
-            state[material][item]--;
+            state[material][item] -= action.payload.amount;
         },
         sell(state, action) {
             const material = action.payload.material;

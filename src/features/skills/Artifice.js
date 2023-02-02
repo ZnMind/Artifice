@@ -15,11 +15,13 @@ export function Artifice() {
     const character = useSelector(state => state.character);
 
     const [skill] = useState('Artifice');
-    const [material, setMaterial] = useState('Copper');
-    const [action, setAction] = useState('Bar');
+    const [itemOptions, setItemOptions] = useState([]);
+    const [action, setAction] = useState("");
+    const [req, setReq] = useState(2);
     const [progress, setProgress] = useState('none');
     const [timing, setTiming] = useState(0);
     const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
+    const [wepArray] = useState(['Bow', 'Knife', 'Sword', 'Axe'])
 
     // Setting materials and excluding certain keys for input options
     const [materialOptions] = useState(
@@ -28,15 +30,21 @@ export function Artifice() {
                 return [];
             }
             // Checking if materials actually have an enhanceable item
-            if (['Bow', 'Knife', 'Sword', 'Axe'].some(i => Object.keys(items[element]).includes(i))) {
-                return element;
-            } else {
+            var hasReturned = false;
+            return Object.keys(items[element]).flatMap(el => {
+                if (wepArray.includes(el.split("+")[0])) {
+                    if (items[element][el] > 0) {
+                        if (!hasReturned) {
+                            hasReturned = true;
+                            return element;
+                        }
+                    }
+                }
                 return [];
-            }
+            })
         }));
 
-
-    const [itemOptions, setItemOptions] = useState([]);
+    const [material, setMaterial] = useState('Copper');
 
     const [expTable] = useState({
         'Copper': { 'exp': 15, 'req': 1 },
@@ -55,49 +63,62 @@ export function Artifice() {
 
     // Not showing options if player doesn't have item
     useEffect(() => {
-        setItemOptions(Object.keys(items[material]).flatMap(element => {
-            if (['Bow', 'Knife', 'Sword', 'Axe'].includes(element)) {
-                if (items[material][element] > 0) {
-                    return element;
+        setProgress('none');
+        if (items[material]) {
+            setItemOptions(Object.keys(items[material]).flatMap(element => {
+                if (['Bow', 'Knife', 'Sword', 'Axe'].includes(element.split("+")[0])) {
+                    if (items[material][element] > 0) {
+                        return element;
+                    }
                 }
-            }
-            return [];
-        }))
+                return [];
+            }))
+        }
     }, [material]);
+
+    useEffect(() => {
+        if (itemOptions) {
+            setAction(itemOptions[0])
+        } else {
+            setAction("");
+        }
+    }, [itemOptions]);
+
+    useEffect(() => {
+        if (action) {
+            if (action.split("+").length > 1) {
+                const grade = parseInt(action.split("+")[1]);
+                const tier = Math.floor((grade + 1) / 5);
+                setReq((grade + 1) * (2 * (tier + 1)))
+            } else {
+                setReq(2);
+            }
+        }
+    }, [action]);
 
     // Adding experience && items when bar is full
     useEffect(() => {
         if (bar.now >= 100) {
-            // Stopping progress if out of materials
-
-            
-
-
-
-            /* if (action === 'Bar') {
-                dispatch(decrement({ material: material, item: 'Ore' }));
-                dispatch(push(`Smithed ${material} ${action}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
-                if (items[material]['Ore'] <= 1) {
-                    setProgress('none');
-                    dispatch(push(`You ran out of ${material} Ore.~`));
-                }
+            if (action.split("+").length > 1) {
+                var grade = action.split("+")[1];
+                dispatch(decrement({ material: material, item: action, amount: 1 }));
+                dispatch(decrement({ material: material, item: 'Bar', amount: req }));
+                dispatch(increment({ material: material, item: `${action.split("+")[0]}+${parseInt(grade) + 1}`, amount: 1 }));
+                dispatch(push(`Upgraded to ${material} ${action.split("+")[0]}+${parseInt(grade) + 1}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
             } else {
-                dispatch(decrement({ material: material, item: 'Bar' }));
-                dispatch(push(`Smithed ${material} ${action}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
-                if (items[material]['Bar'] <= 1) {
-                    setProgress('none');
-                    dispatch(push(`You ran out of ${material} Bars.~`));
-                }
+                dispatch(decrement({ material: material, item: action, amount: 1 }));
+                dispatch(decrement({ material: material, item: 'Bar', amount: req }));
+                dispatch(increment({ material: material, item: `${action}+1`, amount: 1 }));
+                dispatch(push(`Upgraded to ${material} ${action}+1! Amount: ${items[material] ? items[material][action] ? items[material][action] : 1 : 1}~`));
             }
-            dispatch(gainExp({ skill: 'Artifice', amount: expTable[material]['exp'] }));
-            dispatch(increment({ material: material, item: action, amount: 1 })); */
+            // Stopping progress if out of materials
+            if (items[material][action] <= 1 || items[material]['Bar'] < req) {
+                setProgress('none');
+                dispatch(push(`You ran out of ${material} ${action}.~`));
+            }
+            dispatch(gainExp({ skill: 'Artifice', amount: expTable[material]['exp'] * req }));
         }
     }, [bar]);
-
-    // Resetting progress bar on material change
-    useEffect(() => {
-        setProgress('none');
-    }, [material]);
 
     // Checking for level up and dispatching console message
     useEffect(() => {
@@ -111,33 +132,12 @@ export function Artifice() {
 
     // Setting time for progress bar to fill
     const upgrade = type => {
-        if (action === 'Bar') {
-            if (items[type]['Ore'] !== 0) {
-                setProgress(type);
-            } else {
-                dispatch(push(`You ran out of ${type} Ore.~`));
-            }
+        if (items[type]['Bar'] >= req) {
+            setProgress(type)
         } else {
-            if (items[type]['Bar'] !== 0) {
-                setProgress(type)
-            } else {
-                dispatch(push(`You ran out of ${type} Bars.~`));
-            }
+            dispatch(push(`Not enough ${type} Bars.~`));
         }
-
-        switch (type) {
-            case 'Copper':
-                setTiming(2);
-                break;
-            case 'Tin':
-                setTiming(2);
-                break;
-            case 'Iron':
-                setTiming(1);
-                break;
-            default:
-                break;
-        }
+        setTiming(2);
     }
 
     const handleMaterial = event => {
@@ -160,14 +160,8 @@ export function Artifice() {
             <div className='exp'>
                 <small>Level: {`${character[skill] === undefined ? 1 : character[skill].level}`}</small>
                 <small>Exp: {character[skill] === undefined ? `0 / 75` : `${character[skill].experience} / ${character[skill].next}`}</small>
-                
-                <small>{
-                    items[material]
-                        ? action === 'Bar'
-                            ? items[material]['Ore'] ? `${material} Ore: ${items[material]['Ore']}` : `${material} Ore: 0`
-                            : items[material]['Bar'] ? `${material} Bar: ${items[material]['Bar']}` : `${material} Bar: 0`
-                        : `${material} Ore: 0`
-                }</small>
+
+                <small>{`${material} Bar: ${items[material] ? items[material]['Bar'] : 0}`}</small>
             </div>
 
             <div className={styles.row}>
@@ -191,11 +185,19 @@ export function Artifice() {
                         />
                     </div>
                     <div className='tree'>
-                        <small>{`${material} ${action}`}</small>
-                        <small>{`Cost: 2`}</small>
+                        <small>{action ? `${material} ${action}` : "No Items"}</small>
+                        {
+                            items[material] ?
+                                action ?
+                                    items[material]['Bar'] >= req
+                                        ? <small>{`Cost: ${req}`}</small>
+                                        : <small style={{ color: 'red' }}>{`Cost: ${req}`}</small>
+                                    : ""
+                                : ""
+                        }
                         {
                             lvl >= expTable[material].req
-                                ? <button /* onClick={() => upgrade(material)} */ className={styles.button} id='tree'>Upgrade</button>
+                                ? <button onClick={() => upgrade(material)} className={styles.button} id='tree'>Upgrade</button>
                                 : <small>{`Required: ${expTable[material].req}`}</small>
                         }
                     </div>

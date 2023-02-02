@@ -4,15 +4,14 @@ import { sell } from '../slices/bankSlice';
 import Price from '../json/Pricing.json';
 import '../../App.css';
 
-// Adding mouseovers to each individual item
+// Adding selection to each individual item
 const Item = ({ data, index, select }) => {
   const bank = useSelector(state => state.bank);
-  console.log(Price)
 
   return (
     <div key={index} className='slot' onClick={select}>
-      <p className='bank-text'>{`${data}`}</p>
-      <p className='bank-text'>{`${bank[data.split(" ")[0]][data.split(" ")[1]]}`}</p>
+      <small className='bank-text'>{`${data}`}</small>
+      <small className='bank-text'>{`${bank[data.split(" ")[0]][data.split(" ")[1]]}`}</small>
     </div>
   )
 }
@@ -57,7 +56,6 @@ const Bank = () => {
     var temp = objectToList();
     var tempArray = [];
 
-    console.log(temp)
     for (let i = 0; i < temp.length; i++) {
 
       if (temp[i].length !== 0) {
@@ -98,12 +96,28 @@ const Bank = () => {
               <p>{select ? bank[select.split(" ")[0]][select.split(" ")[1]] : ""}</p>
               <button
                 className='equip-btn'
-                onClick={() => dispatch(sell({ 
-                  material: select.split(" ")[0], 
-                  item: select.split(" ")[1], 
-                  amount: 1, 
-                  coins: Price[select.split(" ")[0]][select.split(" ")[1]] 
-                }))}
+                onClick={() => {
+                  if (Price[select.split(" ")[0]][select.split(" ")[1]]) {
+                    dispatch(sell({
+                      material: select.split(" ")[0],
+                      item: select.split(" ")[1],
+                      amount: 1,
+                      coins: Price[select.split(" ")[0]][select.split(" ")[1]]
+                    }))
+                  } else if (select.split("+").length > 1) {
+                    dispatch(sell({
+                      material: select.split(" ")[0],
+                      item: select.split(" ")[1],
+                      amount: 1,
+                      coins: Price[select.split(" ")[0]][select.split(" ")[1].split("+")[0]] * (1 +  parseInt(select.split("+")[1]))
+                    }))
+                  }
+
+                  if (bank[select.split(" ")[0]][select.split(" ")[1]] === 0) {
+                    console.log(bank[select.split(" ")[0]][select.split(" ")[1]])
+                    setSelect("");
+                  }
+                }}
               >Sell</button>
             </div>
             : ""

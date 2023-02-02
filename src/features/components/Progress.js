@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  increment,
-  reset
-} from '../slices/progressSlice';
+import { increment, reset } from '../slices/progressSlice';
 
 export const Progress = props => {
   const dispatch = useDispatch();
