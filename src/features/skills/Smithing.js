@@ -45,9 +45,9 @@ export function Smithing() {
                 for (let i = 0; i < matReqs.length; i++) {
                     var metal = matReqs[i].split(" ")[0];
                     dispatch(decrement({ material: metal, item: 'Ore', amount: 1 }));
-                    if (items[material]['Ore'] <= 1) {
+                    if (items[metal]['Ore'] <= 1) {
                         setProgress('');
-                        dispatch(push(`You ran out of ${material} Ore.~`));
+                        dispatch(push(`You ran out of ${metal} Ore.~`));
                     }
                 }    
                 dispatch(push(`Smithed ${material} ${action}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
