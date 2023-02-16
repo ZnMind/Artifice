@@ -182,7 +182,7 @@ export function Smithing() {
                         {
                             lvl >= expTable[material].req
                                 ? <button onClick={() => smith(material)} className={styles.button} id='tree'>Smith</button>
-                                : <small>{`Required: ${expTable[material].req}`}</small>
+                                : <small style={{ color: 'lightslategray' }}>{`Required: ${expTable[material].req}`}</small>
                         }
                     </div>
                 </div>

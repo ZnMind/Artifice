@@ -163,7 +163,7 @@ export function Artifice() {
                 <small>Level: {`${character[skill] === undefined ? 1 : character[skill].level}`}</small>
                 <small>Exp: {character[skill] === undefined ? `0 / 75` : `${character[skill].experience} / ${character[skill].next}`}</small>
 
-                <small>{`${material} Bar: ${items[material] ? items[material]['Bar'] : 0}`}</small>
+                <small>{`${material} Bar: ${items[material] ? items[material]['Bar'] ? items[material]['Bar'] : 0 : 0}`}</small>
             </div>
 
             <div className={styles.row}>
@@ -200,7 +200,7 @@ export function Artifice() {
                         {
                             lvl >= expTable[material].req
                                 ? <button onClick={() => upgrade(material)} className={styles.button} id='tree'>Upgrade</button>
-                                : <small>{`Required: ${expTable[material].req}`}</small>
+                                : <small style={{ color: 'lightslategray' }}>{`Required: ${expTable[material].req}`}</small>
                         }
                     </div>
                 </div>

@@ -78,14 +78,14 @@ const Bank = () => {
   }
 
   const equipItem = () => {
-    var type;
+    var type, currentEquip;
     const weapons = ['Knife', 'Sword', 'Axe', 'Pick']
 
     if (weapons.some(element => select.includes(element))) {
       type = 'Weapon';
     }
 
-    if (type) var currentEquip = equipment[type].Name;
+    if (type) currentEquip = equipment[type].Name;
 
     if (currentEquip !== '') {
       var materialUn = currentEquip.split(" ")[0];
@@ -96,6 +96,14 @@ const Bank = () => {
       if (type) {
         dispatch(unequip({ equipment: type }));
         dispatch(increment({ material: materialUn, item: itemUn, amount: 1 }));
+        dispatch(decrement({ material: materialEq, item: itemEq, amount: 1 }));
+        dispatch(equip({ equipment: type, item: select }));
+      }
+    } else {
+      var materialEq = select.split(" ")[0];
+      var itemEq = select.split(" ")[1];
+
+      if (type) {
         dispatch(decrement({ material: materialEq, item: itemEq, amount: 1 }));
         dispatch(equip({ equipment: type, item: select }));
       }

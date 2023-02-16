@@ -9,7 +9,7 @@
         "Steel": 60
     },
     "Style": {
-        "Dagger": {
+        "Knife": {
             "Attack": 0.8,
             "Strength": 0.5,
             "Defense": 1.5,
