@@ -4,13 +4,29 @@ import { Progress } from './Progress';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { push } from '../slices/consoleSlice';
 import multipliers from '../json/Multipliers.json';
+import enemies from '../json/Enemies.json';
 import '../../App.css';
 import styles from '../skills/Counter.module.css';
 
 const BattleArea = ({ area, index }) => {
     const dispatch = useDispatch();
+    const character = useSelector(state => state.character);
+    const equipment = useSelector(state => state.equipment);
+
+    // Stat initialization
     const [enemy, setEnemy] = useState([]);
-    const [hp, setHp] = useState(1)
+    const [hp, setHp] = useState(1);
+    const [attack, setAttack] = useState(character.Attack.level);
+    const [defense, setDefense] = useState(character.Defense.level);
+    const [strength, setStrength] = useState(character.Strength.level);
+    const [gearAtk, setGearAtk] = useState();
+    const [gearDef, setGearDef] = useState();
+    const [gearStr, setGearStr] = useState();
+    const [maxHit, setMaxHit] = useState();
+    const [accuracy, setAccuracy] = useState();
+    const [evasion, setEvasion] = useState();
+
+    // Bars
     const [fighting, setFighting] = useState(false);
     const [bar1, setBar1] = useState(0);
     const [bar2, setBar2] = useState(0);
@@ -18,9 +34,48 @@ const BattleArea = ({ area, index }) => {
     const progressTimer = useRef();
     const enemyTimer = useRef();
 
-    console.log(area)
-    console.log(Object.values(area[index]))
-    console.log(index);
+    //console.log(character)
+    //console.log(equipment)
+
+    const calculateBonus = () => {
+        var atk = 0, def = 0, str = 0;
+        for (let i = 0; i < Object.keys(equipment).length - 1; i++) {
+            var slot = equipment[Object.keys(equipment)[i]];
+            atk += slot.Atk;
+            def += slot.Def;
+            str += slot.Str;
+        }
+        setGearAtk(atk);
+        setGearDef(def);
+        setGearStr(str);
+    };
+
+    useEffect(() => {
+        calculateBonus();
+    }, [])
+
+    // Calculating max hit
+    useEffect(() => {
+        var effectiveStr = strength + 8;
+        var max = Math.floor((effectiveStr * (gearStr + 64) + 320) / 64);
+        console.log(max)
+        setMaxHit(max);
+    }, [strength, gearStr]);
+
+    // Calculating accuracy
+    useEffect(() => {
+        var effectiveAtk = attack + 8;
+        var acc = Math.floor(effectiveAtk * (gearAtk + 64));
+        console.log(acc)
+        setAccuracy(acc);
+    }, [attack, gearAtk]);
+
+    useEffect(() => {
+        var effectiveDef = defense + 8;
+        var def = Math.floor(effectiveDef * (gearDef + 64));
+        console.log(def)
+        setEvasion(def);
+    }, [defense, gearDef]);
 
     // Setting monster stats
     useEffect(() => {
@@ -85,8 +140,8 @@ const BattleArea = ({ area, index }) => {
             <p>{`Zone 1-${index + 1}`}</p>
             <div className='battle-screen'>
                 <div className='left'>
+                    <div className='hp-bars'>
                     <p>Me</p>
-
                     <ProgressBar
                         now={80}
                         variant='success'
@@ -96,15 +151,24 @@ const BattleArea = ({ area, index }) => {
                         now={bar1}
                         label={`${Math.round(250 - 250 * (bar1 / 100)) / 100}s`}
                     />
-                    <div className='stat-box'>
-                        <small>80 / 100</small>
-                        <div style={{display: 'flex', flexDirection: 'column'}}>
-                        <small>Accuracy: 5</small>
-                        <small>Evasion: 0</small>
+                        <p>100 / 100</p>
+                        </div>
+                    <div className='stat-box' style={{ border: '1px solid darkgreen' }}>
+                        <small style={{ color: 'lightslategray', width: '100%' }}>Ratings</small>
+                        <div className='stat-line'>
+                            <small>Attack:</small>
+                            <small>Defense:</small>
+                            <small>Max Hit:</small>
+                        </div>
+                        <div className='stat-line'>
+                            <small>{accuracy}</small>
+                            <small>{evasion}</small>
+                            <small>{maxHit}</small>
                         </div>
                     </div>
                 </div>
                 <div className='right'>
+                    <div className='hp-bars'>
                     <p>{Object.keys(area[index])}</p>
 
                     <ProgressBar
@@ -116,17 +180,25 @@ const BattleArea = ({ area, index }) => {
                         now={bar2}
                         label={`${Math.round(200 - 200 * (bar2 / 100)) / 100}s`}
                     />
-                    <div className='stat-box'>
-                        <small>{`${hp} / ${enemy[0]}`}</small>
-                        <div style={{display: 'flex', flexDirection: 'column'}}>
-                            <small>{`Accuracy: ${enemy[1]}`}</small>
-                            <small>{`Evasion: ${enemy[2]}`}</small>
+                        <p>{`${hp} / ${enemy[0]}`}</p>
+                        </div>
+                    <div className='stat-box' style={{ border: '1px solid darkred'}}>
+                    <small style={{ color: 'lightslategray', width: '100%' }}>Ratings</small>
+                        <div className='stat-line'>
+                            <small>Attack:</small>
+                            <small>Defense:</small>
+                            <small>Max Hit:</small>
+                        </div>
+                        <div className='stat-line'>
+                            <small>{accuracy}</small>
+                            <small>{evasion}</small>
+                            <small>{maxHit}</small>
                         </div>
                     </div>
                 </div>
             </div>
             {!fighting
-                ? <button onClick={handleBattle} className={styles.button}>Battle</button>
+                ? <button onClick={handleBattle} className={styles.button} style={{ boxShadow: '5px 6px 0.5em #000'}}>Battle</button>
                 : <button onClick={handleBattle} className={styles.button}>Stop</button>
             }
         </div>
@@ -141,7 +213,11 @@ const Adventure = () => {
         { 'Warg': [150, 35, 5] },
         { 'Troll': [250, 25, 25] }
     ]);
+    //const [areas] = useState(Object.keys(enemies))
     const [current, setCurrent] = useState(0);
+    //const [currentArea, setCurrentArea] = useState('Farm');
+
+    console.log(enemies)
 
     const changeArea = level => {
         setCurrent(level);
@@ -151,6 +227,10 @@ const Adventure = () => {
         <div>
             <h2>Adventure</h2>
             <div className='container'>
+                {/* <select>
+                    {areas.map((d, i) => <option key={i} value={d} onChange={e => changeArea(e)}>{d}</option>)}
+                </select>
+                    <p style={{ color: 'white' }}>{currentArea}</p> */}
                 {areas.map((data, index) => (
                     <div key={index}>
                         <button onClick={() => changeArea(index)}>{`Area 1-${index + 1}`}</button>

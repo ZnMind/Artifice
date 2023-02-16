@@ -17,16 +17,16 @@ export function Smithing() {
     const [skill] = useState('Smithing');
     const [material, setMaterial] = useState('Copper');
     const [action, setAction] = useState('Bar');
-    const [progress, setProgress] = useState('none');
+    const [progress, setProgress] = useState('');
     const [timing, setTiming] = useState(0);
     const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
     const [itemOptions] = useState(['Bar', 'Knife', 'Sword', 'Axe']);
     const [expTable] = useState({
-        'Copper': { 'exp': 15, 'req': 1 },
-        'Tin': { 'exp': 25, 'req': 5 },
-        'Bronze': { 'exp': 40, 'req': 10 },
-        'Iron': { 'exp': 60, 'req': 20 },
-        'Steel': { 'exp': 90, 'req': 30 },
+        'Copper': { 'exp': 15, 'req': 1, 'ore': { 'Copper Ore': 1 } },
+        'Tin': { 'exp': 25, 'req': 1, 'ore': { 'Tin Ore': 1 } },
+        'Bronze': { 'exp': 40, 'req': 1, 'ore': { 'Copper Ore': 1, 'Tin Ore': 1 } },
+        'Iron': { 'exp': 60, 'req': 20, 'ore': { 'Iron Ore': 1 } },
+        'Steel': { 'exp': 90, 'req': 30, 'ore': { 'Iron Ore': 1, 'Coal': 1 } },
     });
 
     // Attempting to initialize state for older saves
@@ -44,14 +44,14 @@ export function Smithing() {
                 dispatch(decrement({ material: material, item: 'Ore', amount: 1 }));
                 dispatch(push(`Smithed ${material} ${action}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
                 if (items[material]['Ore'] <= 1) {
-                    setProgress('none');
+                    setProgress('');
                     dispatch(push(`You ran out of ${material} Ore.~`));
                 }
             } else {
                 dispatch(decrement({ material: material, item: 'Bar', amount: 1 }));
                 dispatch(push(`Smithed ${material} ${action}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
                 if (items[material]['Bar'] <= 1) {
-                    setProgress('none');
+                    setProgress('');
                     dispatch(push(`You ran out of ${material} Bars.~`));
                 }
             }
@@ -62,7 +62,7 @@ export function Smithing() {
 
     // Resetting progress bar on material change
     useEffect(() => {
-        setProgress('none');
+        setProgress('');
     }, [material]);
 
     // Checking for level up and dispatching console message
@@ -77,15 +77,36 @@ export function Smithing() {
 
     // Setting time for progress bar to fill
     const smith = type => {
+        var materialCheck = [];
+
         if (action === 'Bar') {
-            if (items[type]['Ore'] !== 0) {
+
+            Object.keys(expTable[type]['ore']).forEach(i => {
+                if (items[i.split(" ")[0]]) {
+                    //if (items[i.split(" ")[0]]['Ore']) {
+                        if (items[i.split(" ")[0]]['Ore'] >= expTable[type]['ore'][i]) {
+                            materialCheck.push(true);
+                        } else {
+                            materialCheck.push(false);
+                        }
+                    //}
+                } else {
+                    materialCheck.push(false);
+                }
+            })
+            
+            if (materialCheck.every(Boolean)) {
                 setProgress(type);
             } else {
-                dispatch(push(`You ran out of ${type} Ore.~`));
+                dispatch(push(`You ran out of ore.~`));
             }
         } else {
-            if (items[type]['Bar'] !== 0) {
-                setProgress(type)
+            if (items[type]) {
+                if (items[type]['Bar'] !== 0) {
+                    setProgress(type)
+                } else {
+                    dispatch(push(`You ran out of ${type} Bars.~`));
+                }
             } else {
                 dispatch(push(`You ran out of ${type} Bars.~`));
             }
@@ -107,7 +128,7 @@ export function Smithing() {
     }
 
     const handleAction = event => {
-        setProgress('none');
+        setProgress('');
         setAction(event.value);
     }
 
@@ -128,13 +149,34 @@ export function Smithing() {
                     <button className={styles.button} onClick={() => setMaterial('Iron')}>Iron</button>
                     {/* <button className={styles.button} onClick={() => setMaterial('Steel')}>Steel</button> */}
                 </div>
-                <small>{
+
+                {
+                    action === 'Bar'
+                        ? Object.keys(expTable[material]['ore']).map((d, i) => (
+                            <small key={i}>
+                                {
+                                    items[d.split(" ")[0]]
+                                        ? `${d}: ${items[d.split(" ")[0]]['Ore']}`
+                                        : `${d}: 0`
+                                }
+                            </small>
+                        ))
+                        : <small>{
+                            items[material]
+                                ? items[material]['Bar']
+                                    ? `${material} Bar: ${items[material]['Bar']}`
+                                    : `${material} Bar: 0`
+                                : `${material} Bar: 0`
+                        }</small>
+                }
+
+                {/* <small>{
                     items[material]
                         ? action === 'Bar'
                             ? items[material]['Ore'] ? `${material} Ore: ${items[material]['Ore']}` : `${material} Ore: 0`
                             : items[material]['Bar'] ? `${material} Bar: ${items[material]['Bar']}` : `${material} Bar: 0`
                         : `${material} Ore: 0`
-                }</small>
+                }</small> */}
             </div>
 
             <div className={styles.row}>

@@ -1,4 +1,7 @@
 {
+    "Training": {
+        "Sword": 1
+    },
     "Normal": {
         "Log": 1
     },
@@ -7,6 +10,12 @@
     },
     "Willow": {
         "Log": 10
+    },
+    "Teak": {
+        "Log": 15
+    },
+    "Maple": {
+        "Log": 25
     },
     "Stone": {
         "Axe": 1,

@@ -1,6 +1,7 @@
 {
     "Materials": {
         "Training": 5,
+        "Stone": 5,
         "Copper": 10,
         "Tin": 20,
         "Iron": 30,
@@ -30,6 +31,12 @@
             "Strength": 1.8,
             "Defense": 0.6,
             "Mult": 2
+        },
+        "Pick": {
+            "Attack": 0.3,
+            "Strength": 0.8,
+            "Defense": 0.3,
+            "Mult": 1
         }
     }
 }

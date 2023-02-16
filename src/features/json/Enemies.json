@@ -1,0 +1,39 @@
+{
+    "Farm": {
+        "Chicken": {
+            "Hp": 30,
+            "Attack": 1,
+            "Defense": 1,
+            "Strength": 1,
+            "Drops": {
+                "Bones": [1, 1],
+                "Feathers": [0.5, 15],
+                "Raw Chicken": [0.25, 1]
+            }
+        },
+        "Cow": {
+            "Hp": 80,
+            "Attack": 2,
+            "Defense": 2,
+            "Strength": 2,
+            "Drops": {
+                "Bones": [1, 1],
+                "Cowhide": [1, 1],
+                "Raw Beef": [1, 1]
+            }
+        },
+        "Farmer": {
+            "Hp": 120,
+            "Attack": 5,
+            "Defense": 5,
+            "Strength": 5,
+            "Drops": {
+                "Bones": [1, 1]
+            }
+        }
+    },
+    "City": {
+        "Man": {},
+        "Thief": {}
+    }
+}

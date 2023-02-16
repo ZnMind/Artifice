@@ -18,7 +18,7 @@ export function Artifice() {
     const [itemOptions, setItemOptions] = useState([]);
     const [action, setAction] = useState("");
     const [req, setReq] = useState(2);
-    const [progress, setProgress] = useState('none');
+    const [progress, setProgress] = useState('');
     const [timing, setTiming] = useState(0);
     const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
     const [wepArray] = useState(['Bow', 'Knife', 'Sword', 'Axe'])
@@ -26,7 +26,7 @@ export function Artifice() {
     // Setting materials and excluding certain keys for input options
     const [materialOptions] = useState(
         Object.keys(items).flatMap(element => {
-            if (element === 'Coins' || element === 'Stone') {
+            if (element === 'Coins' || element === 'Stone' || element === 'Training') {
                 return [];
             }
             // Checking if materials actually have an enhanceable item
@@ -63,7 +63,7 @@ export function Artifice() {
 
     // Not showing options if player doesn't have item
     useEffect(() => {
-        setProgress('none');
+        setProgress('');
         if (items[material]) {
             setItemOptions(Object.keys(items[material]).flatMap(element => {
                 if (['Bow', 'Knife', 'Sword', 'Axe'].includes(element.split("+")[0])) {
@@ -74,7 +74,7 @@ export function Artifice() {
                 return [];
             }))
         }
-    }, [material]);
+    }, [material, items[material]]);
 
     useEffect(() => {
         if (itemOptions) {
@@ -113,9 +113,10 @@ export function Artifice() {
             }
             // Stopping progress if out of materials
             if (items[material][action] <= 1 || items[material]['Bar'] < req) {
-                setProgress('none');
+                setProgress('');
                 dispatch(push(`You ran out of ${material} ${action}.~`));
             }
+            setMaterial(material);
             dispatch(gainExp({ skill: 'Artifice', amount: expTable[material]['exp'] * req }));
         }
     }, [bar]);
@@ -141,12 +142,12 @@ export function Artifice() {
     }
 
     const handleMaterial = event => {
-        setProgress('none');
+        setProgress('');
         setMaterial(event.value);
     }
 
     const handleAction = event => {
-        setProgress('none');
+        setProgress('');
         setAction(event.value);
     }
 

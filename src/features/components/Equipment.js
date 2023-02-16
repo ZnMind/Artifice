@@ -7,54 +7,50 @@ const Equipment = () => {
     const [slots] = useState(['Head', 'Chest', 'Gloves', 'Legs', 'Boots', 'Weapon', 'Offhand']);
     const [stats, setStats] = useState([]);
     const equip = useSelector(state => state.equipment);
-    console.log(equip[0]);
 
     useEffect(() => {
         calculateBonus();
     }, []);
 
     const calculateBonus = () => {
-        var atkAcc = 0,
-            strAcc = 0,
-            defAcc = 0,
-            strBonus = 0;
-
-        for (let i = 0; i < Object.keys(equip).length; i++) {
-            var slot = equip[Object.keys(equip)[i]];
-            if (slot !== "") {
-                console.log(slot)
-                var mat = multipliers.Materials[slot.split(" ")[0]];
-                var type = multipliers.Style[slot.split(" ")[1]];
-
-                console.log(mat)
-                console.log(type)
-                atkAcc = mat * type.Attack;
-                strAcc = mat * type.Strength;
-                defAcc = mat * type.Defense;
-                strBonus = mat * type.Mult;
+        var atk = 0, def = 0, str = 0;
+            for (let i = 0; i < Object.keys(equip).length - 1; i++) {
+                var slot = equip[Object.keys(equip)[i]];
+                    atk += slot.Atk;
+                    def += slot.Def;
+                    str += slot.Str;
             }
-        }
-
-        setStats([ atkAcc, strAcc, defAcc, strBonus ]);
+            setStats([ atk, def, str ])
     };
 
     return (
         <div>
             <h2>Equipment</h2>
             <div>
-                <small>{`A: ${stats[0]} D: ${stats[3]}`}</small>
+                <small>{`Attack: ${stats[0]}, Defense: ${stats[1]}, Strength: ${stats[2]}`}</small>
             </div>
             <div>
                 {slots.map((data, index) => (
-                    <div key={index} className='equip'>
+                    <div key={index} className='equip' onMouseEnter={e => mouseOver(e)}>
                         <p>{`${data}: `}</p>
-                        <p>{`${equip[data]}`}</p>
+                        <p>{`${equip[data].Name}`}</p>
                     </div>
                 ))}
 
             </div>
         </div>
     )
+}
+
+const mouseOver = item => {
+    var slot = item.target.firstChild.innerText.split(":")[0];
+    console.log(slot);
+
+    /* return (
+        <div style={{ position: 'absolute', top: 0, color: 'white' }}>
+            <p>1234</p>
+        </div>
+    ) */
 }
 
 export default Equipment;

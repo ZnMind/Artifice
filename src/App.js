@@ -7,6 +7,7 @@ import { Mining } from './features/skills/Mining';
 import { Smithing } from './features/skills/Smithing';
 import { Artifice } from './features/skills/Artifice';
 import { Skills } from './features/skills/Skills';
+import { ModScreen } from './features/skills/Skills';
 import { push } from './features/slices/consoleSlice';
 import Bank from './features/components/Bank';
 import Equipment from './features/components/Equipment';
@@ -17,6 +18,7 @@ const App = () => {
   const dispatch = useDispatch();
   const saveTimer = useRef();
   const [screen, setScreen] = useState('woodcutting');
+  const [mod, setMod] = useState('skills');
 
   const logs = useSelector(state => state.woodcut)
   const character = useSelector(state => state.character)
@@ -26,8 +28,9 @@ const App = () => {
     //window.localStorage.setItem('Screen', JSON.stringify(screen));
     store.subscribe(() => {
       saveState({
-        character: store.getState().character,
         bank: store.getState().bank,
+        character: store.getState().character,
+        equipment: store.getState().equipment,
       });
     });
     dispatch(push(`Game Saved!~`))
@@ -57,7 +60,13 @@ const App = () => {
     'artifice': Artifice,
   }
 
+  const modifiers = {
+    'skills': Skills,
+    'modifiers': ModScreen
+  }
+
   const Display = components[screen]
+  const ModDisplay = modifiers[mod]
 
   return (
     <>
@@ -83,7 +92,11 @@ const App = () => {
           </div>
         </div>
         <div className='skill-screen'>
-          <Skills />
+          <div className='buffs'>
+            <div className='buff-btn' style={{borderRight: '1px solid black'}} onClick={() => setMod('skills')}>Skills</div>
+            <div className='buff-btn' onClick={() => setMod('modifiers')}>Modifiers</div>
+          </div>
+          <ModDisplay />
         </div>
       </div>
       <div className='console'>

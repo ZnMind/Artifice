@@ -12,18 +12,20 @@ export function Mining() {
     const bar = useSelector(state => state.progress);
     const items = useSelector(state => state.bank);
     const character = useSelector(state => state.character);
+    const bonus = useSelector(state => state.equipment.Bonus.Pick);
 
     const [page, setPage] = useState(1);
     const [action, setAction] = useState('');
     const [timing, setTiming] = useState(0);
     const [skill] = useState('Mining');
     const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
+    const [speedBonus, setSpeedBonus] = useState(Math.round((bonus / 2 + 100 + ((lvl - 1) / 2) * (1 + (bonus / 100))) * 100) / 100);
     const [expTable] = useState({
-        'Copper': { 'exp': 15, 'req': 1, 'timing': 5 },
-        'Tin': { 'exp': 20, 'req': 5, 'timing': 5 },
-        'Iron': { 'exp': 40, 'req': 15, 'timing': 10 },
-        'Coal': { 'exp': 60, 'req': 30, 'timing': 15 },
-        'Mithril': { 'exp': 60, 'req': 30, 'timing': 15 },
+        'Copper': { 'exp': 15, 'req': 1, 'timing': 1 },
+        'Tin': { 'exp': 20, 'req': 5, 'timing': 1 },
+        'Iron': { 'exp': 40, 'req': 15, 'timing': 2 },
+        'Coal': { 'exp': 60, 'req': 30, 'timing': 3 },
+        'Mithril': { 'exp': 60, 'req': 40, 'timing': 5 },
     });
 
     // Attempting to initialize state for older saves
@@ -48,6 +50,7 @@ export function Mining() {
             if (character[skill].level > lvl) {
                 dispatch(push(`Congrats you leveled up! ${skill} level ${character[skill].level}~`))
                 setLvl(lvl + 1);
+                setSpeedBonus(100 + (lvl / 2) * (1 + (bonus / 100)))
             }
         }
     }, [character[skill]]);
@@ -55,19 +58,7 @@ export function Mining() {
     // Setting time for progress bar to fill
     const mine = type => {
         setAction(type);
-        switch (type) {
-            case 'Copper':
-                setTiming(2);
-                break;
-            case 'Tin':
-                setTiming(2);
-                break;
-            case 'Iron':
-                setTiming(1);
-                break;
-            default:
-                break;
-        }
+        setTiming(expTable[type].timing)
     }
 
     return (
@@ -76,23 +67,29 @@ export function Mining() {
             <Progress
                 action={action}
                 timing={timing}
+                bonus={speedBonus / 100}
             />
             <div className='exp'>
                 <small>Level: {`${character[skill] === undefined ? 1 : character[skill].level}`}</small>
                 <small>Exp: {character[skill] === undefined ? `0 / 75` : `${character[skill].experience} / ${character[skill].next}`}</small>
             </div>
+            <div className='p-container'></div>
 
             <div className={styles.row}>
-            <div className={`arrow ${page === 1 ? 'disabled' : 'arrow-left'}`} onClick={() => setPage(page - 1)}></div>
+                <div className={`arrow ${page === 1 ? 'disabled' : 'arrow-left'}`} onClick={() => setPage(page - 1)}></div>
                 <div className='container'>
                     {Object.keys(expTable).slice(page * 4 - 4, page * 4).map((data, index) => (
                         <div key={index} className='tree'>
                             <p>{data}</p>
-                            <small>{`${expTable[data].timing}s`}</small>
+                            <small>{`${Math.round(((2.5 + expTable[data].timing * 2.5) / (speedBonus / 100)) * 100) / 100}s`}</small>
                             {
                                 lvl >= expTable[data].req
                                     ? <button onClick={() => mine(data)} className={styles.button} id='tree'>Mine</button>
-                                    : <small>{`Required: ${expTable[data].req}`}</small>
+                                    : <small style={{
+                                        color: 'lightslategray',
+                                        marginTop: '25px',
+                                        marginBottom: '25px'
+                                    }}>{`Required: ${expTable[data].req}`}</small>
                             }
                         </div>
                     ))}

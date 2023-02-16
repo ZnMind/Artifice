@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { sell } from '../slices/bankSlice';
+import { increment, decrement } from '../slices/bankSlice';
+import { equip, unequip } from '../slices/equipmentSlice';
 import Price from '../json/Pricing.json';
 import '../../App.css';
 
@@ -18,9 +20,11 @@ const Item = ({ data, index, select }) => {
 
 const Bank = () => {
   const dispatch = useDispatch();
-  const [inventory, setInventory] = useState([]);
-  const [select, setSelect] = useState("");
   const bank = useSelector(state => state.bank);
+  const equipment = useSelector(state => state.equipment);
+  const [inventory, setInventory] = useState([]);
+  const [select, setSelect] = useState("Stone Axe");
+  const [equipArray] = useState(['Knife', 'Sword', 'Axe', 'Pick'])
 
   // Converting state object into an array
   // Could probably be done cleaner but it works
@@ -44,10 +48,57 @@ const Bank = () => {
       var item = event.target.firstChild.innerText;
     }
 
-    if (select === item) {
+    /* if (select === item) {
       setSelect("");
-    } else {
-      setSelect(item);
+    } else { */
+    setSelect(item);
+    //}
+  }
+
+  const sellItem = () => {
+    if (Price[select.split(" ")[0]][select.split(" ")[1]]) {
+      dispatch(sell({
+        material: select.split(" ")[0],
+        item: select.split(" ")[1],
+        amount: 1,
+        coins: Price[select.split(" ")[0]][select.split(" ")[1]]
+      }))
+    } else if (select.split("+").length > 1) {
+      dispatch(sell({
+        material: select.split(" ")[0],
+        item: select.split(" ")[1],
+        amount: 1,
+        coins: Price[select.split(" ")[0]][select.split(" ")[1].split("+")[0]] * (1 + parseInt(select.split("+")[1]))
+      }))
+    }
+
+    if (bank[select.split(" ")[0]][select.split(" ")[1]] === 0) {
+      setSelect("");
+    }
+  }
+
+  const equipItem = () => {
+    var type;
+    const weapons = ['Knife', 'Sword', 'Axe', 'Pick']
+
+    if (weapons.some(element => select.includes(element))) {
+      type = 'Weapon';
+    }
+
+    if (type) var currentEquip = equipment[type].Name;
+
+    if (currentEquip !== '') {
+      var materialUn = currentEquip.split(" ")[0];
+      var itemUn = currentEquip.split(" ")[1];
+      var materialEq = select.split(" ")[0];
+      var itemEq = select.split(" ")[1];
+
+      if (type) {
+        dispatch(unequip({ equipment: type }));
+        dispatch(increment({ material: materialUn, item: itemUn, amount: 1 }));
+        dispatch(decrement({ material: materialEq, item: itemEq, amount: 1 }));
+        dispatch(equip({ equipment: type, item: select }));
+      }
     }
   }
 
@@ -67,6 +118,11 @@ const Bank = () => {
 
     setInventory(tempArray);
   }, [bank]);
+
+  useEffect(() => {
+    //console.log("E")
+    //setSelect("");
+  }, [equipment]);
 
   return (
     <div>
@@ -94,30 +150,18 @@ const Bank = () => {
             ? <div className='selected'>
               <small>{select}</small>
               <p>{select ? bank[select.split(" ")[0]][select.split(" ")[1]] : ""}</p>
+
+              {/* Equip Button */}
+              {
+                equipArray.some(element => select.includes(element))
+                  ? <button className='equip-btn' onClick={equipItem}>Equip</button>
+                  : ""
+              }
+
+              {/* Sell Button */}
               <button
                 className='equip-btn'
-                onClick={() => {
-                  if (Price[select.split(" ")[0]][select.split(" ")[1]]) {
-                    dispatch(sell({
-                      material: select.split(" ")[0],
-                      item: select.split(" ")[1],
-                      amount: 1,
-                      coins: Price[select.split(" ")[0]][select.split(" ")[1]]
-                    }))
-                  } else if (select.split("+").length > 1) {
-                    dispatch(sell({
-                      material: select.split(" ")[0],
-                      item: select.split(" ")[1],
-                      amount: 1,
-                      coins: Price[select.split(" ")[0]][select.split(" ")[1].split("+")[0]] * (1 +  parseInt(select.split("+")[1]))
-                    }))
-                  }
-
-                  if (bank[select.split(" ")[0]][select.split(" ")[1]] === 0) {
-                    console.log(bank[select.split(" ")[0]][select.split(" ")[1]])
-                    setSelect("");
-                  }
-                }}
+                onClick={sellItem}
               >Sell</button>
             </div>
             : ""

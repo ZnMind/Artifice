@@ -10,12 +10,13 @@ export const Progress = props => {
   const progressTimer = useRef();
   
   const handleTime = () => {
-    dispatch(increment(props.timing));
+    var perMs = props.bonus * (10 / ( 2.5 + props.timing * 2.5));
+    dispatch(increment(perMs));
   }
 
   useEffect(() => {
     dispatch(reset());
-    if (props.action !== 'none') {
+    if (props.action !== '') {
       progressTimer.current = setInterval(handleTime, 100);
       return () => clearInterval(progressTimer.current)
     }
@@ -23,13 +24,14 @@ export const Progress = props => {
 
   useEffect(() => {
     if (bar.now >= 100) {
+      console.log("Stop")
       dispatch(reset());
     }
   }, [bar.now]);
 
     return (
         <div>
-          <ProgressBar now={bar.now} label={`Action: ${(100 - bar.now) / (props.timing * 10)}s`} />
+          <ProgressBar now={bar.now} label={`${Math.round((100 - bar.now) / (props.bonus * (100 / ( 2.5 + props.timing * 2.5))) * 10 ) / 10}s`} />
         </div>
     )
 }

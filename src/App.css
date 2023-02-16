@@ -36,7 +36,6 @@
   flex-direction: column;
   justify-content: center;
   border-right: 1px solid black;
-  
   width: 15vw;
 }
 
@@ -46,6 +45,8 @@
   background-color: white;
   text-align: center;
   color: black;
+  margin: 0.1em;
+  border-radius: 5%;
 }
 
 .div-button:hover {
@@ -78,12 +79,28 @@
 
 .skill-screen {
   width: 15vw;
-  display: flex;
   justify-content: center;
+  align-items: flex-start;
   flex-wrap: wrap;
   border-left: 1px solid black;
-  padding: 1vw;
+  padding-left: 1vw;
+  padding-right: 1vw;
   color: white;
+}
+
+.buffs {
+  display: flex;
+  
+  align-items: center;
+  border-bottom: 1px solid #fff;
+  height: 5vh;
+  margin-bottom: 2em;
+}
+
+.buff-btn {
+  min-width: 50%;
+  cursor: pointer;
+  text-align: center;
 }
 
 .console {
@@ -156,7 +173,7 @@
 }
 
 .tree {
-  border: 1px solid black;
+  border: 1px solid #000;
   width: 175px;
   height: 175px;
   margin: 0.5em;
@@ -164,6 +181,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: 7.5%;
+  box-shadow: 2.5px 3px 0.25em #000;
+}
+
+.p-container {
+  height: 2px;
+  border-radius: 100%;
+  box-shadow: 2px 10px 0.4em slategray;
+  margin-bottom: 2em;
 }
 
 .arrow {
@@ -227,27 +253,24 @@ small.save {
 
 .grid {
   height: 100%;
-  max-width: 806px;
+  max-width: 50vw;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   position: relative;
   top: 0;
-  
-  border-left: 0.5px solid black;
-  border-top: 0.5px solid black;
-  /* border-bottom: 0.5px solid black; */
 }
 
 .slot {
-  min-height: 115px;
-  width: 115px;
-  
-  border-right: 0.5px solid #000;
-  border-bottom: 0.5px solid #000;
+  height: 120px;
+  width: 120px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  border: 1px solid #000;
+  margin: 0.15em;
+  cursor: pointer;
+  border-radius: 7.5%;
 }
 
 .bank-row {
@@ -258,7 +281,6 @@ small.save {
   font-size: medium;
   flex-wrap: wrap;
   padding: 0.25em;
-  
 }
 
 .btn-div {
@@ -273,8 +295,10 @@ small.save {
 .selected {
   border: 1px solid #000;
   width: 10vw;
+  min-width: 120px;
   height: 100%;
-  margin-left: 2em;
+  margin-left: 1em;
+  border-radius: 7.5%;
   /* position: relative;
   top: 0;
   right: 0px; */
@@ -315,19 +339,47 @@ small.save {
 }
 
 .left, .right {
-  width: 40%;
+  width: 45%;
 }
 
 .battle-pbar {
   margin-bottom: 0.5em;
 }
 
+.hp-bars {
+  border: 1px solid #000;
+  border-radius: 7.5%;
+  box-shadow: 5px 6px 0.5em #000;
+  padding: 0.5em;
+  margin-top: 1em;
+}
+
 .stat-box {
-  border: 1px solid black;
-  margin-top: 2em;
+  margin-top: 0.25em;
   margin-bottom: 2em;
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  border-radius: 7.5%;
   height: 200px;
+  box-shadow: 5px 6px 0.5em #000;
+}
+
+.stat-line {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin-top: -2em;
+}
+
+.mod-box {
+  display: flex;
+  justify-content: center;
+}
+
+.mod-line {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  text-align: start;
 }
