@@ -24,7 +24,6 @@ export const Progress = props => {
 
   useEffect(() => {
     if (bar.now >= 100) {
-      console.log("Stop")
       dispatch(reset());
     }
   }, [bar.now]);

@@ -4,8 +4,9 @@
         "Stone": 5,
         "Copper": 10,
         "Tin": 20,
-        "Iron": 30,
-        "Steel": 40
+        "Bronze": 30,
+        "Iron": 45,
+        "Steel": 60
     },
     "Style": {
         "Dagger": {

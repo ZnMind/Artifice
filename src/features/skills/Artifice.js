@@ -21,7 +21,7 @@ export function Artifice() {
     const [progress, setProgress] = useState('');
     const [timing, setTiming] = useState(0);
     const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
-    const [wepArray] = useState(['Bow', 'Knife', 'Sword', 'Axe'])
+    const [wepArray] = useState(['Bow', 'Knife', 'Sword', 'Axe', 'Pick'])
 
     // Setting materials and excluding certain keys for input options
     const [materialOptions] = useState(
@@ -66,7 +66,7 @@ export function Artifice() {
         setProgress('');
         if (items[material]) {
             setItemOptions(Object.keys(items[material]).flatMap(element => {
-                if (['Bow', 'Knife', 'Sword', 'Axe'].includes(element.split("+")[0])) {
+                if (wepArray.includes(element.split("+")[0])) {
                     if (items[material][element] > 0) {
                         return element;
                     }
@@ -138,7 +138,7 @@ export function Artifice() {
         } else {
             dispatch(push(`Not enough ${type} Bars.~`));
         }
-        setTiming(2);
+        setTiming(1);
     }
 
     const handleMaterial = event => {
@@ -157,6 +157,7 @@ export function Artifice() {
             <Progress
                 action={progress}
                 timing={timing}
+                bonus={1}
             />
             <div className='exp'>
                 <small>Level: {`${character[skill] === undefined ? 1 : character[skill].level}`}</small>
