@@ -50,7 +50,7 @@ export function Mining() {
             if (character[skill].level > lvl) {
                 dispatch(push(`Congrats you leveled up! ${skill} level ${character[skill].level}~`))
                 setLvl(lvl + 1);
-                setSpeedBonus(100 + (lvl / 2) * (1 + (bonus / 100)))
+                setSpeedBonus(bonus / 2 + 100 + (lvl / 2) * (1 + (bonus / 100)))
             }
         }
     }, [character[skill]]);
