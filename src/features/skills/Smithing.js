@@ -106,10 +106,12 @@ export function Smithing() {
             }
         } else {
             if (items[type]) {
-                if (items[type]['Bar'] !== 0) {
-                    setProgress(type)
-                } else {
-                    dispatch(push(`You ran out of ${type} Bars.~`));
+                if (items[type]['Bar']) {
+                    if (items[type]['Bar'] !== 0) {
+                        setProgress(type)
+                    } else {
+                        dispatch(push(`You ran out of ${type} Bars.~`));
+                    }
                 }
             } else {
                 dispatch(push(`You ran out of ${type} Bars.~`));
