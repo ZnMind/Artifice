@@ -8,12 +8,15 @@ const combatSlice = createSlice({
         Strength: 0,
     },
     reducers: {
-        updateStats(state, action) {
-            
+        updateHp(state, action) {
+            state.Hp.current += action.payload;
+        },
+        resetHp(state) {
+            state.Hp.current = state.Hp.max;
         },
     }
 })
 
-export const { updateStats } = combatSlice.actions;
+export const { updateHp, resetHp } = combatSlice.actions;
 
 export default combatSlice.reducer;

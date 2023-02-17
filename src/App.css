@@ -333,13 +333,22 @@ small.save {
   background-color: rgba(0, 76, 182, 0.2);
 }
 
+.adventure-container {
+  display: flex;
+  justify-content: space-around;
+  min-width: 450px;
+}
+
 .battle-screen {
+  width: 25vw;
+  min-width: 450px;
   display: flex;
   justify-content: space-around;
 }
 
 .left, .right {
   width: 45%;
+  min-width: 200px;
 }
 
 .battle-pbar {
@@ -382,4 +391,10 @@ small.save {
   flex-direction: column;
   width: 50%;
   text-align: start;
+}
+
+.zones {
+  display: flex;
+  justify-content: space-around;
+  margin: 0.5em;
 }

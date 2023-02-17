@@ -2,23 +2,23 @@
     "Farm": {
         "Chicken": {
             "Hp": 30,
-            "Attack": 1,
-            "Defense": 1,
-            "Strength": 1,
+            "Attack": -6,
+            "Defense": -4,
+            "Strength": 0,
             "Drops": {
-                "Bones": [1, 1],
+                "Normal Bones": [1, 1],
                 "Feathers": [0.5, 15],
                 "Raw Chicken": [0.25, 1]
             }
         },
         "Cow": {
             "Hp": 80,
-            "Attack": 2,
-            "Defense": 2,
-            "Strength": 2,
+            "Attack": 0,
+            "Defense": 5,
+            "Strength": 5,
             "Drops": {
-                "Bones": [1, 1],
-                "Cowhide": [1, 1],
+                "Normal Bones": [1, 1],
+                "Cow Hide": [1, 1],
                 "Raw Beef": [1, 1]
             }
         },
@@ -26,14 +26,31 @@
             "Hp": 120,
             "Attack": 5,
             "Defense": 5,
-            "Strength": 5,
+            "Strength": 12,
             "Drops": {
-                "Bones": [1, 1]
+                "Normal Bones": [1, 1]
             }
         }
     },
     "City": {
-        "Man": {},
-        "Thief": {}
+        "Man": {
+            "Hp": 70,
+            "Attack": 3,
+            "Defense": 3,
+            "Strength": 5,
+            "Drops": {
+                "Normal Bones": [1, 1]
+            }
+        },
+        "Thief": {
+            "Hp": 150,
+            "Attack": 10,
+            "Defense": 10,
+            "Strength": 25,
+            "Drops": {
+                "Normal Bones": [1, 1],
+                "Black Cape": [1, 1]
+            }
+        }
     }
 }

@@ -57,8 +57,12 @@ export function Mining() {
 
     // Setting time for progress bar to fill
     const mine = type => {
-        setAction(type);
-        setTiming(expTable[type].timing)
+        if (bonus > 0) {
+            setAction(type);
+            setTiming(expTable[type].timing)
+        } else {
+            dispatch(push(`You don't have a pick equipped!~`))
+        }
     }
 
     return (

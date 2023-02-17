@@ -6,6 +6,7 @@ import characterReducer from '../features/slices/characterSlice';
 import bankReducer from '../features/slices/bankSlice';
 import equipmentReducer from '../features/slices/equipmentSlice';
 import consoleReducer from '../features/slices/consoleSlice';
+import combatReducer from '../features/slices/combatSlice';
 
 // I'm writing this function to combine a preloaded state and initial state.
 // It checks if initial state object has keys that persisted state doesn't and then adds those in.
@@ -33,6 +34,7 @@ export const store = configureStore({
     character: characterReducer,
     bank: bankReducer,
     equipment: equipmentReducer,
+    combat: combatReducer,
     console: consoleReducer,
   },
   preloadedState: combineStates
