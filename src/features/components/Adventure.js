@@ -60,7 +60,7 @@ const BattleArea = ({ zone, area }) => {
             def += slot.Def;
             str += slot.Str;
         }
-        setGearAtk(Math.round(atk * multipliers['Style'][equipment['Weapon'].Name.split(" ")[1]][style]));
+        setGearAtk(Math.round(atk * multipliers['Style'][equipment['Weapon'].Name.split(" ")[1].split("+")[0]][style]));
         setGearDef(def);
         setGearStr(str);
     };
