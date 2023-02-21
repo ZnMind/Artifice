@@ -5,11 +5,12 @@ const equipmentSlice = createSlice({
     name: 'equipment',
     initialState: {
         Head: { Name: '', Atk: 0, Def: 0, Str: 0 },
+        Back: { Name: '', Atk: 0, Def: 0, Str: 0 },
         Chest: { Name: '', Atk: 0, Def: 0, Str: 0 },
         Gloves: { Name: '', Atk: 0, Def: 0, Str: 0 },
         Legs: { Name: '', Atk: 0, Def: 0, Str: 0 },
         Boots: { Name: '', Atk: 0, Def: 0, Str: 0 },
-        Weapon: { Name: 'Training Sword', Atk: 5, Def: 0, Str: 4 },
+        Weapon: { Name: 'Training Sword', Atk: 5, Def: 0, Str: 5 },
         Offhand: { Name: '', Atk: 0, Def: 0, Str: 0 },
         Bonus: {
             Axe: 0,

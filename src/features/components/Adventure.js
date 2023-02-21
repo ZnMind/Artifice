@@ -5,7 +5,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import { gainExp } from '../slices/characterSlice';
 import { increment } from '../slices/bankSlice';
 import { push } from '../slices/consoleSlice';
-import { updateHp, resetHp } from '../slices/combatSlice';
+import { updateHp, updateMax, resetHp } from '../slices/combatSlice';
 import multipliers from '../json/Multipliers.json';
 import enemies from '../json/Enemies.json';
 import Select from 'react-select';
@@ -17,6 +17,7 @@ const BattleArea = ({ zone, area }) => {
     const character = useSelector(state => state.character);
     const equipment = useSelector(state => state.equipment);
     const characterHp = useSelector(state => state.combat.Hp);
+    const style = useSelector(state => state.combat.Style);
 
     // Stat initialization
     const [attack, setAttack] = useState(character.Attack.level);
@@ -39,8 +40,9 @@ const BattleArea = ({ zone, area }) => {
     const [enemyHit, setEnemyHit] = useState(0);
 
     // Skill check
-    const [skill] = useState('Strength');
-    const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
+    const [skill] = useState(style);
+    const [lvl, setLvl] = useState(character[style].level);
+    const [hpLvl, setHpLvl] = useState(character['Hitpoints'].level);
 
     // Bars
     const [fighting, setFighting] = useState(false);
@@ -58,14 +60,15 @@ const BattleArea = ({ zone, area }) => {
             def += slot.Def;
             str += slot.Str;
         }
-        setGearAtk(atk);
+        setGearAtk(Math.round(atk * multipliers['Style'][equipment['Weapon'].Name.split(" ")[1]][style]));
         setGearDef(def);
         setGearStr(str);
     };
 
     useEffect(() => {
+        setLvl(character[style].level)
         calculateBonus();
-    }, [])
+    }, [style])
 
     useEffect(() => {
         if (area) {
@@ -79,17 +82,27 @@ const BattleArea = ({ zone, area }) => {
     /* Player Stats */
     // Calculating max hit
     useEffect(() => {
-        var effectiveStr = strength + 8;
+        var effectiveStr;
+        if (style === 'Strength') {
+            effectiveStr = strength + 11;
+        } else {
+            effectiveStr = strength + 8;
+        }
         var max = Math.floor((effectiveStr * (gearStr + 64) + 320) / 64);
         setMaxHit(max);
-    }, [strength, gearStr]);
+    }, [strength, gearStr, style]);
 
     // Calculating accuracy
     useEffect(() => {
-        var effectiveAtk = attack + 8;
+        var effectiveAtk;
+        if (style === 'Attack') {
+            effectiveAtk = attack + 11;
+        } else {
+            effectiveAtk = attack + 8;
+        }
         var acc = Math.floor(effectiveAtk * (gearAtk + 64));
         setAccuracy(acc);
-    }, [attack, gearAtk]);
+    }, [attack, gearAtk, style]);
 
     // Calculating defense
     useEffect(() => {
@@ -179,11 +192,24 @@ const BattleArea = ({ zone, area }) => {
 
     // Checking level up
     useEffect(() => {
-        if (character[skill].level > lvl) {
-            dispatch(push(`Congrats you leveled up! ${skill} level ${character[skill].level}~`))
+        if (character[style].level > lvl) {
+            dispatch(push(`Congrats you leveled up! ${style} level ${character[style].level}~`))
+            if (style === 'Attack') {
+                setAttack(character[style].level);
+            } else if (style === 'Strength') {
+                setStrength(character[style].level);
+            } else {
+                setDefense(character[style].level);
+            }
             setLvl(lvl + 1);
         }
-    }, [character[skill]]);
+        if (character['Hitpoints'].level > hpLvl) {
+            dispatch(push(`Congrats you leveled up! Hp level ${character['Hitpoints'].level}~`));
+            dispatch(updateMax(character['Hitpoints'].level * 10));
+            dispatch(resetHp());
+            setHpLvl(hpLvl + 1);
+        }
+    }, [character[style]]);
 
     const playerCombat = () => {
         var hitRoll = Math.random()
@@ -191,7 +217,7 @@ const BattleArea = ({ zone, area }) => {
             var dmg = Math.round(maxHit * Math.random());
             var styleExp = Math.ceil(dmg / 10) * 4;
             var hpExp = Math.round(styleExp / 3);
-            dispatch(gainExp({ skill: 'Strength', amount: styleExp }));
+            dispatch(gainExp({ skill: style, amount: styleExp }));
             dispatch(gainExp({ skill: 'Hitpoints', amount: hpExp }));
             return dmg;
         } else {
@@ -209,15 +235,23 @@ const BattleArea = ({ zone, area }) => {
     };
 
     const handleDrops = () => {
-        console.log("Drops");
         var dropList = enemies[zone][area].Drops;
-        console.log(dropList)
         var keys = Object.keys(dropList);
-        console.log(keys);
+        var rand = Math.random();
+        var count = 0;
+
         for (let i = 0; i < keys.length; i++) {
             if (dropList[keys[i]][0] === 1) {
                 dispatch(push(`Dropped ${keys[i]} x${dropList[keys[i]][1]}~`));
                 dispatch(increment({ material: keys[i].split(" ")[0], item: keys[i].split(" ")[1], amount: dropList[keys[i]][1] }));
+            } else {
+                console.log(dropList[keys[i]][0])
+                if (rand > count  && rand <= count + dropList[keys[i]][0]) {
+                    dispatch(push(`Dropped ${keys[i]} x${dropList[keys[i]][1]}~`));
+                    dispatch(increment({ material: keys[i].split(" ")[0], item: keys[i].split(" ")[1], amount: dropList[keys[i]][1] }));
+                    rand = 2;
+                }
+                count += dropList[keys[i]][0];
             }
         }
     };

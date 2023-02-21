@@ -6,7 +6,18 @@
         "Tin": 20,
         "Bronze": 30,
         "Iron": 45,
-        "Steel": 60
+        "Steel": 60,
+        "Normal": 5,
+        "Oak": 10
+    },
+    "Requirements": {
+        "Training": 1,
+        "Stone": 1,
+        "Copper": 1,
+        "Tin": 5,
+        "Bronze": 15,
+        "Iron": 20,
+        "Steel": 30
     },
     "Style": {
         "Knife": {
@@ -34,10 +45,10 @@
             "Mult": 2
         },
         "Pick": {
-            "Attack": 0.3,
+            "Attack": 0.5,
             "Strength": 0.8,
             "Defense": 0.3,
-            "Mult": 1
+            "Mult": 0.5
         }
     }
 }

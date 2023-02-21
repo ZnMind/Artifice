@@ -7,7 +7,7 @@
             "Strength": 0,
             "Drops": {
                 "Normal Bones": [1, 1],
-                "Feathers": [0.5, 15],
+                "Normal Feathers": [0.5, 15],
                 "Raw Chicken": [0.25, 1]
             }
         },
@@ -49,7 +49,7 @@
             "Strength": 25,
             "Drops": {
                 "Normal Bones": [1, 1],
-                "Black Cape": [1, 1]
+                "Wool Cape": [1, 1]
             }
         }
     }

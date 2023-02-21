@@ -1,11 +1,17 @@
+#root {
+  background-color: lightslategray;
+}
+
 .header {
   text-align: center;
-  border-bottom: 1px solid goldenrod;
+  border-bottom: 2px solid goldenrod;
   background-color: #282c34;
   color: white;
   height: 5vh;
   color: goldenrod;
   text-shadow: 1px 2px 2px black;
+  box-shadow: 0px 6px 0.5em #000;
+  margin-bottom: 1vh;
 }
 
 .bank-header {
@@ -16,27 +22,36 @@
 .app-container {
   display: flex;
   flex-wrap: nowrap;
-  background-color: #282c34;
 }
 
 .App {
   text-align: center;
-  min-height: 75vh;
-  min-width: 70vw;
+  background-color: #282c34;
+  min-height: 73vh;
+  min-width: 68vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 1.5vmin);
   color: white;
+  box-shadow: 5px 6px 0.5em #000;
+  margin-bottom: 1vh;
+  border-radius: 1%;
 }
 
 .navigate {
+  background-color: #282c34;
   display: flex;
   flex-direction: column;
   justify-content: center;
   border-right: 1px solid black;
   width: 15vw;
+  margin-right: 1vw;
+  margin-bottom: 1vh;
+  box-shadow: 3px 5px 0.5em #000;
+  border-top-right-radius: 1%;
+  border-bottom-right-radius: 1%;
 }
 
 .div-button {
@@ -54,12 +69,41 @@
 }
 
 .character {
-  border-top: 1px solid #000;
-  border-bottom: 1px solid #000;
+  border-top: 1px solid lightslategray;
+  border-bottom: 1px solid lightslategray;
+  padding: 0.25em;
   margin-bottom: 2em;
   color: white;
   text-align: center;
-  height: 20vh;
+  min-height: 20vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.face {
+  border: 1px solid lightslategray;
+  height: 75px;
+  width: 75px;
+  border-radius: 50%;
+}
+
+.eyeline {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1.5em;
+}
+
+.eye {
+  background-color: lightslategray;
+  height: 5px;
+  width: 5px;
+}
+
+.mouth {
+  border-bottom: 2px solid lightslategray;
+  height: 30px;
+  width: 50px;
+  border-radius: 50%;
 }
 
 .space {
@@ -74,11 +118,16 @@
   width: 40vw;
   margin: 0.25em;
   padding: 0.25em;
-  border: 0.5px solid gray;
+  padding-left: 2em;
+  padding-right: 2em;
+  border: 0.5px solid lightslategray;
+  box-shadow: 5px 6px 0.5em #000;
+  border-radius: 1%;
 }
 
 .skill-screen {
   width: 15vw;
+  background-color: #282c34;
   justify-content: center;
   align-items: flex-start;
   flex-wrap: wrap;
@@ -86,11 +135,15 @@
   padding-left: 1vw;
   padding-right: 1vw;
   color: white;
+  margin-left: 1vw;
+  margin-bottom: 1vh;
+  border-top-left-radius: 1%;
+  border-bottom-left-radius: 1%;
+  box-shadow: 3px 5px 0.5em #000;
 }
 
 .buffs {
   display: flex;
-  
   align-items: center;
   border-bottom: 1px solid #fff;
   height: 5vh;
@@ -104,13 +157,14 @@
 }
 
 .console {
-  border-top: 1px solid goldenrod;
+  border-top: 2px solid goldenrod;
   height: 20vh;
   background-color: #282c34;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 5px 6px 0.5em #000;
 }
 
 .console-box {
@@ -123,7 +177,7 @@
 .exp {
   display: flex;
   flex-direction: column;
-  margin-bottom: 5vh;
+  
 }
 
 .row {
@@ -150,6 +204,15 @@
 
 .sm {
   margin-left: -0.5vw;
+}
+
+h2 {
+  text-shadow: 1px 2px 2px black;
+}
+
+.progress {
+  box-shadow: 2px 3px 0.5em #000;
+  margin-bottom: 1em;
 }
 
 .progress-bar {
@@ -254,11 +317,21 @@ small.save {
 .grid {
   height: 100%;
   max-width: 50vw;
+  max-height: 50vh;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   position: relative;
   top: 0;
+  overflow: scroll;
+  /* IE, FF */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Chrome */
+.grid::-webkit-scrollbar {
+  display: none;
 }
 
 .slot {
@@ -268,9 +341,10 @@ small.save {
   flex-direction: column;
   justify-content: space-around;
   border: 1px solid #000;
-  margin: 0.15em;
+  margin: 0.25em;
   cursor: pointer;
   border-radius: 7.5%;
+  box-shadow: 2px 3px 0.25em #000;
 }
 
 .bank-row {
@@ -289,20 +363,22 @@ small.save {
 
 .bank-screen {
   display: flex;
-  padding: 2em;
+  padding: 1em;
 }
 
 .selected {
   border: 1px solid #000;
   width: 10vw;
-  min-width: 120px;
+  min-width: 180px;
   height: 100%;
-  margin-left: 1em;
+  margin-left: 2em;
+  padding: 0.25em;
+  box-shadow: 5px 6px 0.5em #000;
+}
+
+.inner-selected {
+  border: 1px solid lightslategray;
   border-radius: 7.5%;
-  /* position: relative;
-  top: 0;
-  right: 0px; */
-  /* right: 16vw; */
 }
 
 .equip-btn {

@@ -9,6 +9,7 @@ import { Artifice } from './features/skills/Artifice';
 import { Skills } from './features/skills/Skills';
 import { ModScreen } from './features/skills/Skills';
 import { push } from './features/slices/consoleSlice';
+import { currentStyle } from './features/slices/combatSlice';
 import Bank from './features/components/Bank';
 import Equipment from './features/components/Equipment';
 import Adventure from './features/components/Adventure';
@@ -19,10 +20,12 @@ const App = () => {
   const saveTimer = useRef();
   const [screen, setScreen] = useState('woodcutting');
   const [mod, setMod] = useState('skills');
+  const [stats, setStats] = useState();
 
-  const logs = useSelector(state => state.woodcut)
-  const character = useSelector(state => state.character)
-  const con = useSelector(state => state.console.console)
+  const character = useSelector(state => state.character);
+  const equipment = useSelector(state => state.equipment);
+  const style = useSelector(state => state.combat.Style);
+  const con = useSelector(state => state.console.console);
 
   const saveGame = () => {
     //window.localStorage.setItem('Screen', JSON.stringify(screen));
@@ -36,6 +39,10 @@ const App = () => {
     dispatch(push(`Game Saved!~`))
   }
 
+  const handleStyles = event => {
+    dispatch(currentStyle(event.target.innerText));
+  }
+
   useEffect(() => {
     const data = window.localStorage.getItem('Screen');
     if (data !== null) {
@@ -47,8 +54,19 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    //setDisplay(components[screen]);
+    calculateBonus();
   }, []);
+
+  const calculateBonus = () => {
+    var atk = 0, def = 0, str = 0;
+    for (let i = 0; i < Object.keys(equipment).length - 1; i++) {
+      var slot = equipment[Object.keys(equipment)[i]];
+      atk += slot.Atk;
+      def += slot.Def;
+      str += slot.Str;
+    }
+    setStats([atk, def, str])
+  };
 
   const components = {
     'bank': Bank,
@@ -70,11 +88,32 @@ const App = () => {
 
   return (
     <>
-    <div className='header'><h2>Artifice</h2></div>
+      <div className='header'><h2>Artifice</h2></div>
       <div className='app-container'>
         <div className='navigate'>
           <div className='character'>
-            <p>Char</p>
+            <p>Me</p>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
+              <div className='face'>
+                <div className='eyeline'>
+                  <div className='eye'></div>
+                  <div className='eye'></div>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <div className='mouth'></div>
+                </div>
+              </div>
+            </div>
+            {/* <small>{`Bonuses:`}</small>
+            <small>{stats[0]}</small>
+            <small>{stats[1]}</small>
+            <small>{stats[2]}</small> */}
+            <small>{`Training Style: `}<b>{style}</b></small>
+            {['Attack', 'Strength', 'Defense'].map((data, index) => (
+              data === style
+                ? <div key={index} className='div-button' onClick={handleStyles} style={{ backgroundColor: 'lightgray' }}>{data}</div>
+                : <div key={index} className='div-button' onClick={handleStyles}>{data}</div>
+            ))}
           </div>
           <div className='div-button' onClick={() => setScreen('bank')}>Bank</div>
           <div className='div-button' onClick={() => setScreen('equipment')}>Equipment</div>
@@ -93,7 +132,7 @@ const App = () => {
         </div>
         <div className='skill-screen'>
           <div className='buffs'>
-            <div className='buff-btn' style={{borderRight: '1px solid black'}} onClick={() => setMod('skills')}>Skills</div>
+            <div className='buff-btn' style={{ borderRight: '1px solid black' }} onClick={() => setMod('skills')}>Skills</div>
             <div className='buff-btn' onClick={() => setMod('modifiers')}>Modifiers</div>
           </div>
           <ModDisplay />
@@ -105,8 +144,8 @@ const App = () => {
             <div key={index}>{data}</div>
           ))}
         </div>
-          <button onClick={saveGame} className='save'>Save</button>
-          <small className='save'>Autosave every 60s</small>
+        <button onClick={saveGame} className='save'>Save</button>
+        <small className='save'>Autosave every 60s</small>
       </div>
     </>
   );

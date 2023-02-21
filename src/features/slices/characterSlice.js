@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export const initialSkills = {
-    Hitpoints: { level: 10, experience: 1279, last: 0, next: 1497 },
+    Hitpoints: { level: 10, experience: 1279, last: 1279, next: 1497 },
     Attack: { level: 1, experience: 0, last: 0, next: 75 },
     Strength: { level: 1, experience: 0, last: 0, next: 75 },
     Defense: { level: 1, experience: 0, last: 0, next: 75 },

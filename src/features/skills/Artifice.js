@@ -104,7 +104,7 @@ export function Artifice() {
                 dispatch(decrement({ material: material, item: action, amount: 1 }));
                 dispatch(decrement({ material: material, item: 'Bar', amount: req }));
                 dispatch(increment({ material: material, item: `${action.split("+")[0]}+${parseInt(grade) + 1}`, amount: 1 }));
-                dispatch(push(`Upgraded to ${material} ${action.split("+")[0]}+${parseInt(grade) + 1}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
+                dispatch(push(`Upgraded to ${material} ${action.split("+")[0]}+${parseInt(grade) + 1}! Amount: ${items[material] ? items[material][action] ? items[material][action] : 1 : 1}~`));
             } else {
                 dispatch(decrement({ material: material, item: action, amount: 1 }));
                 dispatch(decrement({ material: material, item: 'Bar', amount: req }));

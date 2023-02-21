@@ -7,6 +7,7 @@ const Equipment = () => {
     const [slots] = useState(['Head', 'Chest', 'Gloves', 'Legs', 'Boots', 'Weapon', 'Offhand']);
     const [stats, setStats] = useState([]);
     const equip = useSelector(state => state.equipment);
+    const style = useSelector(state => state.combat.Style);
 
     useEffect(() => {
         calculateBonus();
