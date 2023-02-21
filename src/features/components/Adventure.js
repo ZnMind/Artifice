@@ -192,17 +192,24 @@ const BattleArea = ({ zone, area }) => {
 
     // Checking level up
     useEffect(() => {
-        if (character[style].level > lvl) {
-            dispatch(push(`Congrats you leveled up! ${style} level ${character[style].level}~`))
-            if (style === 'Attack') {
+        if (style === 'Attack') {
+            if (character[style].level > attack) {
+                dispatch(push(`Congrats you leveled up! ${style} level ${character[style].level}~`))
                 setAttack(character[style].level);
-            } else if (style === 'Strength') {
+            }
+        } else if (style === 'Strength') {
+            if (character[style].level > strength) {
+                dispatch(push(`Congrats you leveled up! ${style} level ${character[style].level}~`))
                 setStrength(character[style].level);
-            } else {
+            }
+        } else {
+            if (character[style].level > defense) {
+                dispatch(push(`Congrats you leveled up! ${style} level ${character[style].level}~`))
                 setDefense(character[style].level);
             }
-            setLvl(lvl + 1);
         }
+        //setLvl(lvl + 1);
+
         if (character['Hitpoints'].level > hpLvl) {
             dispatch(push(`Congrats you leveled up! Hp level ${character['Hitpoints'].level}~`));
             dispatch(updateMax(character['Hitpoints'].level * 10));
@@ -246,7 +253,7 @@ const BattleArea = ({ zone, area }) => {
                 dispatch(increment({ material: keys[i].split(" ")[0], item: keys[i].split(" ")[1], amount: dropList[keys[i]][1] }));
             } else {
                 console.log(dropList[keys[i]][0])
-                if (rand > count  && rand <= count + dropList[keys[i]][0]) {
+                if (rand > count && rand <= count + dropList[keys[i]][0]) {
                     dispatch(push(`Dropped ${keys[i]} x${dropList[keys[i]][1]}~`));
                     dispatch(increment({ material: keys[i].split(" ")[0], item: keys[i].split(" ")[1], amount: dropList[keys[i]][1] }));
                     rand = 2;
