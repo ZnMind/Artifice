@@ -7,7 +7,7 @@ const consoleSlice = createSlice({
     },
     reducers: {
         push(state, action) {
-            if (state.console.split("~").length > 5) {
+            if (state.console.split("~").length > 100) {
                 state.console = state.console.split("~").slice(1).join("~")
             }
             state.console += action.payload;

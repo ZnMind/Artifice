@@ -7,35 +7,34 @@ import { push } from '../slices/consoleSlice';
 import Select from 'react-select';
 import styles from './Counter.module.css';
 
-export function Smithing() {
+export function Woodworking() {
     const dispatch = useDispatch();
 
     const bar = useSelector(state => state.progress);
     const items = useSelector(state => state.bank);
     const character = useSelector(state => state.character);
 
-    const [skill] = useState('Smithing');
-    const [material, setMaterial] = useState('Copper');
-    const [action, setAction] = useState('Bar');
+    const [skill] = useState('Woodworking');
+    const [material, setMaterial] = useState('Normal');
+    const [action, setAction] = useState('Plank');
     const [progress, setProgress] = useState('');
     const [timing, setTiming] = useState(0);
     const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
     const [page, setPage] = useState(1);
-    const [itemOptions] = useState(['Bar', 'Knife', 'Sword', 'Axe', 'Pick']);
+    const [itemOptions] = useState(['Plank', 'Rod', 'Shield']);
     const [expTable] = useState({
-        'Copper': { 'exp': 15, 'req': 1, 'ore': { 'Copper Ore': 1 } },
-        'Tin': { 'exp': 25, 'req': 5, 'ore': { 'Tin Ore': 1 } },
-        'Bronze': { 'exp': 40, 'req': 15, 'ore': { 'Copper Ore': 1, 'Tin Ore': 1 } },
-        'Iron': { 'exp': 60, 'req': 30, 'ore': { 'Iron Ore': 1 } },
-        'Steel': { 'exp': 90, 'req': 40, 'ore': { 'Iron Ore': 1, 'Coal': 1 } },
-        'Alumite': { 'exp': 150, 'req': 50, 'ore': { 'Alumite': 1, 'Iron Ore': 2, 'Coal': 2 } },
-        'Dragon': { 'exp': 250, 'req': 60, 'ore': { 'Dragon Scale': 1 } },
+        'Normal': { 'exp': 15, 'req': 1, 'log': { 'Normal Log': 1 } },
+        'Oak': { 'exp': 25, 'req': 5, 'log': { 'Oak Log': 1 } },
+        'Willow': { 'exp': 40, 'req': 15, 'log': { 'Willow Log': 1 } },
+        'Teak': { 'exp': 60, 'req': 30, 'log': { 'Teak Log': 1 } },
+        'Maple': { 'exp': 90, 'req': 40, 'log': { 'Maple Log': 1 } },
+        'Yew': { 'exp': 150, 'req': 50, 'log': { 'Yew Log': 1 } },
     });
 
     // Attempting to initialize state for older saves
     useEffect(() => {
-        if (character.Smithing === undefined) {
-            dispatch(initialize({ skill: "Smithing" }));
+        if (character.Woodworking === undefined) {
+            dispatch(initialize({ skill: "Woodworking" }));
         }
     }, []);
 
@@ -43,26 +42,26 @@ export function Smithing() {
     useEffect(() => {
         if (bar.now >= 100) {
             // Stopping progress if out of materials
-            if (action === 'Bar') {
-                var matReqs = Object.keys(expTable[material].ore);
+            if (action === 'Plank') {
+                var matReqs = Object.keys(expTable[material].log);
                 for (let i = 0; i < matReqs.length; i++) {
-                    var metal = matReqs[i].split(" ")[0];
-                    dispatch(decrement({ material: metal, item: 'Ore', amount: 1 }));
-                    if (items[metal]['Ore'] <= 1) {
+                    var wood = matReqs[i].split(" ")[0];
+                    dispatch(decrement({ material: wood, item: 'Log', amount: 1 }));
+                    if (items[wood]['Log'] <= 1) {
                         setProgress('');
-                        dispatch(push(`You ran out of ${metal} Ore.~`));
+                        dispatch(push(`You ran out of ${wood} Logs.~`));
                     }
                 }
-                dispatch(push(`Smithed ${material} ${action}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
+                dispatch(push(`Cut ${material} ${action}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
             } else {
-                dispatch(decrement({ material: material, item: 'Bar', amount: 1 }));
-                dispatch(push(`Smithed ${material} ${action}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
-                if (items[material]['Bar'] <= 1) {
+                dispatch(decrement({ material: material, item: 'Plank', amount: 1 }));
+                dispatch(push(`Cut ${material} ${action}! Amount: ${items[material] ? items[material][action] ? items[material][action] + 1 : 1 : 1}~`));
+                if (items[material]['Plank'] <= 1) {
                     setProgress('');
-                    dispatch(push(`You ran out of ${material} Bars.~`));
+                    dispatch(push(`You ran out of ${material} Planks.~`));
                 }
             }
-            dispatch(gainExp({ skill: 'Smithing', amount: expTable[material]['exp'] }));
+            dispatch(gainExp({ skill: 'Woodworking', amount: expTable[material]['exp'] }));
             dispatch(increment({ material: material, item: action, amount: 1 }));
         }
     }, [bar]);
@@ -83,15 +82,15 @@ export function Smithing() {
     }, [character[skill]]);
 
     // Setting time for progress bar to fill
-    const smith = type => {
+    const fletch = type => {
         var materialCheck = [];
 
-        if (action === 'Bar') {
+        if (action === 'Plank') {
 
-            Object.keys(expTable[type]['ore']).forEach(i => {
+            Object.keys(expTable[type]['log']).forEach(i => {
                 if (items[i.split(" ")[0]]) {
                     //if (items[i.split(" ")[0]]['Ore']) {
-                    if (items[i.split(" ")[0]]['Ore'] >= expTable[type]['ore'][i]) {
+                    if (items[i.split(" ")[0]]['Log'] >= expTable[type]['log'][i]) {
                         materialCheck.push(true);
                     } else {
                         materialCheck.push(false);
@@ -105,15 +104,15 @@ export function Smithing() {
             if (materialCheck.every(Boolean)) {
                 setProgress(type);
             } else {
-                dispatch(push(`You ran out of ore.~`));
+                dispatch(push(`You ran out of logs.~`));
             }
         } else {
             if (items[type]) {
-                if (items[type]['Bar']) {
-                    if (items[type]['Bar'] !== 0) {
+                if (items[type]['Plank']) {
+                    if (items[type]['Plank'] !== 0) {
                         setProgress(type)
                     } else {
-                        dispatch(push(`You ran out of ${type} Bars.~`));
+                        dispatch(push(`You ran out of ${type} Planks.~`));
                     }
                 }
             } else {
@@ -149,22 +148,22 @@ export function Smithing() {
                 </div>
 
                 {
-                    action === 'Bar'
-                        ? Object.keys(expTable[material]['ore']).map((d, i) => (
+                    action === 'Plank'
+                        ? Object.keys(expTable[material]['log']).map((d, i) => (
                             <small key={i}>
                                 {
                                     items[d.split(" ")[0]]
-                                        ? `${d}: ${items[d.split(" ")[0]]['Ore']}`
+                                        ? `${d}: ${items[d.split(" ")[0]]['Log']}`
                                         : `${d}: 0`
                                 }
                             </small>
                         ))
                         : <small>{
                             items[material]
-                                ? items[material]['Bar']
-                                    ? `${material} Bar: ${items[material]['Bar']}`
-                                    : `${material} Bar: 0`
-                                : `${material} Bar: 0`
+                                ? items[material]['Plank']
+                                    ? `${material} Plank: ${items[material]['Plank']}`
+                                    : `${material} Plank: 0`
+                                : `${material} Plank: 0`
                         }</small>
                 }
             </div>
@@ -181,11 +180,11 @@ export function Smithing() {
                     />
                     <div className='tree'>
                         <small>{`${material} ${action}`}</small>
-                        <small>{`xp: ${expTable[material].exp}`}</small>
+                        <small>5s</small>
                         {
                             lvl >= expTable[material].req
-                                ? <button onClick={() => smith(material)} className={styles.button} id='tree'>Smith</button>
-                                : <small style={{ color: 'lightslategray', marginTop: '25px', marginBottom: '25px' }}>{`Required: ${expTable[material].req}`}</small>
+                                ? <button onClick={() => fletch(material)} className={styles.button} id='tree'>Fletch</button>
+                                : <small style={{ color: 'lightslategray' }}>{`Required: ${expTable[material].req}`}</small>
                         }
                     </div>
                 </div>

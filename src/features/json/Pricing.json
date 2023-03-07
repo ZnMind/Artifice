@@ -3,49 +3,137 @@
         "Sword": 1
     },
     "Normal": {
-        "Log": 1
+        "Log": 1,
+        "Feathers": 1,
+        "Bones": 1,
+        "Plank": 2,
+        "Rod": 5,
+        "Shield": 5
     },
     "Oak": {
-        "Log": 5
+        "Log": 5,
+        "Plank": 8,
+        "Rod": 10,
+        "Shield": 10
     },
     "Willow": {
-        "Log": 10
+        "Log": 10,
+        "Plank": 15,
+        "Rod": 20,
+        "Shield": 20
     },
     "Teak": {
-        "Log": 15
+        "Log": 10,
+        "Plank": 15,
+        "Rod": 20,
+        "Shield": 20
     },
     "Maple": {
-        "Log": 25
+        "Log": 25,
+        "Plank": 40,
+        "Rod": 50,
+        "Shield": 50
     },
     "Stone": {
         "Axe": 1,
-        "Pickaxe": 1
+        "Pick": 1
     },
     "Copper": {
         "Ore": 1,
         "Bar": 2,
         "Knife": 5,
         "Sword": 5,
-        "Axe": 5
+        "Axe": 5,
+        "Pick": 5
     },
     "Tin": {
         "Ore": 2,
         "Bar": 5,
         "Knife": 10,
         "Sword": 10,
-        "Axe": 10
+        "Axe": 10,
+        "Pick": 10
     },
     "Iron": {
         "Ore": 10,
         "Bar": 15,
         "Knife": 22,
         "Sword": 22,
-        "Axe": 22
+        "Axe": 22,
+        "Pick": 22
     },
     "Steel": {
         "Bar": 25,
         "Knife": 35,
         "Sword": 35,
-        "Axe": 35
+        "Axe": 35,
+        "Pick": 35
+    },
+    "Cow": {
+        "Leather": 2,
+        "Helm": 5,
+        "Chest": 5,
+        "Gloves": 5,
+        "Legs": 5,
+        "Boots": 5
+    },
+    "Stag": {
+        "Leather": 5,
+        "Helm": 10,
+        "Chest": 10,
+        "Gloves": 10,
+        "Legs": 10,
+        "Boots": 10
+    },
+    "Boar": {
+        "Leather": 12,
+        "Helm": 20,
+        "Chest": 20,
+        "Gloves": 20,
+        "Legs": 20,
+        "Boots": 20
+    },
+    "Bear": {
+        "Leather": 15,
+        "Helm": 25,
+        "Chest": 25,
+        "Gloves": 25,
+        "Legs": 25,
+        "Boots": 25
+    },
+    "Croc": {
+        "Leather": 22,
+        "Helm": 35,
+        "Chest": 35,
+        "Gloves": 35,
+        "Legs": 35,
+        "Boots": 35
+    },
+    "Grizzly": {
+        "Leather": 40,
+        "Helm": 50,
+        "Chest": 50,
+        "Gloves": 50,
+        "Legs": 50,
+        "Boots": 50
+    },
+    "Dragon": {
+        "Bones": 50,
+        "Hide": 75,
+        "Scale": 75,
+        "Leather": 100,
+        "Helm": 150,
+        "Chest": 150,
+        "Gloves": 150,
+        "Legs": 150,
+        "Boots": 150
+    },
+    "Raw": {
+        "Chicken": 1,
+        "Beef": 2
+    },
+    "Cooked": {
+        "Chicken": 2,
+        "Beef": 4
     }
 }

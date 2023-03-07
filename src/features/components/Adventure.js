@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Progress } from './Progress';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { gainExp } from '../slices/characterSlice';
-import { increment } from '../slices/bankSlice';
+import { increment, decrement } from '../slices/bankSlice';
 import { push } from '../slices/consoleSlice';
 import { updateHp, updateMax, resetHp } from '../slices/combatSlice';
 import multipliers from '../json/Multipliers.json';
@@ -14,10 +14,12 @@ import styles from '../skills/Counter.module.css';
 
 const BattleArea = ({ zone, area }) => {
     const dispatch = useDispatch();
+    const items = useSelector(state => state.bank);
     const character = useSelector(state => state.character);
     const equipment = useSelector(state => state.equipment);
     const characterHp = useSelector(state => state.combat.Hp);
     const style = useSelector(state => state.combat.Style);
+    const [currentFood, setCurrentFood] = useState(Object.keys(items.Cooked)[0])
 
     // Stat initialization
     const [attack, setAttack] = useState(character.Attack.level);
@@ -60,7 +62,11 @@ const BattleArea = ({ zone, area }) => {
             def += slot.Def;
             str += slot.Str;
         }
-        setGearAtk(Math.round(atk * multipliers['Style'][equipment['Weapon'].Name.split(" ")[1].split("+")[0]][style]));
+        if (equipment['Weapon'].Name !== '') {
+            setGearAtk(Math.round(atk * multipliers['Style'][equipment['Weapon'].Name.split(" ")[1].split("+")[0]][style]));
+        } else {
+            setGearAtk(atk)
+        }
         setGearDef(def);
         setGearStr(str);
     };
@@ -82,34 +88,39 @@ const BattleArea = ({ zone, area }) => {
     /* Player Stats */
     // Calculating max hit
     useEffect(() => {
-        var effectiveStr;
+        let effectiveStr;
         if (style === 'Strength') {
             effectiveStr = strength + 11;
         } else {
             effectiveStr = strength + 8;
         }
-        var max = Math.floor((effectiveStr * (gearStr + 64) + 320) / 64);
+        let max = Math.floor((effectiveStr * (gearStr + 64) + 320) / 64);
         setMaxHit(max);
     }, [strength, gearStr, style]);
 
     // Calculating accuracy
     useEffect(() => {
-        var effectiveAtk;
+        let effectiveAtk;
         if (style === 'Attack') {
             effectiveAtk = attack + 11;
         } else {
             effectiveAtk = attack + 8;
         }
-        var acc = Math.floor(effectiveAtk * (gearAtk + 64));
+        let acc = Math.floor(effectiveAtk * (gearAtk + 64));
         setAccuracy(acc);
     }, [attack, gearAtk, style]);
 
     // Calculating defense
     useEffect(() => {
-        var effectiveDef = defense + 8;
-        var def = Math.floor(effectiveDef * (gearDef + 64));
+        let effectiveDef;
+        if (style === 'Defense') {
+            effectiveDef = defense + 11;
+        } else {
+            effectiveDef = defense + 8;
+        }
+        let def = Math.floor(effectiveDef * (gearDef + 64));
         setEvasion(def);
-    }, [defense, gearDef]);
+    }, [defense, gearDef, style]);
 
     // Chance to hit
     useEffect(() => {
@@ -170,7 +181,7 @@ const BattleArea = ({ zone, area }) => {
         }
     }, [bar1, bar2]);
 
-    // Handling monster death
+    // Handling death
     useEffect(() => {
         if (characterHp.current <= 0) {
             setFighting(false);
@@ -208,7 +219,6 @@ const BattleArea = ({ zone, area }) => {
                 setDefense(character[style].level);
             }
         }
-        //setLvl(lvl + 1);
 
         if (character['Hitpoints'].level > hpLvl) {
             dispatch(push(`Congrats you leveled up! Hp level ${character['Hitpoints'].level}~`));
@@ -275,89 +285,117 @@ const BattleArea = ({ zone, area }) => {
         setFighting(!fighting);
     };
 
+    const handleEat = () => {
+        let heal = multipliers['Food'][currentFood];
+        if (items['Food'][currentFood] >= 1) {
+            if (heal >= characterHp.max - characterHp.current) {
+                dispatch(resetHp());
+            } else {
+                dispatch(updateHp(heal));
+            }
+            dispatch(decrement({ material: 'Cooked', item: currentFood, amount: 1 }));
+            dispatch(push(`Snacked on ${currentFood}!~`));
+            setBar1(0);
+        } else {
+            dispatch(push(`You have no more ${currentFood}!~`))
+        }
+    }
+
     return (
-        <div className='battle-area'>
-
-            <div className='battle-screen'>
-                <div className='left'>
-                    <div className='hp-bars'>
-                        <p>Me</p>
-                        <ProgressBar
-                            now={(characterHp.current / characterHp.max) * 100}
-                            variant='success'
-                            className='battle-pbar'
-                        />
-                        <ProgressBar
-                            now={bar1}
-                            label={`${Math.round(250 - 250 * (bar1 / 100)) / 100}s`}
-                        />
-                        <p>{`${characterHp.current} / ${characterHp.max}`}</p>
-                    </div>
-                    <div className='stat-box' style={{ border: '1px solid darkgreen' }}>
-                        <small style={{ color: 'lightslategray', width: '100%', marginTop: '-1em' }}>Ratings</small>
-                        <div className='stat-line'>
-                            <small>Attack:</small>
-                            <small>Defense:</small>
-                            <small>Hit:</small>
-                            <small>Max Hit:</small>
+        <>
+            
+            <div className='battle-area'>
+                <div className='battle-screen'>
+                    <div className='left'>
+                        <div className='hp-bars'>
+                            <p>Me</p>
+                            <ProgressBar
+                                now={(characterHp.current / characterHp.max) * 100}
+                                variant='success'
+                                className='battle-pbar'
+                            />
+                            <ProgressBar
+                                now={bar1}
+                                label={`${Math.round(250 - 250 * (bar1 / 100)) / 100}s`}
+                            />
+                            <p>{`${characterHp.current} / ${characterHp.max}`}</p>
                         </div>
-                        {accuracy ? <div className='stat-line'>
-                            <small>{accuracy}</small>
-                            <small>{evasion}</small>
-                            <small>{`${Math.floor(hit * 1000) / 10}%`}</small>
-                            <small>{maxHit}</small>
-                        </div> : ""}
+                        <div className='stat-box' style={{ border: '1px solid darkgreen' }}>
+                            <small style={{ color: 'lightslategray', width: '100%', marginTop: '-1em' }}>Ratings</small>
+                            <div className='stat-line'>
+                                <small>Attack:</small>
+                                <small>Defense:</small>
+                                <small>Hit:</small>
+                                <small>Max Hit:</small>
+                            </div>
+                            {accuracy ? <div className='stat-line'>
+                                <small>{accuracy}</small>
+                                <small>{evasion}</small>
+                                <small>{`${Math.floor(hit * 1000) / 10}%`}</small>
+                                <small>{maxHit}</small>
+                            </div> : ""}
+                        </div>
                     </div>
+                    {area ? <div className='right'>
+
+                        <div className='hp-bars'>
+                            <p>{area ? area : ""}</p>
+
+                            <ProgressBar
+                                now={enemy ? (enemyHp / enemy.Hp) * 100 : 100}
+                                variant='danger'
+                                className='battle-pbar'
+                            />
+                            <ProgressBar
+                                now={bar2}
+                                label={`${Math.round(200 - 200 * (bar2 / 100)) / 100}s`}
+                            />
+                            <p>{enemy ? `${enemyHp} / ${enemy.Hp}` : 0}</p>
+                        </div>
+                        <div className='stat-box' style={{ border: '1px solid darkred' }}>
+                            <small style={{ color: 'lightslategray', width: '100%', marginTop: '-1em' }}>Ratings</small>
+                            <div className='stat-line'>
+                                <small>Attack:</small>
+                                <small>Defense:</small>
+                                <small>Hit:</small>
+                                <small>Max Hit:</small>
+                            </div>
+                            {enemy ? <div className='stat-line'>
+                                <small>{enemyAttack}</small>
+                                <small>{enemyDefense}</small>
+                                <small>{`${Math.floor(enemyHit * 1000) / 10}%`}</small>
+                                <small>{enemyStrength}</small>
+                            </div> : ""}
+                        </div>
+                    </div> : ""}
                 </div>
-                {area ? <div className='right'>
-
-                    <div className='hp-bars'>
-                        <p>{area ? area : ""}</p>
-
-                        <ProgressBar
-                            now={enemy ? (enemyHp / enemy.Hp) * 100 : 100}
-                            variant='danger'
-                            className='battle-pbar'
-                        />
-                        <ProgressBar
-                            now={bar2}
-                            label={`${Math.round(200 - 200 * (bar2 / 100)) / 100}s`}
-                        />
-                        <p>{enemy ? `${enemyHp} / ${enemy.Hp}` : 0}</p>
+                {zone !== '' ?
+                <div className='food'>
+                    <Select
+                        placeholder={Object.keys(items.Cooked)[0]}
+                        defaultValue={Object.keys(items.Cooked)[0]}
+                        onChange={e => setCurrentFood(e.value)}
+                        options={Object.keys(items.Cooked).map(data => ({ value: data, label: `${data}` }))}
+                        className='basic-multi-select'
+                        classNamePrefix='select'
+                    />
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <small>{`${currentFood}: +${multipliers['Food'][currentFood]}`}</small>
+                        <small>{`Amount: ${items['Cooked'][currentFood]}`}</small>
                     </div>
-                    <div className='stat-box' style={{ border: '1px solid darkred' }}>
-                        <small style={{ color: 'lightslategray', width: '100%', marginTop: '-1em' }}>Ratings</small>
-                        <div className='stat-line'>
-                            <small>Attack:</small>
-                            <small>Defense:</small>
-                            <small>Hit:</small>
-                            <small>Max Hit:</small>
-                        </div>
-                        {enemy ? <div className='stat-line'>
-                            <small>{enemyAttack}</small>
-                            <small>{enemyDefense}</small>
-                            <small>{`${Math.floor(enemyHit * 1000) / 10}%`}</small>
-                            <small>{enemyStrength}</small>
-                        </div> : ""}
-                    </div>
+                    <button className='equip-btn' onClick={handleEat} style={{ boxShadow: '2px 4px 0.5em #000', borderRadius: '5px'}}>Eat</button>
                 </div> : ""}
+                {area ? !fighting
+                    ? <button onClick={handleBattle} className={styles.button} style={{ boxShadow: '5px 6px 0.5em #000', marginTop: '0', borderRadius: '5px' }}>Battle</button>
+                    : <button onClick={handleBattle} className={styles.button} style={{ boxShadow: '5px 6px 0.5em #000', marginTop: '0', borderRadius: '5px' }}>Stop</button>
+                    : ""}
             </div>
-            {area ? !fighting
-                ? <button onClick={handleBattle} className={styles.button} style={{ boxShadow: '5px 6px 0.5em #000', marginTop: '0' }}>Battle</button>
-                : <button onClick={handleBattle} className={styles.button} style={{ boxShadow: '5px 6px 0.5em #000', marginTop: '0' }}>Stop</button>
-                : ""}
-        </div>
+            
+        </>
     )
 }
 
 const Adventure = () => {
-    const [areas] = useState([
-        { 'Goblin': [50, 5, 5] },
-        { 'Wolf': [80, 10, 5] },
-        { 'Orc': [120, 20, 10] },
-        { 'Warg': [150, 35, 5] },
-        { 'Troll': [250, 25, 25] }
-    ]);
     const [zones] = useState(Object.keys(enemies));
     const [currentZone, setCurrentZone] = useState('');
     const [currentArea, setCurrentArea] = useState(currentZone[0])
@@ -383,7 +421,6 @@ const Adventure = () => {
         <div>
             <h2>Adventure</h2>
             <div className='adventure-container'>
-
                 <Select
                     placeholder={zones[0]}
                     defaultValue={zones[0]}

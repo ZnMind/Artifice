@@ -25,7 +25,7 @@ export function Mining() {
         'Tin': { 'exp': 20, 'req': 5, 'timing': 1 },
         'Iron': { 'exp': 40, 'req': 15, 'timing': 2 },
         'Coal': { 'exp': 60, 'req': 30, 'timing': 3 },
-        'Mithril': { 'exp': 60, 'req': 40, 'timing': 5 },
+        'Alumite': { 'exp': 80, 'req': 40, 'timing': 5 },
     });
 
     // Attempting to initialize state for older saves

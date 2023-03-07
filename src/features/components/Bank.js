@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { sell } from '../slices/bankSlice';
 import { increment, decrement } from '../slices/bankSlice';
 import { equip, unequip } from '../slices/equipmentSlice';
-import { currentStyle } from '../slices/combatSlice';
 import Price from '../json/Pricing.json';
 import multipliers from '../json/Multipliers.json';
 import '../../App.css';
@@ -28,11 +27,13 @@ const Bank = () => {
   const style = useSelector(state => state.combat.Style);
   const [inventory, setInventory] = useState([]);
   const [select, setSelect] = useState("");
+  const [pricing, setPricing] = useState("");
   const [stats, setStats] = useState([]);
-  const [equipArray] = useState(['Knife', 'Sword', 'Axe', 'Pick'])
+  const [amount, setAmount] = useState(1);
+  const [weaponArray] = useState(['Knife', 'Sword', 'Axe', 'Pick', 'Rod']);
+  const [armorArray] = useState(['Helm', 'Chest', 'Gloves', 'Legs', 'Boots', 'Shield']);
 
   // Converting state object into an array
-  // Could probably be done cleaner but it works
   const objectToList = () => {
     return Object.keys(bank).map(key => {
       // Array.prototype.flatMap is a way to add or remove items during a map
@@ -47,17 +48,18 @@ const Bank = () => {
   }
 
   const handleSelect = event => {
+    var item;
     if (event.target.children.length === 0) {
-      var item = event.target.parentElement.firstChild.innerText;
+      item = event.target.parentElement.firstChild.innerText;
     } else {
-      var item = event.target.firstChild.innerText;
+      item = event.target.firstChild.innerText;
     }
-
-    /* if (select === item) {
-      setSelect("");
-    } else { */
     setSelect(item);
-    //}
+    if (item.split("+").length > 1) {
+      setPricing(Price[item.split(" ")[0]][item.split(" ")[1].split("+")[0]] * (1 + parseInt(item.split("+")[1])))
+    } else {
+      setPricing(Price[item.split(" ")[0]][item.split(" ")[1]]);
+    }
   }
 
   const sellItem = () => {
@@ -65,29 +67,35 @@ const Bank = () => {
       dispatch(sell({
         material: select.split(" ")[0],
         item: select.split(" ")[1],
-        amount: 1,
-        coins: Price[select.split(" ")[0]][select.split(" ")[1]]
+        amount: amount,
+        coins: Price[select.split(" ")[0]][select.split(" ")[1]] * amount
       }))
     } else if (select.split("+").length > 1) {
       dispatch(sell({
         material: select.split(" ")[0],
         item: select.split(" ")[1],
-        amount: 1,
-        coins: Price[select.split(" ")[0]][select.split(" ")[1].split("+")[0]] * (1 + parseInt(select.split("+")[1]))
+        amount: amount,
+        coins: Price[select.split(" ")[0]][select.split(" ")[1].split("+")[0]] * (1 + parseInt(select.split("+")[1])) * amount
       }))
     }
 
-    if (bank[select.split(" ")[0]][select.split(" ")[1]] === 0) {
+    if (bank[select.split(" ")[0]][select.split(" ")[1]] - amount === 0) {
       setSelect("");
     }
   }
 
   const equipItem = () => {
     var type, currentEquip;
-    const weapons = ['Knife', 'Sword', 'Axe', 'Pick']
+    const weapons = ['Knife', 'Sword', 'Axe', 'Pick', 'Rod']
 
     if (weapons.some(element => select.includes(element))) {
       type = 'Weapon';
+    } else {
+      if (select.split(" ")[1].split("+")[0] === 'Shield') {
+        type = 'Offhand';
+      } else {
+        type = select.split(" ")[1].split("+")[0];
+      }
     }
 
     if (type) currentEquip = equipment[type].Name;
@@ -117,9 +125,8 @@ const Bank = () => {
   }
 
   const gearBonus = () => {
-    if (equipArray.some(element => select.includes(element))) {
-      var base, atk, str, multi, gather;
-
+    let base, atk, str, multi, gather, def;
+    if (weaponArray.some(element => select.includes(element))) {
       base = multipliers['Materials'][select.split(" ")[0]]
       str = Math.round(multipliers['Style'][select.split(" ")[1].split("+")[0]].Mult * base);
       atk = Math.round(multipliers['Style'][select.split(" ")[1].split("+")[0]][style] * base);
@@ -136,6 +143,26 @@ const Bank = () => {
       }
       return [atk, str, gather];
     }
+
+    if (armorArray.some(element => select.includes(element))) {
+      base = multipliers['Materials'][select.split(" ")[0]];
+      def = Math.round(multipliers['Style'][select.split(" ")[1].split("+")[0]] * base);
+
+      if (select.split("+").length > 1) {
+        multi = 1 + parseInt(select.split("+")[1]) / 10;
+        base *= multi;
+        def = Math.round(def * multi);
+      }
+      console.log(def)
+      return [def];
+    }
+  }
+
+  const handleAmount = event => {
+    let { value, min, max } = event.target;
+    value = Math.max(Number(min), Math.min(Number(max), Number(value)))
+    console.log(value);
+    setAmount(value)
   }
 
   // Flattening array and setting inventory state
@@ -156,12 +183,18 @@ const Bank = () => {
   }, [bank]);
 
   useEffect(() => {
-    if (inventory.length > 0) setSelect(inventory[0])
+    //if (inventory.length > 0) setSelect(inventory[0]);
+    /* if (inventory[0].split("+").length > 1) {
+      setPricing(Price[inventory[0].split(" ")[0]][inventory[0].split(" ")[1].split("+")[0]] * (1 + parseInt(inventory[0].split("+")[1])))
+    } else {
+      setPricing(Price[inventory[0].split(" ")[0]][inventory[0].split(" ")[1]]);
+    } */
   }, [inventory]);
 
   useEffect(() => {
     const gear = gearBonus();
     if (gear) setStats(gear);
+    setAmount(1);
   }, [select, style]);
 
 
@@ -188,36 +221,58 @@ const Bank = () => {
 
         {
           select !== ""
-            ?<div className='selected'>
+            ? <div className='selected'>
               <div className='inner-selected'>
-              <small>{select}</small>
-              <p>{select ? bank[select.split(" ")[0]][select.split(" ")[1]] : ""}</p>
+                <small>{select}</small>
+                <p>{select ? bank[select.split(" ")[0]][select.split(" ")[1]] : ""}</p>
+                  {
+                    weaponArray.some(element => select.includes(element))
+                      ? <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <small>{`Attack: ${stats[0]}`}</small>
+                        <small>{`Strength: ${stats[1]}`}</small>
+                        {stats[2] ? <small style={{ marginTop: "1em" }}>{`Gathering: +${stats[2]}%`}</small> : ""}
+                      </div>
+                      : ""
+                  }
+                  {
+                    armorArray.some(element => select.includes(element))
+                      ? <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <small>{`Defense: ${stats[0]}`}</small>
+                      </div>
+                      : ""
+                  }
 
-              {
-                equipArray.some(element => select.includes(element))
-                  ? <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <small>{`Attack: ${stats[0]}`}</small>
-                    <small>{`Strength: ${stats[1]}`}</small>
-                    {stats[2] ? <small style={{ marginTop: "1em" }}>{`Gathering: +${stats[2]}%`}</small> : ""}
-                  </div>
-                  : ""
-              }
+                  <small style={{ display: 'block' }}>{`Price: ${pricing}`}</small>
+                {/* Equip Button */}
+                {
+                  weaponArray.some(element => select.includes(element))
+                    ? character.Attack.level >= multipliers['Requirements'][select.split(" ")[0]]
+                      ? <button className='equip-btn' onClick={equipItem}>Equip</button>
+                      : <small style={{ color: 'lightslategray' }}>{`Need ${multipliers['Requirements'][select.split(" ")[0]]} attack`}</small>
+                    : ""
+                }
 
-              {/* Equip Button */}
-              {
-                equipArray.some(element => select.includes(element))
-                  ? character.Attack.level >= multipliers['Requirements'][select.split(" ")[0]]
-                    ? <button className='equip-btn' onClick={equipItem}>Equip</button>
-                    : <small style={{color: 'lightslategray'}}>{`Need ${multipliers['Requirements'][select.split(" ")[0]]} attack`}</small>
-                  : ""
-              }
+                {
+                  armorArray.some(element => select.includes(element))
+                    ? character.Defense.level >= multipliers['Requirements'][select.split(" ")[0]]
+                      ? <button className='equip-btn' onClick={equipItem}>Equip</button>
+                      : <small style={{ color: 'lightslategray' }}>{`Need ${multipliers['Requirements'][select.split(" ")[0]]} defense`}</small>
+                    : ""
+                }
 
-              {/* Sell Button */}
-              <button
-                className='equip-btn'
-                onClick={sellItem}
-              >Sell</button>
-            </div>
+                {/* Sell Button */}
+                <button className='equip-btn' onClick={sellItem}>Sell</button>
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '0.5em', marginBottom: '0.5em' }}>
+                <input
+                  value={amount}
+                  onChange={handleAmount}
+                  type="number"
+                  min={1}
+                  max={bank[select.split(" ")[0]][select.split(" ")[1]]}
+                  style={{ textAlign: 'center', borderRadius: '5px' }}
+                />
+                </div>
+              </div>
             </div>
             : ""
         }

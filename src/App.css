@@ -37,7 +37,7 @@
   color: white;
   box-shadow: 5px 6px 0.5em #000;
   margin-bottom: 1vh;
-  border-radius: 1%;
+  border-radius: 5px;
 }
 
 .navigate {
@@ -50,8 +50,8 @@
   margin-right: 1vw;
   margin-bottom: 1vh;
   box-shadow: 3px 5px 0.5em #000;
-  border-top-right-radius: 1%;
-  border-bottom-right-radius: 1%;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .div-button {
@@ -95,6 +95,7 @@
 
 .eye {
   background-color: lightslategray;
+  border-radius: 50%;
   height: 5px;
   width: 5px;
 }
@@ -122,7 +123,7 @@
   padding-right: 2em;
   border: 0.5px solid lightslategray;
   box-shadow: 5px 6px 0.5em #000;
-  border-radius: 1%;
+  border-radius: 5px;
 }
 
 .skill-screen {
@@ -137,8 +138,8 @@
   color: white;
   margin-left: 1vw;
   margin-bottom: 1vh;
-  border-top-left-radius: 1%;
-  border-bottom-left-radius: 1%;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
   box-shadow: 3px 5px 0.5em #000;
 }
 
@@ -168,10 +169,16 @@
 }
 
 .console-box {
-  border: 1px solid black;
+  border: 1px solid lightslategray;
   padding: 1em;
-  height: 80%;
+  padding-top: 0.5em;
+  height: 85%;
   width: 80%;
+  box-shadow: 2px 3px 0.5em #000;
+  border-radius: 5px;
+  position: relative;
+  top: 0;
+  overflow: scroll;
 }
 
 .exp {
@@ -235,6 +242,13 @@ h2 {
   margin-top: 1em;
 }
 
+.sm-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin-top: 1.5em;
+}
+
 .tree {
   border: 1px solid #000;
   width: 175px;
@@ -287,16 +301,14 @@ h2 {
 
 .save {
   position: fixed;
-  right: 0;
-  margin-right: 4vw;
+  right: 4vw;
+  bottom: 5vh;
 }
 
 small.save {
   position: fixed;
-  right: 0;
-  bottom: 0;
-  margin-right: 2.25vw;
-  margin-bottom: 5vh;
+  right: 2.25vw;
+  bottom: 2vh;
 }
 
 .craft-container {
@@ -304,6 +316,7 @@ small.save {
   display: flex;
   align-items: flex-start;
   justify-content: space-around;
+  margin-top: 1em;
 }
 
 .basic-multi-select {
@@ -312,6 +325,18 @@ small.save {
   margin-bottom: 2vh;
   margin-top: 1em;
   box-shadow: 2px 3px 0.5em black;
+}
+
+.food {
+  width: 95%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid #000;
+  border-radius: 10px;
+  margin-top: -1em;
+  margin-bottom: 1em;
+  box-shadow: 5px 6px 0.25em #000;
 }
 
 .grid {
@@ -324,6 +349,8 @@ small.save {
   position: relative;
   top: 0;
   overflow: scroll;
+  /* border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff; */
   /* IE, FF */
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -331,6 +358,10 @@ small.save {
 
 /* Chrome */
 .grid::-webkit-scrollbar {
+  display: none;
+}
+
+.console-box::-webkit-scrollbar {
   display: none;
 }
 
@@ -368,6 +399,7 @@ small.save {
 
 .selected {
   border: 1px solid #000;
+  border-radius: 5px;
   width: 10vw;
   min-width: 180px;
   height: 100%;
@@ -378,7 +410,7 @@ small.save {
 
 .inner-selected {
   border: 1px solid lightslategray;
-  border-radius: 7.5%;
+  border-radius: 10px;
 }
 
 .equip-btn {
@@ -415,6 +447,12 @@ small.save {
   min-width: 450px;
 }
 
+.battle-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .battle-screen {
   width: 25vw;
   min-width: 450px;
@@ -434,7 +472,7 @@ small.save {
 .hp-bars {
   border: 1px solid #000;
   border-radius: 7.5%;
-  box-shadow: 5px 6px 0.5em #000;
+  box-shadow: 5px 6px 0.25em #000;
   padding: 0.5em;
   margin-top: 1em;
 }
@@ -447,7 +485,7 @@ small.save {
   flex-wrap: wrap;
   border-radius: 7.5%;
   height: 200px;
-  box-shadow: 5px 6px 0.5em #000;
+  box-shadow: 5px 6px 0.25em #000;
 }
 
 .stat-line {
@@ -473,4 +511,50 @@ small.save {
   display: flex;
   justify-content: space-around;
   margin: 0.5em;
+}
+
+.popup-box {
+  position: fixed;
+  background: #00000050;
+  width: 100%;
+  height: 100vh;
+}
+
+.box {
+  color: white;
+  position: fixed;
+  width: 65%;
+  margin: 0 auto;
+  height: auto;
+  min-height: 50vh;
+  max-height: 70vh;
+  top: calc(100vh - 85vh - 20px);
+  right: 17.5%;
+  /* margin-top: calc(100vh - 85vh - 20px); */
+  background: #fff;
+  border-radius: 4px;
+  padding: 20px;
+  border: 1px solid #999;
+  overflow: auto;
+  background-color: #ededed;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-image: radial-gradient(#343a40, black);
+}
+
+.close-icon {
+  content: 'x';
+  cursor: pointer;
+  position: fixed;
+  right: 17.5%;
+  top: calc(100vh - 85vh - 20px);
+  background: transparent;
+  width: 30px;
+  height: 30px;
+  line-height: 25px;
+  text-align: center;
+  font-size: 25px;
 }

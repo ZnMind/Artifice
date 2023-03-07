@@ -8,12 +8,6 @@ const bankSlice = createSlice({
             const material = action.payload.material;
             const item = action.payload.item;
 
-            /* if (item in state) {
-                state[item] += action.payload.amount;
-            } else {
-                state[item] = action.payload.amount;
-            } */
-
             if (material in state) {
                 if (item in state[material]) {
                     state[material][item] += action.payload.amount;

@@ -20,8 +20,9 @@ export function Artifice() {
     const [req, setReq] = useState(2);
     const [progress, setProgress] = useState('');
     const [timing, setTiming] = useState(0);
+    const [mat, setMat] = useState("Log");
     const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
-    const [wepArray] = useState(['Bow', 'Knife', 'Sword', 'Axe', 'Pick'])
+    const [wepArray] = useState(['Bow', 'Knife', 'Sword', 'Axe', 'Pick', 'Rod', 'Helm', 'Chest', 'Gloves', 'Legs', 'Boots']);
 
     // Setting materials and excluding certain keys for input options
     const [materialOptions] = useState(
@@ -44,14 +45,16 @@ export function Artifice() {
             })
         }));
 
-    const [material, setMaterial] = useState('Copper');
+    const [material, setMaterial] = useState(materialOptions[0]);
 
     const [expTable] = useState({
-        'Copper': { 'exp': 15, 'req': 1 },
-        'Tin': { 'exp': 25, 'req': 5 },
-        'Bronze': { 'exp': 40, 'req': 10 },
-        'Iron': { 'exp': 60, 'req': 20 },
-        'Steel': { 'exp': 90, 'req': 30 },
+        'Copper': { 'exp': 15, 'req': 1, 'mat': 'Bar' },
+        'Tin': { 'exp': 25, 'req': 5, 'mat': 'Bar' },
+        'Bronze': { 'exp': 40, 'req': 10, 'mat': 'Bar' },
+        'Iron': { 'exp': 60, 'req': 20, 'mat': 'Bar' },
+        'Steel': { 'exp': 90, 'req': 30, 'mat': 'Bar' },
+        'Normal': { 'exp': 15, 'req': 1, 'mat': 'Log' },
+        'Cow': { 'exp': 15, 'req': 1, 'mat': 'Leather' },
     });
 
     // Attempting to initialize state for older saves
@@ -64,6 +67,7 @@ export function Artifice() {
     // Not showing options if player doesn't have item
     useEffect(() => {
         setProgress('');
+        setMat(expTable[material]['mat']);
         if (items[material]) {
             setItemOptions(Object.keys(items[material]).flatMap(element => {
                 if (wepArray.includes(element.split("+")[0])) {
@@ -102,17 +106,17 @@ export function Artifice() {
             if (action.split("+").length > 1) {
                 var grade = action.split("+")[1];
                 dispatch(decrement({ material: material, item: action, amount: 1 }));
-                dispatch(decrement({ material: material, item: 'Bar', amount: req }));
+                dispatch(decrement({ material: material, item: mat, amount: req }));
                 dispatch(increment({ material: material, item: `${action.split("+")[0]}+${parseInt(grade) + 1}`, amount: 1 }));
                 dispatch(push(`Upgraded to ${material} ${action.split("+")[0]}+${parseInt(grade) + 1}! Amount: ${items[material] ? items[material][action] ? items[material][action] : 1 : 1}~`));
             } else {
                 dispatch(decrement({ material: material, item: action, amount: 1 }));
-                dispatch(decrement({ material: material, item: 'Bar', amount: req }));
+                dispatch(decrement({ material: material, item: mat, amount: req }));
                 dispatch(increment({ material: material, item: `${action}+1`, amount: 1 }));
                 dispatch(push(`Upgraded to ${material} ${action}+1! Amount: ${items[material] ? items[material][action] ? items[material][action] : 1 : 1}~`));
             }
             // Stopping progress if out of materials
-            if (items[material][action] <= 1 || items[material]['Bar'] < req) {
+            if (items[material][action] <= 1 || items[material][mat] < req) {
                 setProgress('');
                 dispatch(push(`You ran out of ${material} ${action}.~`));
             }
@@ -133,10 +137,10 @@ export function Artifice() {
 
     // Setting time for progress bar to fill
     const upgrade = type => {
-        if (items[type]['Bar'] >= req) {
+        if (items[type][mat] >= req) {
             setProgress(type)
         } else {
-            dispatch(push(`Not enough ${type} Bars.~`));
+            dispatch(push(`Not enough ${type} ${mat}.~`));
         }
         setTiming(1);
     }
@@ -163,7 +167,7 @@ export function Artifice() {
                 <small>Level: {`${character[skill] === undefined ? 1 : character[skill].level}`}</small>
                 <small>Exp: {character[skill] === undefined ? `0 / 75` : `${character[skill].experience} / ${character[skill].next}`}</small>
 
-                <small>{`${material} Bar: ${items[material] ? items[material]['Bar'] ? items[material]['Bar'] : 0 : 0}`}</small>
+                <small>{`${material} ${mat}: ${items[material] ? items[material][mat] ? items[material][mat] : 0 : 0}`}</small>
             </div>
 
             <div className={styles.row}>
@@ -178,12 +182,13 @@ export function Artifice() {
                             classNamePrefix='select'
                         />
                         <Select
-                            placeholder={itemOptions[0]}
-                            defaultValue={itemOptions[0]}
+                            placeholder={action}
+                            value={action}
                             onChange={handleAction}
                             options={itemOptions.map(data => ({ value: data, label: data }))}
                             className='basic-multi-select'
                             classNamePrefix='select'
+                            styles={{ color: 'Red' }}
                         />
                     </div>
                     <div className='tree'>
@@ -191,7 +196,7 @@ export function Artifice() {
                         {
                             items[material] ?
                                 action ?
-                                    items[material]['Bar'] >= req
+                                    items[material][mat] >= req
                                         ? <small>{`Cost: ${req}`}</small>
                                         : <small style={{ color: 'red' }}>{`Cost: ${req}`}</small>
                                     : ""

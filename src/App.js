@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { store } from './app/store';
-import { saveState, loadState } from './localStorage';
+import { saveState } from './localStorage';
 import { Woodcutting } from './features/skills/Woodcutting';
+import { Woodworking } from './features/skills/Woodworking';
 import { Mining } from './features/skills/Mining';
 import { Smithing } from './features/skills/Smithing';
+import { Crafting } from './features/skills/Crafting';
 import { Artifice } from './features/skills/Artifice';
+import { Cooking } from './features/skills/Cooking';
 import { Skills } from './features/skills/Skills';
 import { ModScreen } from './features/skills/Skills';
+import { About } from './features/components/About';
 import { push } from './features/slices/consoleSlice';
 import { currentStyle } from './features/slices/combatSlice';
 import Bank from './features/components/Bank';
@@ -21,6 +25,7 @@ const App = () => {
   const [screen, setScreen] = useState('woodcutting');
   const [mod, setMod] = useState('skills');
   const [stats, setStats] = useState();
+  const [about, setAbout] = useState(false);
 
   const character = useSelector(state => state.character);
   const equipment = useSelector(state => state.equipment);
@@ -33,6 +38,7 @@ const App = () => {
       saveState({
         bank: store.getState().bank,
         character: store.getState().character,
+        combat: store.getState().combat,
         equipment: store.getState().equipment,
       });
     });
@@ -73,8 +79,11 @@ const App = () => {
     'equipment': Equipment,
     'adventure': Adventure,
     'woodcutting': Woodcutting,
+    'woodworking': Woodworking,
     'mining': Mining,
     'smithing': Smithing,
+    'crafting': Crafting,
+    'cooking': Cooking,
     'artifice': Artifice,
   }
 
@@ -89,6 +98,11 @@ const App = () => {
   return (
     <>
       <div className='header'><h2>Artifice</h2></div>
+      {about
+        ? <About
+          onClose={() => setAbout(!about)}
+        />
+        : ""}
       <div className='app-container'>
         <div className='navigate'>
           <div className='character'>
@@ -118,15 +132,24 @@ const App = () => {
           <div className='div-button' onClick={() => setScreen('bank')}>Bank</div>
           <div className='div-button' onClick={() => setScreen('equipment')}>Equipment</div>
           <div className='div-button space' onClick={() => setScreen('adventure')}>Adventure</div>
-
+          
+          {/* {Object.keys(components).map((data, index) =>(
+            <div className='div-button' onClick={() => setScreen('woodcutting')}>{`${data} (${character.Woodcutting.level})`}</div>
+          ))} */}
           <div className='div-button' onClick={() => setScreen('woodcutting')}>{`Woodcutting (${character.Woodcutting.level})`}</div>
+          <div className='div-button' onClick={() => setScreen('woodworking')}>{`Woodworking (${character.Woodworking.level})`}</div>
           <div className='div-button' onClick={() => setScreen('mining')}>{`Mining (${character.Mining.level})`}</div>
           <div className='div-button' onClick={() => setScreen('smithing')}>{`Smithing (${character.Smithing.level})`}</div>
-          <div className='div-button' onClick={() => setScreen('artifice')}>{`Artifice (${character.Artifice.level})`}</div>
+          <div className='div-button' onClick={() => setScreen('crafting')}>{`Crafting (${character.Crafting.level})`}</div>
+          <div className='div-button' onClick={() => setScreen('cooking')}>{`Cooking (${character.Cooking.level})`}</div>
+          <div className='div-button space' onClick={() => setScreen('artifice')}>{`Artifice (${character.Artifice.level})`}</div>
+
+          <div className='div-button' onClick={() => setAbout(!about)}>{`About`}</div>
 
         </div>
         <div className="App">
           <div>
+
             <Display />
           </div>
         </div>
@@ -140,7 +163,7 @@ const App = () => {
       </div>
       <div className='console'>
         <div className='console-box'>
-          {con.split("~").map((data, index) => (
+          {con.split("~").reverse().map((data, index) => (
             <div key={index}>{data}</div>
           ))}
         </div>

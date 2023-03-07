@@ -21,6 +21,13 @@ const combineStates = (() => {
       }
     })
 
+    Object.keys(persistedState.bank).forEach(element => {
+      if (element === "") {
+        console.log(`Deleting undefined items found.`)
+        delete persistedState.bank[element];
+      }
+    })
+
     if (persistedState.bank.Coins === null) {
       persistedState.bank.Coins = 0;
     }

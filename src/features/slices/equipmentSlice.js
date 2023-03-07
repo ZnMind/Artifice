@@ -4,7 +4,7 @@ import multipliers from '../json/Multipliers.json';
 const equipmentSlice = createSlice({
     name: 'equipment',
     initialState: {
-        Head: { Name: '', Atk: 0, Def: 0, Str: 0 },
+        Helm: { Name: '', Atk: 0, Def: 0, Str: 0 },
         Back: { Name: '', Atk: 0, Def: 0, Str: 0 },
         Chest: { Name: '', Atk: 0, Def: 0, Str: 0 },
         Gloves: { Name: '', Atk: 0, Def: 0, Str: 0 },
@@ -22,22 +22,30 @@ const equipmentSlice = createSlice({
         equip(state, action) {
             const equipment = action.payload.equipment;
             const item = action.payload.item;
-            var base, str, multi;
+            var base, str, def, multi;
 
             base = multipliers['Materials'][item.split(" ")[0]]
-            str = Math.round(multipliers['Style'][item.split(" ")[1].split("+")[0]].Mult * base);
-
-            if (item.split("+").length > 1) {
-                multi = 1 + parseInt(item.split("+")[1]) / 10;
-                base *= multi;
-                str *= multi;
+            if (equipment === 'Weapon') {
+                str = Math.round(multipliers['Style'][item.split(" ")[1].split("+")[0]].Mult * base);
+                if (item.split("+").length > 1) {
+                    multi = 1 + parseInt(item.split("+")[1]) / 10;
+                    base = Math.round(base * multi);
+                    str = Math.round(str * multi);
+                }
+                
+                if (['Axe', 'Pick', 'Rod'].some(element => item.includes(element))) {
+                    state['Bonus'][item.split(" ")[1].split("+")[0]] = base;
+                }
+                
+                state[equipment] = { Name: item, Atk: base, Def: 0, Str: str };
+            } else {
+                def = Math.round(multipliers['Style'][item.split(" ")[1].split("+")[0]] * base);
+                if (item.split("+").length > 1) {
+                    multi = 1 + parseInt(item.split("+")[1]) / 10;
+                    def = Math.round(def * multi);
+                }
+                state[equipment] = { Name: item, Atk: 0, Def: def, Str: 0 };
             }
-
-            if (['Axe', 'Pick', 'Rod'].some(element => item.includes(element))) {
-                state['Bonus'][item.split(" ")[1].split("+")[0]] = base;
-            }
-
-            state[equipment] = { Name: item, Atk: base, Def: 0, Str: str };
         },
         unequip(state, action) {
             const equipment = action.payload.equipment;
