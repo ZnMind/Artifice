@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const bankSlice = createSlice({
     name: 'bank',
-    initialState: { Coins: 0, Stone: { Axe: 1, Pick: 1 } },
+    initialState: { Coins: 0, Stone: { Axe: 1, Pick: 1 }, Cooked: { Chicken: 5 } },
     reducers: {
         increment(state, action) {
             const material = action.payload.material;
