@@ -19,7 +19,7 @@ const BattleArea = ({ zone, area }) => {
     const equipment = useSelector(state => state.equipment);
     const characterHp = useSelector(state => state.combat.Hp);
     const style = useSelector(state => state.combat.Style);
-    const [currentFood, setCurrentFood] = useState(Object.keys(items.Cooked)[0])
+    const [currentFood, setCurrentFood] = useState(items.Cooked ? Object.keys(items.Cooked)[0] : "");
 
     // Stat initialization
     const [attack, setAttack] = useState(character.Attack.level);
