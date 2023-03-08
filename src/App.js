@@ -12,6 +12,7 @@ import { Cooking } from './features/skills/Cooking';
 import { Skills } from './features/skills/Skills';
 import { ModScreen } from './features/skills/Skills';
 import { About } from './features/components/About';
+import { Tutorial } from './features/components/Tutorial';
 import ErrorBoundary from './features/components/Error';
 import { push } from './features/slices/consoleSlice';
 import { currentStyle } from './features/slices/combatSlice';
@@ -23,10 +24,11 @@ import './App.css';
 const App = () => {
   const dispatch = useDispatch();
   const saveTimer = useRef();
-  const [screen, setScreen] = useState('woodcutting');
+  const [screen, setScreen] = useState('bank');
   const [mod, setMod] = useState('skills');
   const [stats, setStats] = useState();
   const [about, setAbout] = useState(false);
+  const [tutorial, setTutorial] = useState(true);
 
   const character = useSelector(state => state.character);
   const equipment = useSelector(state => state.equipment);
@@ -35,6 +37,7 @@ const App = () => {
 
   const saveGame = () => {
     window.localStorage.setItem('Screen', JSON.stringify(screen));
+    window.localStorage.setItem('Tutorial', JSON.stringify(tutorial));
     store.subscribe(() => {
       saveState({
         bank: store.getState().bank,
@@ -49,7 +52,7 @@ const App = () => {
   const handleStyles = event => {
     dispatch(currentStyle(event.target.innerText));
   }
-  
+
   const calculateBonus = () => {
     var atk = 0, def = 0, str = 0;
     for (let i = 0; i < Object.keys(equipment).length - 1; i++) {
@@ -62,9 +65,13 @@ const App = () => {
   };
 
   useEffect(() => {
-    const data = window.localStorage.getItem('Screen');
+    let data = window.localStorage.getItem('Screen');
+    let status = window.localStorage.getItem('Tutorial');
     if (data !== null) {
       setScreen(JSON.parse(data));
+    };
+    if (status !== null) {
+      setTutorial(JSON.parse(status));
     };
 
     saveTimer.current = setTimeout(saveGame, 60000);
@@ -99,7 +106,17 @@ const App = () => {
   return (
     <>
       <div className='header'><h2>Artifice</h2></div>
-      {about ? <About onClose={() => setAbout(!about)} /> : ""}
+      {about ?
+        <About
+          onClose={() => setAbout(!about)}
+          onOpen={() => setTutorial(!tutorial)}
+        />
+        : ""}
+      {tutorial ?
+        <Tutorial
+          status={() => setTutorial(!tutorial)}
+        />
+        : ""}
       <div className='app-container'>
         <div className='navigate'>
           <div className='character'>
