@@ -43,6 +43,7 @@
         "Bar": 2,
         "Knife": 5,
         "Sword": 5,
+        "Scimitar": 5,
         "Axe": 5,
         "Pick": 5
     },
@@ -51,6 +52,7 @@
         "Bar": 5,
         "Knife": 10,
         "Sword": 10,
+        "Scimitar": 10,
         "Axe": 10,
         "Pick": 10
     },
@@ -59,6 +61,7 @@
         "Bar": 15,
         "Knife": 22,
         "Sword": 22,
+        "Scimitar": 22,
         "Axe": 22,
         "Pick": 22
     },
@@ -66,8 +69,17 @@
         "Bar": 25,
         "Knife": 35,
         "Sword": 35,
+        "Scimitar": 35,
         "Axe": 35,
         "Pick": 35
+    },
+    "Alumite": {
+        "Bar": 50,
+        "Knife": 100,
+        "Sword": 100,
+        "Scimitar": 100,
+        "Axe": 100,
+        "Pick": 100
     },
     "Cow": {
         "Leather": 2,
@@ -126,14 +138,28 @@
         "Chest": 150,
         "Gloves": 150,
         "Legs": 150,
-        "Boots": 150
+        "Boots": 150,
+        "Bar": 100,
+        "Knife": 150,
+        "Sword": 150,
+        "Scimitar": 150,
+        "Axe": 150,
+        "Pick": 150
     },
     "Raw": {
         "Chicken": 1,
-        "Beef": 2
+        "Beef": 2,
+        "Boar": 5,
+        "Bear": 10,
+        "Croc": 25,
+        "Grizzly": 50
     },
     "Cooked": {
         "Chicken": 2,
-        "Beef": 4
+        "Beef": 4,
+        "Boar": 10,
+        "Bear": 20,
+        "Croc": 50,
+        "Grizzly": 100
     }
 }

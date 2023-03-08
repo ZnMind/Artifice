@@ -1,6 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchTodos } from "../slices/async";
 
 export function About({ onClose }) {
+    const dispatch = useDispatch();
+    const select = useSelector(state => state.entities)
+    const [data, setData] = useState();
+
+    useEffect(() => {
+        //dispatch(fetchTodos());
+    }, [])
+
     return (
         <>
             < div className="modal-box" >

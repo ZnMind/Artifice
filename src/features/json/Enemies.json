@@ -55,9 +55,9 @@
     },
     "Grove": {
         "Stag": {
-            "Hp": 200,
-            "Attack": 3,
-            "Defense": 3,
+            "Hp": 120,
+            "Attack": 5,
+            "Defense": 6,
             "Strength": 5,
             "Drops": {
                 "Normal Bones": [1, 1],
@@ -67,10 +67,10 @@
             }
         },
         "Boar": {
-            "Hp": 140,
-            "Attack": 8,
+            "Hp": 200,
+            "Attack": 17,
             "Defense": 12,
-            "Strength": 25,
+            "Strength": 15,
             "Drops": {
                 "Normal Bones": [1, 1],
                 "Boar Hide": [1, 1],
@@ -80,9 +80,9 @@
         },
         "Black Bear": {
             "Hp": 250,
-            "Attack": 20,
-            "Defense": 20,
-            "Strength": 75,
+            "Attack": 50,
+            "Defense": 25,
+            "Strength": 37,
             "Drops": {
                 "Normal Bones": [1, 1],
                 "Bear Hide": [1, 1],
@@ -91,22 +91,22 @@
             }
         },
         "Croc": {
-            "Hp": 351,
-            "Attack": 40,
-            "Defense": 25,
-            "Strength": 100,
+            "Hp": 375,
+            "Attack": 82,
+            "Defense": 58,
+            "Strength": 62,
             "Drops": {
                 "Normal Bones": [1, 1],
-                "Caiman Hide": [1, 1],
-                "Raw Caiman": [1, 1],
-                "Caiman Claw": [0.1, 1]
+                "Croc Hide": [1, 1],
+                "Raw Croc": [1, 1],
+                "Croc Claw": [0.1, 1]
             }
         },
         "Grizzly Bear": {
             "Hp": 500,
-            "Attack": 45,
-            "Defense": 40,
-            "Strength": 120,
+            "Attack": 150,
+            "Defense": 105,
+            "Strength": 111,
             "Drops": {
                 "Normal Bones": [1, 1],
                 "Grizzly Hide": [1, 1],
@@ -154,9 +154,9 @@
     "Volcano": {
         "Dragon": {
             "Hp": 1100,
-            "Attack": 70,
-            "Defense": 50,
-            "Strength": 97,
+            "Attack": 244,
+            "Defense": 166,
+            "Strength": 167,
             "Drops": {
                 "Dragon Bones": [1, 1],
                 "Dragon Hide": [0.5, 1],

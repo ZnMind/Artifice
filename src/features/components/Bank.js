@@ -30,7 +30,7 @@ const Bank = () => {
   const [pricing, setPricing] = useState("");
   const [stats, setStats] = useState([]);
   const [amount, setAmount] = useState(1);
-  const [weaponArray] = useState(['Knife', 'Sword', 'Axe', 'Pick', 'Rod']);
+  const [weaponArray] = useState(['Knife', 'Sword', 'Scimitar', 'Axe', 'Pick', 'Rod']);
   const [armorArray] = useState(['Helm', 'Chest', 'Gloves', 'Legs', 'Boots', 'Shield']);
 
   // Converting state object into an array
@@ -88,7 +88,7 @@ const Bank = () => {
     var type, currentEquip;
     const weapons = ['Knife', 'Sword', 'Axe', 'Pick', 'Rod']
 
-    if (weapons.some(element => select.includes(element))) {
+    if (weaponArray.some(element => select.includes(element))) {
       type = 'Weapon';
     } else {
       if (select.split(" ")[1].split("+")[0] === 'Shield') {

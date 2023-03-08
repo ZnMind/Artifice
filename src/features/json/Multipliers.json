@@ -46,36 +46,49 @@
     },
     "Style": {
         "Knife": {
+            "Speed": 1.25,
             "Attack": 0.8,
             "Strength": 0.5,
             "Defense": 1.5,
             "Mult": 0.6
         },
         "Sword": {
+            "Speed": 1.6,
             "Attack": 1.4,
             "Strength": 0.8,
             "Defense": 0.8,
             "Mult": 1
         },
+        "Scimitar": {
+            "Speed": 1.6,
+            "Attack": 0.6,
+            "Strength": 1.5,
+            "Defense": 0.6,
+            "Mult": 1.5
+        },
         "Axe": {
+            "Speed": 2,
             "Attack": 0.8,
             "Strength": 1.2,
             "Defense": 0.8,
             "Mult": 1.5
         },
         "Hammer": {
+            "Speed": 2.5,
             "Attack": 0.6,
             "Strength": 1.8,
             "Defense": 0.6,
             "Mult": 2
         },
         "Pick": {
+            "Speed": 2,
             "Attack": 0.5,
             "Strength": 0.8,
             "Defense": 0.3,
             "Mult": 0.5
         },
         "Rod": {
+            "Speed": 2,
             "Attack": 0.2,
             "Strength": 0.4,
             "Defense": 0.3,
@@ -90,6 +103,10 @@
     },
     "Food": {
         "Chicken": 30,
-        "Beef": 50
+        "Beef": 50,
+        "Boar": 70,
+        "Bear": 90,
+        "Croc": 110,
+        "Grizzly": 150
     }
 }

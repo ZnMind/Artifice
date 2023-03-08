@@ -21,7 +21,7 @@ export function Smithing() {
     const [timing, setTiming] = useState(0);
     const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
     const [page, setPage] = useState(1);
-    const [itemOptions] = useState(['Bar', 'Knife', 'Sword', 'Axe', 'Pick']);
+    const [itemOptions] = useState(['Bar', 'Knife', 'Sword', 'Scimitar', 'Axe', 'Pick']);
     const [expTable] = useState({
         'Copper': { 'exp': 15, 'req': 1, 'ore': { 'Copper Ore': 1 } },
         'Tin': { 'exp': 25, 'req': 5, 'ore': { 'Tin Ore': 1 } },

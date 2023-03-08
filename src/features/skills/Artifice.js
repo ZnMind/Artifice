@@ -23,7 +23,7 @@ export function Artifice() {
     const [timing, setTiming] = useState(0);
     const [mat, setMat] = useState("Log");
     const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
-    const [wepArray] = useState(['Bow', 'Knife', 'Sword', 'Axe', 'Pick', 'Rod', 'Helm', 'Chest', 'Gloves', 'Legs', 'Boots', 'Shield']);
+    const [wepArray] = useState(['Bow', 'Knife', 'Sword', 'Scimitar', 'Axe', 'Pick', 'Rod', 'Helm', 'Chest', 'Gloves', 'Legs', 'Boots', 'Shield']);
 
     // Setting materials and excluding certain keys for input options
     const [materialOptions] = useState(
@@ -56,12 +56,12 @@ export function Artifice() {
         'Steel': { 'exp': 90, 'req': multipliers['Requirements']['Steel'], 'mat': 'Bar' },
         'Alumite': { 'exp': 120, 'req': multipliers['Requirements']['Alumite'], 'mat': 'Bar' },
         'Dragon': { 'exp': 250, 'req': multipliers['Requirements']['Dragon'], 'mat': 'Bar' },
-        'Normal': { 'exp': 15, 'req': multipliers['Requirements']['Normal'], 'mat': 'Log' },
-        'Oak': { 'exp': 35, 'req': multipliers['Requirements']['Oak'], 'mat': 'Log' },
-        'Willow': { 'exp': 60, 'req': multipliers['Requirements']['Willow'], 'mat': 'Log' },
-        'Teak': { 'exp': 70, 'req': multipliers['Requirements']['Teak'], 'mat': 'Log' },
-        'Maple': { 'exp': 90, 'req': multipliers['Requirements']['Maple'], 'mat': 'Log' },
-        'Yew': { 'exp': 120, 'req': multipliers['Requirements']['Yew'], 'mat': 'Log' },
+        'Normal': { 'exp': 15, 'req': multipliers['Requirements']['Normal'], 'mat': 'Plank' },
+        'Oak': { 'exp': 35, 'req': multipliers['Requirements']['Oak'], 'mat': 'Plank' },
+        'Willow': { 'exp': 60, 'req': multipliers['Requirements']['Willow'], 'mat': 'Plank' },
+        'Teak': { 'exp': 70, 'req': multipliers['Requirements']['Teak'], 'mat': 'Plank' },
+        'Maple': { 'exp': 90, 'req': multipliers['Requirements']['Maple'], 'mat': 'Plank' },
+        'Yew': { 'exp': 120, 'req': multipliers['Requirements']['Yew'], 'mat': 'Plank' },
         'Cow': { 'exp': 15, 'req': multipliers['Requirements']['Cow'], 'mat': 'Leather' },
         'Stag': { 'exp': 25, 'req': multipliers['Requirements']['Stag'], 'mat': 'Leather' },
         'Boar': { 'exp': 40, 'req': multipliers['Requirements']['Boar'], 'mat': 'Leather' },
@@ -184,7 +184,7 @@ export function Artifice() {
                 <small>Level: {`${character[skill] === undefined ? 1 : character[skill].level}`}</small>
                 <small>Exp: {character[skill] === undefined ? `0 / 75` : `${character[skill].experience} / ${character[skill].next}`}</small>
 
-                <small>{`${material} ${mat}: ${items[material] ? items[material][mat] ? items[material][mat] : 0 : 0}`}</small>
+                <small>{material ? `${material} ${mat}: ${items[material] ? items[material][mat] ? items[material][mat] : 0 : 0}` : ""}</small>
             </div>
 
             <div className={styles.row}>

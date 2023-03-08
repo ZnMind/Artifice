@@ -28,6 +28,7 @@ const BattleArea = ({ zone, area }) => {
     const [gearAtk, setGearAtk] = useState();
     const [gearDef, setGearDef] = useState();
     const [gearStr, setGearStr] = useState();
+    const [speed, setSpeed] = useState(20);
     const [maxHit, setMaxHit] = useState();
     const [accuracy, setAccuracy] = useState();
     const [evasion, setEvasion] = useState();
@@ -64,6 +65,8 @@ const BattleArea = ({ zone, area }) => {
         }
         if (equipment['Weapon'].Name !== '') {
             setGearAtk(Math.round(atk * multipliers['Style'][equipment['Weapon'].Name.split(" ")[1].split("+")[0]][style]));
+            let atkSpd = multipliers['Style'][equipment['Weapon'].Name.split(" ")[1].split("+")[0]]['Speed'];
+            setSpeed(atkSpd * 10);
         } else {
             setGearAtk(atk)
         }
@@ -274,7 +277,7 @@ const BattleArea = ({ zone, area }) => {
     };
 
     const handlePlayerTime = () => {
-        setBar1(n => n + (100 / 25));
+        setBar1(n => n + (100 / speed));
     };
 
     const handleEnemyTime = () => {
@@ -316,7 +319,7 @@ const BattleArea = ({ zone, area }) => {
                             />
                             <ProgressBar
                                 now={bar1}
-                                label={`${Math.round(250 - 250 * (bar1 / 100)) / 100}s`}
+                                label={`${Math.round(speed * 10 - speed * 10 * (bar1 / 100)) / 100}s`}
                             />
                             <p>{`${characterHp.current} / ${characterHp.max}`}</p>
                         </div>

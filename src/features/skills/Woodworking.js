@@ -86,7 +86,6 @@ export function Woodworking() {
         var materialCheck = [];
 
         if (action === 'Plank') {
-
             Object.keys(expTable[type]['log']).forEach(i => {
                 if (items[i.split(" ")[0]]) {
                     //if (items[i.split(" ")[0]]['Ore']) {
@@ -140,11 +139,11 @@ export function Woodworking() {
                 <small>Level: {`${character[skill] === undefined ? 1 : character[skill].level}`}</small>
                 <small>Exp: {character[skill] === undefined ? `0 / 75` : `${character[skill].experience} / ${character[skill].next}`}</small>
                 <div className='sm-container'>
-                    <div className={`arrow ${page === 1 ? 'disabled' : 'arrow-left'}`} style={{marginRight: '0.5em'}} onClick={() => setPage(page - 1)}></div>
+                    <div className={`arrow ${page === 1 ? 'disabled' : 'arrow-left'}`} style={{ marginRight: '0.5em' }} onClick={() => setPage(page - 1)}></div>
                     {Object.keys(expTable).slice(page * 4 - 4, page * 4).map((data, index) => (
-                        <button key={index} className={styles.button} style={{marginTop: '0'}} onClick={() => setMaterial(data)}>{data}</button>
+                        <button key={index} className={styles.button} style={{ marginTop: '0' }} onClick={() => setMaterial(data)}>{data}</button>
                     ))}
-                    <div className={`arrow ${page === 2 ? 'disabled' : 'arrow-right'}`} style={{marginLeft: '0.5em'}} onClick={() => setPage(page + 1)}></div>
+                    <div className={`arrow ${page === 2 ? 'disabled' : 'arrow-right'}`} style={{ marginLeft: '0.5em' }} onClick={() => setPage(page + 1)}></div>
                 </div>
 
                 {
@@ -152,8 +151,11 @@ export function Woodworking() {
                         ? Object.keys(expTable[material]['log']).map((d, i) => (
                             <small key={i}>
                                 {
+
                                     items[d.split(" ")[0]]
-                                        ? `${d}: ${items[d.split(" ")[0]]['Log']}`
+                                        ? items[d.split(" ")[0]]['Log']
+                                            ? `${d}: ${items[d.split(" ")[0]]['Log']}`
+                                            : `${d}: 0`
                                         : `${d}: 0`
                                 }
                             </small>
