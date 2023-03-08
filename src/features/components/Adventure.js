@@ -19,7 +19,7 @@ const BattleArea = ({ zone, area }) => {
     const equipment = useSelector(state => state.equipment);
     const characterHp = useSelector(state => state.combat.Hp);
     const style = useSelector(state => state.combat.Style);
-    const [currentFood, setCurrentFood] = useState(items.Cooked ? Object.keys(items.Cooked)[0] : "");
+    const [currentFood, setCurrentFood] = useState(items.Cooked ? Object.keys(items.Cooked)[0] : []);
 
     // Stat initialization
     const [attack, setAttack] = useState(character.Attack.level);
@@ -287,7 +287,7 @@ const BattleArea = ({ zone, area }) => {
 
     const handleEat = () => {
         let heal = multipliers['Food'][currentFood];
-        if (items['Food'][currentFood] >= 1) {
+        if (items['Cooked'][currentFood] >= 1) {
             if (heal >= characterHp.max - characterHp.current) {
                 dispatch(resetHp());
             } else {
@@ -399,9 +399,7 @@ const Adventure = () => {
     const [zones] = useState(Object.keys(enemies));
     const [currentZone, setCurrentZone] = useState('');
     const [currentArea, setCurrentArea] = useState(currentZone[0])
-    //const [areas] = useState(Object.keys(enemies))
     const [cb, setCb] = useState();
-    //const [currentArea, setCurrentArea] = useState('Farm');
 
     useEffect(() => {
         if (currentZone !== "") {
@@ -442,31 +440,12 @@ const Adventure = () => {
                     : ""
                 }
 
-                {/* <AreaSelect
-                    data={Object.keys(enemies[currentZone])}
-                /> */}
-
             </div>
             <BattleArea
-                /* index={current}
-                area={areas} */
                 zone={currentZone}
                 area={currentArea}
             />
         </div>
-    )
-}
-
-const AreaSelect = props => {
-
-    return (
-        <Select
-
-            onChange={e => console.log(e.value)}
-            options={props.data.map(data => ({ value: data, label: data }))}
-            className='basic-multi-select'
-            classNamePrefix='select'
-        />
     )
 }
 

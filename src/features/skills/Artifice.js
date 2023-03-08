@@ -5,6 +5,7 @@ import { gainExp, initialize } from '../slices/characterSlice';
 import { increment, decrement } from '../slices/bankSlice';
 import { push } from '../slices/consoleSlice';
 import Select from 'react-select';
+import multipliers from '../json/Multipliers.json';
 import styles from './Counter.module.css';
 
 export function Artifice() {
@@ -22,7 +23,7 @@ export function Artifice() {
     const [timing, setTiming] = useState(0);
     const [mat, setMat] = useState("Log");
     const [lvl, setLvl] = useState(character[skill] ? character[skill].level : 1);
-    const [wepArray] = useState(['Bow', 'Knife', 'Sword', 'Axe', 'Pick', 'Rod', 'Helm', 'Chest', 'Gloves', 'Legs', 'Boots']);
+    const [wepArray] = useState(['Bow', 'Knife', 'Sword', 'Axe', 'Pick', 'Rod', 'Helm', 'Chest', 'Gloves', 'Legs', 'Boots', 'Shield']);
 
     // Setting materials and excluding certain keys for input options
     const [materialOptions] = useState(
@@ -48,13 +49,25 @@ export function Artifice() {
     const [material, setMaterial] = useState(materialOptions[0]);
 
     const [expTable] = useState({
-        'Copper': { 'exp': 15, 'req': 1, 'mat': 'Bar' },
-        'Tin': { 'exp': 25, 'req': 5, 'mat': 'Bar' },
-        'Bronze': { 'exp': 40, 'req': 10, 'mat': 'Bar' },
-        'Iron': { 'exp': 60, 'req': 20, 'mat': 'Bar' },
-        'Steel': { 'exp': 90, 'req': 30, 'mat': 'Bar' },
-        'Normal': { 'exp': 15, 'req': 1, 'mat': 'Log' },
-        'Cow': { 'exp': 15, 'req': 1, 'mat': 'Leather' },
+        'Copper': { 'exp': 15, 'req': multipliers['Requirements']['Copper'], 'mat': 'Bar' },
+        'Tin': { 'exp': 25, 'req': multipliers['Requirements']['Tin'], 'mat': 'Bar' },
+        'Bronze': { 'exp': 40, 'req': multipliers['Requirements']['Bronze'], 'mat': 'Bar' },
+        'Iron': { 'exp': 60, 'req': multipliers['Requirements']['Iron'], 'mat': 'Bar' },
+        'Steel': { 'exp': 90, 'req': multipliers['Requirements']['Steel'], 'mat': 'Bar' },
+        'Alumite': { 'exp': 120, 'req': multipliers['Requirements']['Alumite'], 'mat': 'Bar' },
+        'Dragon': { 'exp': 250, 'req': multipliers['Requirements']['Dragon'], 'mat': 'Bar' },
+        'Normal': { 'exp': 15, 'req': multipliers['Requirements']['Normal'], 'mat': 'Log' },
+        'Oak': { 'exp': 35, 'req': multipliers['Requirements']['Oak'], 'mat': 'Log' },
+        'Willow': { 'exp': 60, 'req': multipliers['Requirements']['Willow'], 'mat': 'Log' },
+        'Teak': { 'exp': 70, 'req': multipliers['Requirements']['Teak'], 'mat': 'Log' },
+        'Maple': { 'exp': 90, 'req': multipliers['Requirements']['Maple'], 'mat': 'Log' },
+        'Yew': { 'exp': 120, 'req': multipliers['Requirements']['Yew'], 'mat': 'Log' },
+        'Cow': { 'exp': 15, 'req': multipliers['Requirements']['Cow'], 'mat': 'Leather' },
+        'Stag': { 'exp': 25, 'req': multipliers['Requirements']['Stag'], 'mat': 'Leather' },
+        'Boar': { 'exp': 40, 'req': multipliers['Requirements']['Boar'], 'mat': 'Leather' },
+        'Bear': { 'exp': 60, 'req': multipliers['Requirements']['Bear'], 'mat': 'Leather' },
+        'Croc': { 'exp': 90, 'req': multipliers['Requirements']['Croc'], 'mat': 'Leather' },
+        'Grizzly': { 'exp': 120, 'req': multipliers['Requirements']['Grizzly'], 'mat': 'Leather' },
     });
 
     // Attempting to initialize state for older saves
@@ -67,7 +80,11 @@ export function Artifice() {
     // Not showing options if player doesn't have item
     useEffect(() => {
         setProgress('');
-        setMat(expTable[material]['mat']);
+
+        if (expTable[material]) {
+            setMat(expTable[material]['mat']);
+        }
+
         if (items[material]) {
             setItemOptions(Object.keys(items[material]).flatMap(element => {
                 if (wepArray.includes(element.split("+")[0])) {
@@ -203,9 +220,11 @@ export function Artifice() {
                                 : ""
                         }
                         {
-                            lvl >= expTable[material].req
-                                ? <button onClick={() => upgrade(material)} className={styles.button} id='tree'>Upgrade</button>
-                                : <small style={{ color: 'lightslategray' }}>{`Required: ${expTable[material].req}`}</small>
+                            expTable[material] ?
+                                lvl >= expTable[material].req
+                                    ? <button onClick={() => upgrade(material)} className={styles.button} id='tree'>Upgrade</button>
+                                    : <small style={{ color: 'lightslategray' }}>{`Required: ${expTable[material].req}`}</small>
+                                : ""
                         }
                     </div>
                 </div>

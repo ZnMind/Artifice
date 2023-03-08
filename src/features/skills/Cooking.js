@@ -21,7 +21,7 @@ export function Cooking() {
     
 
     // Setting materials and excluding certain keys for input options
-    const [materialOptions] = useState(Object.keys(items.Raw));
+    const [materialOptions] = useState(items.Raw ? Object.keys(items.Raw) : []);
     const [material, setMaterial] = useState('Chicken');
     const [expTable] = useState({
         'Chicken': { 'exp': 30, 'req': 1 },

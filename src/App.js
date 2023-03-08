@@ -12,6 +12,7 @@ import { Cooking } from './features/skills/Cooking';
 import { Skills } from './features/skills/Skills';
 import { ModScreen } from './features/skills/Skills';
 import { About } from './features/components/About';
+import ErrorBoundary from './features/components/Error';
 import { push } from './features/slices/consoleSlice';
 import { currentStyle } from './features/slices/combatSlice';
 import Bank from './features/components/Bank';
@@ -33,7 +34,7 @@ const App = () => {
   const con = useSelector(state => state.console.console);
 
   const saveGame = () => {
-    //window.localStorage.setItem('Screen', JSON.stringify(screen));
+    window.localStorage.setItem('Screen', JSON.stringify(screen));
     store.subscribe(() => {
       saveState({
         bank: store.getState().bank,
@@ -48,6 +49,17 @@ const App = () => {
   const handleStyles = event => {
     dispatch(currentStyle(event.target.innerText));
   }
+  
+  const calculateBonus = () => {
+    var atk = 0, def = 0, str = 0;
+    for (let i = 0; i < Object.keys(equipment).length - 1; i++) {
+      var slot = equipment[Object.keys(equipment)[i]];
+      atk += slot.Atk;
+      def += slot.Def;
+      str += slot.Str;
+    }
+    setStats([atk, def, str])
+  };
 
   useEffect(() => {
     const data = window.localStorage.getItem('Screen');
@@ -62,17 +74,6 @@ const App = () => {
   useEffect(() => {
     calculateBonus();
   }, []);
-
-  const calculateBonus = () => {
-    var atk = 0, def = 0, str = 0;
-    for (let i = 0; i < Object.keys(equipment).length - 1; i++) {
-      var slot = equipment[Object.keys(equipment)[i]];
-      atk += slot.Atk;
-      def += slot.Def;
-      str += slot.Str;
-    }
-    setStats([atk, def, str])
-  };
 
   const components = {
     'bank': Bank,
@@ -98,11 +99,7 @@ const App = () => {
   return (
     <>
       <div className='header'><h2>Artifice</h2></div>
-      {about
-        ? <About
-          onClose={() => setAbout(!about)}
-        />
-        : ""}
+      {about ? <About onClose={() => setAbout(!about)} /> : ""}
       <div className='app-container'>
         <div className='navigate'>
           <div className='character'>
@@ -118,10 +115,6 @@ const App = () => {
                 </div>
               </div>
             </div>
-            {/* <small>{`Bonuses:`}</small>
-            <small>{stats[0]}</small>
-            <small>{stats[1]}</small>
-            <small>{stats[2]}</small> */}
             <small>{`Training Style: `}<b>{style}</b></small>
             {['Attack', 'Strength', 'Defense'].map((data, index) => (
               data === style
@@ -132,7 +125,7 @@ const App = () => {
           <div className='div-button' onClick={() => setScreen('bank')}>Bank</div>
           <div className='div-button' onClick={() => setScreen('equipment')}>Equipment</div>
           <div className='div-button space' onClick={() => setScreen('adventure')}>Adventure</div>
-          
+
           {/* {Object.keys(components).map((data, index) =>(
             <div className='div-button' onClick={() => setScreen('woodcutting')}>{`${data} (${character.Woodcutting.level})`}</div>
           ))} */}
@@ -148,10 +141,9 @@ const App = () => {
 
         </div>
         <div className="App">
-          <div>
-
+          <ErrorBoundary>
             <Display />
-          </div>
+          </ErrorBoundary>
         </div>
         <div className='skill-screen'>
           <div className='buffs'>
