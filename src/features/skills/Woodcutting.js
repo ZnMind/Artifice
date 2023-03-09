@@ -25,7 +25,8 @@ export function Woodcutting() {
         'Oak': { 'exp': 35, 'req': 15, 'timing': 2 },
         'Willow': { 'exp': 65, 'req': 30, 'timing': 3 },
         'Teak': { 'exp': 75, 'req': 35, 'timing': 3 },
-        'Maple': { 'exp': 90, 'req': 45, 'timing': 4 },
+        'Maple': { 'exp': 120, 'req': 45, 'timing': 4 },
+        'Yew': { 'exp': 175, 'req': 60, 'timing': 5 },
     });
 
     // Attempting to initialize state for older saves

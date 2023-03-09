@@ -23,12 +23,12 @@ export function Woodworking() {
     const [page, setPage] = useState(1);
     const [itemOptions] = useState(['Plank', 'Rod', 'Shield']);
     const [expTable] = useState({
-        'Normal': { 'exp': 15, 'req': 1, 'log': { 'Normal Log': 1 } },
-        'Oak': { 'exp': 25, 'req': 5, 'log': { 'Oak Log': 1 } },
-        'Willow': { 'exp': 40, 'req': 15, 'log': { 'Willow Log': 1 } },
-        'Teak': { 'exp': 60, 'req': 30, 'log': { 'Teak Log': 1 } },
-        'Maple': { 'exp': 90, 'req': 40, 'log': { 'Maple Log': 1 } },
-        'Yew': { 'exp': 150, 'req': 50, 'log': { 'Yew Log': 1 } },
+        'Normal': { 'exp': 20, 'req': 1, 'log': { 'Normal Log': 1 } },
+        'Oak': { 'exp': 35, 'req': 15, 'log': { 'Oak Log': 1 } },
+        'Willow': { 'exp': 65, 'req': 30, 'log': { 'Willow Log': 1 } },
+        'Teak': { 'exp': 75, 'req': 35, 'log': { 'Teak Log': 1 } },
+        'Maple': { 'exp': 120, 'req': 45, 'log': { 'Maple Log': 1 } },
+        'Yew': { 'exp': 175, 'req': 60, 'log': { 'Yew Log': 1 } },
     });
 
     // Attempting to initialize state for older saves

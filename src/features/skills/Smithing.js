@@ -25,10 +25,10 @@ export function Smithing() {
     const [expTable] = useState({
         'Copper': { 'exp': 15, 'req': 1, 'ore': { 'Copper Ore': 1 } },
         'Tin': { 'exp': 25, 'req': 5, 'ore': { 'Tin Ore': 1 } },
-        'Bronze': { 'exp': 40, 'req': 15, 'ore': { 'Copper Ore': 1, 'Tin Ore': 1 } },
-        'Iron': { 'exp': 60, 'req': 30, 'ore': { 'Iron Ore': 1 } },
-        'Steel': { 'exp': 90, 'req': 40, 'ore': { 'Iron Ore': 1, 'Coal': 1 } },
-        'Alumite': { 'exp': 150, 'req': 50, 'ore': { 'Alumite': 1, 'Iron Ore': 2, 'Coal': 2 } },
+        'Bronze': { 'exp': 40, 'req': 10, 'ore': { 'Copper Ore': 1, 'Tin Ore': 1 } },
+        'Iron': { 'exp': 60, 'req': 20, 'ore': { 'Iron Ore': 1 } },
+        'Steel': { 'exp': 90, 'req': 30, 'ore': { 'Iron Ore': 1, 'Coal': 1 } },
+        'Alumite': { 'exp': 150, 'req': 40, 'ore': { 'Alumite': 1, 'Iron Ore': 2, 'Coal': 2 } },
         'Dragon': { 'exp': 250, 'req': 60, 'ore': { 'Dragon Scale': 1 } },
     });
 

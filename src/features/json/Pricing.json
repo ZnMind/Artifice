@@ -82,6 +82,7 @@
         "Pick": 100
     },
     "Cow": {
+        "Hide": 1,
         "Leather": 2,
         "Helm": 5,
         "Chest": 5,
@@ -90,6 +91,7 @@
         "Boots": 5
     },
     "Stag": {
+        "Hide": 2,
         "Leather": 5,
         "Helm": 10,
         "Chest": 10,
@@ -98,6 +100,7 @@
         "Boots": 10
     },
     "Boar": {
+        "Hide": 5,
         "Leather": 12,
         "Helm": 20,
         "Chest": 20,
@@ -106,6 +109,7 @@
         "Boots": 20
     },
     "Bear": {
+        "Hide": 10,
         "Leather": 15,
         "Helm": 25,
         "Chest": 25,
@@ -114,6 +118,7 @@
         "Boots": 25
     },
     "Croc": {
+        "Hide": 15,
         "Leather": 22,
         "Helm": 35,
         "Chest": 35,
@@ -122,6 +127,7 @@
         "Boots": 35
     },
     "Grizzly": {
+        "Hide": 20,
         "Leather": 40,
         "Helm": 50,
         "Chest": 50,
@@ -149,6 +155,7 @@
     "Raw": {
         "Chicken": 1,
         "Beef": 2,
+        "Venison": 3,
         "Boar": 5,
         "Bear": 10,
         "Croc": 25,
@@ -157,6 +164,7 @@
     "Cooked": {
         "Chicken": 2,
         "Beef": 4,
+        "Venison": 6,
         "Boar": 10,
         "Bear": 20,
         "Croc": 50,

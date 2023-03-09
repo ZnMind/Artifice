@@ -22,8 +22,8 @@ export function Mining() {
     const [speedBonus, setSpeedBonus] = useState(Math.round((bonus / 2 + 100 + ((lvl - 1) / 2) * (1 + (bonus / 100))) * 100) / 100);
     const [expTable] = useState({
         'Copper': { 'exp': 15, 'req': 1, 'timing': 1 },
-        'Tin': { 'exp': 20, 'req': 5, 'timing': 1 },
-        'Iron': { 'exp': 40, 'req': 15, 'timing': 2 },
+        'Tin': { 'exp': 20, 'req': 10, 'timing': 1 },
+        'Iron': { 'exp': 40, 'req': 20, 'timing': 2 },
         'Coal': { 'exp': 60, 'req': 30, 'timing': 3 },
         'Alumite': { 'exp': 80, 'req': 40, 'timing': 5 },
     });
