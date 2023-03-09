@@ -37,7 +37,6 @@ const App = () => {
 
   const saveGame = () => {
     window.localStorage.setItem('Screen', JSON.stringify(screen));
-    window.localStorage.setItem('Tutorial', JSON.stringify(tutorial));
     store.subscribe(() => {
       saveState({
         bank: store.getState().bank,
@@ -51,6 +50,11 @@ const App = () => {
 
   const handleStyles = event => {
     dispatch(currentStyle(event.target.innerText));
+  }
+
+  const handleTutorial = () => {
+    setTutorial(!tutorial);
+    window.localStorage.setItem('Tutorial', JSON.stringify(!tutorial));
   }
 
   const calculateBonus = () => {
@@ -114,7 +118,7 @@ const App = () => {
         : ""}
       {tutorial ?
         <Tutorial
-          status={() => setTutorial(!tutorial)}
+          status={handleTutorial}
         />
         : ""}
       <div className='app-container'>

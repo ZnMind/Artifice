@@ -40,7 +40,7 @@ export function Woodcutting() {
         if (bar.now >= 100) {
             dispatch(gainExp({ skill: 'Woodcutting', amount: expTable[action].exp }));
             dispatch(increment({ material: action, item: 'Log', amount: 1 }));
-            dispatch(push(`Chopped ${action} log! Amount: ${items[action] ? items[action]['Log'] + 1 : 1}~`))
+            dispatch(push(`Chopped ${action} log! Amount: ${items[action] ? items[action]['Log'] ? items[action]['Log'] + 1 : 1 : 1}~`))
         }
     }, [bar]);
 

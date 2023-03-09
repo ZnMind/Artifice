@@ -174,7 +174,7 @@ const BattleArea = ({ zone, area }) => {
         if (bar1 >= 100) {
             setBar1(0);
             var dmg = playerCombat();
-            setEnemyHp(n => n - dmg);
+            setEnemyHp(enemyHp - dmg);
         }
 
         if (bar2 >= 100) {

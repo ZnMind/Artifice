@@ -583,7 +583,7 @@ small.save {
   right: 25%;
   /* margin-top: calc(100vh - 85vh - 20px); */
   background: #fff;
-  border-radius: 4px;
+  border-radius: 5px;
   padding: 20px;
   border: 1px solid #999;
   overflow: auto;
@@ -593,7 +593,9 @@ small.save {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background-image: radial-gradient(#343a40, black);
+  background-image: radial-gradient(#343a40, #282c34, black);
+  /* background-color: #282c34; */
+  box-shadow: 2px 3px 0.5em #000;
 }
 
 .close-icon {

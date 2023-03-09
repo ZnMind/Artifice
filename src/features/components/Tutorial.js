@@ -6,9 +6,9 @@ export function Tutorial({ status }) {
     const Page1 = () => {
         return (
             <>
+                <p>[ Tutorial ]</p>
                 <p>Welcome to Artifice!</p>
-                <p>[ Bank ]</p>
-                <p>This is where you can interact with all the items you have gathered in the game.</p>
+                <p>This is the [ Bank ] tab where you can interact with all the items you have gathered in the game.</p>
                 <p>Try equipping your Stone Pick for the next part of the tutorial!</p>
             </>
         )
@@ -18,7 +18,7 @@ export function Tutorial({ status }) {
         return (
             <>
                 <p>[ Mining ]</p>
-                <p>Now that you have your pick equipped try navigating to the [ Mining ] tab on the left</p>
+                <p>Now that you have your Pick equipped try navigating to the [ Mining ] tab on the left</p>
                 <p>and mining some Copper!</p>
                 <p>The speed is determined by how strong your tool is!</p>
             </>
@@ -41,7 +41,7 @@ export function Tutorial({ status }) {
             <>
                 <p>[ Artifice ]</p>
                 <p>The [ Artifice ] tab is where you make your gear even more powerful.</p>
-                <p>Try collecting 2 bars and upgrading the weapon you just made!</p>
+                <p>Try collecting 2 Bars and upgrading the weapon you just made!</p>
                 <p>There is no level cap, but cost scales quickly.</p>
             </>
         )
