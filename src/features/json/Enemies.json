@@ -138,9 +138,9 @@
         },
         "Bone King": {
             "Hp": 550,
-            "Attack": 35,
-            "Defense": 20,
-            "Strength": 52,
+            "Attack": 100,
+            "Defense": 50,
+            "Strength": 100,
             "Drops": {
                 "Normal Bones": [1, 1],
                 "Bone Knife": [0.1, 1],

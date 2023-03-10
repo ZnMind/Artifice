@@ -73,6 +73,14 @@
         "Axe": 35,
         "Pick": 35
     },
+    "Bone": {
+        "Bar": 25,
+        "Knife": 35,
+        "Sword": 35,
+        "Scimitar": 35,
+        "Axe": 35,
+        "Pick": 35
+    },
     "Alumite": {
         "Bar": 50,
         "Knife": 100,

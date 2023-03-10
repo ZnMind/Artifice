@@ -5,15 +5,18 @@ import { increment, decrement } from '../slices/bankSlice';
 import { equip, unequip } from '../slices/equipmentSlice';
 import Price from '../json/Pricing.json';
 import multipliers from '../json/Multipliers.json';
+//import { img, colorChange } from '../images/imageHelper';
 import '../../App.css';
 
 // Adding selection to each individual item
 const Item = ({ data, index, select }) => {
   const bank = useSelector(state => state.bank);
+  let type = data.split("+")[0].split(" ")[1];
 
   return (
     <div key={index} className='slot' onClick={select}>
       <small className='bank-text'>{`${data}`}</small>
+      {/* {img[type] ? <object className='color-svg' data={img[type]} alt='' height='30px' type='image/svg+xml'></object> : ""} */}
       <small className='bank-text'>{`${bank[data.split(" ")[0]][data.split(" ")[1]]}`}</small>
     </div>
   )
@@ -30,6 +33,7 @@ const Bank = () => {
   const [pricing, setPricing] = useState("");
   const [stats, setStats] = useState([]);
   const [amount, setAmount] = useState(1);
+  const [loading, setLoading] = useState(true);
   const [weaponArray] = useState(['Knife', 'Sword', 'Scimitar', 'Axe', 'Pick', 'Rod']);
   const [armorArray] = useState(['Helm', 'Chest', 'Gloves', 'Legs', 'Boots', 'Shield']);
 
@@ -86,7 +90,6 @@ const Bank = () => {
 
   const equipItem = () => {
     var type, currentEquip;
-    const weapons = ['Knife', 'Sword', 'Axe', 'Pick', 'Rod']
 
     if (weaponArray.some(element => select.includes(element))) {
       type = 'Weapon';
@@ -183,20 +186,18 @@ const Bank = () => {
   }, [bank]);
 
   useEffect(() => {
-    //if (inventory.length > 0) setSelect(inventory[0]);
-    /* if (inventory[0].split("+").length > 1) {
-      setPricing(Price[inventory[0].split(" ")[0]][inventory[0].split(" ")[1].split("+")[0]] * (1 + parseInt(inventory[0].split("+")[1])))
-    } else {
-      setPricing(Price[inventory[0].split(" ")[0]][inventory[0].split(" ")[1]]);
-    } */
-  }, [inventory]);
-
-  useEffect(() => {
     const gear = gearBonus();
     if (gear) setStats(gear);
     setAmount(1);
   }, [select, style]);
 
+  /* useEffect(() => {
+    setLoading(!loading);
+  }, [inventory]);
+
+  useEffect(() => {
+    colorChange();
+  }, [loading]) */
 
   return (
     <div>

@@ -28,7 +28,7 @@ export function Artifice() {
     // Setting materials and excluding certain keys for input options
     const [materialOptions] = useState(
         Object.keys(items).flatMap(element => {
-            if (element === 'Coins' || element === 'Stone' || element === 'Training') {
+            if (element === 'Coins' || element === 'Stone' || element === 'Training' || element === 'Bone') {
                 return [];
             }
             // Checking if materials actually have an enhanceable item
@@ -54,6 +54,7 @@ export function Artifice() {
         'Bronze': { 'exp': 40, 'req': multipliers['Requirements']['Bronze'], 'mat': 'Bar' },
         'Iron': { 'exp': 60, 'req': multipliers['Requirements']['Iron'], 'mat': 'Bar' },
         'Steel': { 'exp': 90, 'req': multipliers['Requirements']['Steel'], 'mat': 'Bar' },
+        'Bone': { 'exp': 100, 'req': multipliers['Requirements']['Bone'], 'mat': 'Bones' },
         'Alumite': { 'exp': 120, 'req': multipliers['Requirements']['Alumite'], 'mat': 'Bar' },
         'Dragon': { 'exp': 250, 'req': multipliers['Requirements']['Dragon'], 'mat': 'Bar' },
         'Normal': { 'exp': 15, 'req': multipliers['Requirements']['Normal'], 'mat': 'Plank' },
@@ -184,7 +185,7 @@ export function Artifice() {
                 <small>Level: {`${character[skill] === undefined ? 1 : character[skill].level}`}</small>
                 <small>Exp: {character[skill] === undefined ? `0 / 75` : `${character[skill].experience} / ${character[skill].next}`}</small>
 
-                <small>{material ? `${material} ${mat}: ${items[material] ? items[material][mat] ? items[material][mat] : 0 : 0}` : ""}</small>
+                <small>{material === 'Bone' ? `Normal Bones: ${items['Normal'][mat]}` : material ? `${material} ${mat}: ${items[material] ? items[material][mat] ? items[material][mat] : 0 : 0}` : ""}</small>
             </div>
 
             <div className={styles.row}>
@@ -223,7 +224,7 @@ export function Artifice() {
                             expTable[material] ?
                                 lvl >= expTable[material].req
                                     ? <button onClick={() => upgrade(material)} className={styles.button} id='tree'>Upgrade</button>
-                                    : <small style={{ color: 'lightslategray' }}>{`Required: ${expTable[material].req}`}</small>
+                                    : <small style={{ color: 'lightslategray', marginTop: '25px', marginBottom: '25px' }}>{`Required: ${expTable[material].req}`}</small>
                                 : ""
                         }
                     </div>
