@@ -39,10 +39,10 @@ export const ModScreen = () => {
             <div style={{ textAlign: 'center', marginBottom: '1em', color: 'lightslategray' }}>Weapon Speed</div>
             <div className='mod-box'>
                 <div className='mod-line'>
-                    <p>{`${weapon.Name}:`}</p>
+                    <p>{weapon.Name !== '' ? `${weapon.Name}:` : 'Fists:'}</p>
                 </div>
                 <div className='mod-line'>
-                    <p>{`${multipliers['Style'][weapon.Name.split("+")[0].split(" ")[1]]['Speed']} s`}</p>
+                    <p>{weapon.Name !== '' ? `${multipliers['Style'][weapon.Name.split("+")[0].split(" ")[1]]['Speed']} s` : `2 s`}</p>
                 </div>
             </div>
             <div style={{ textAlign: 'center', marginBottom: '1em', color: 'lightslategray' }}>Gather Speed</div>

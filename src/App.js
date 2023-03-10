@@ -171,7 +171,9 @@ const App = () => {
             <div className='buff-btn' style={{ borderRight: '1px solid black' }} onClick={() => setMod('skills')}>Skills</div>
             <div className='buff-btn' onClick={() => setMod('modifiers')}>Modifiers</div>
           </div>
-          <ModDisplay />
+          <ErrorBoundary>
+            <ModDisplay />
+          </ErrorBoundary>
         </div>
       </div>
       <div className='console'>
