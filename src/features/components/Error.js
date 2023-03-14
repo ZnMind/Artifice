@@ -10,14 +10,19 @@ class ErrorBoundary extends Component {
         let errorArea;
         // errorArea returns the first component the error is in
 
-        if (typeof error.stack === 'string') {
-            if (error.stack.split(">)").length > 1) {
-                errorArea = error.stack.split(">)")[1].split("(")[0];
-            } else {
-                errorArea = error.stack.split(")")[1].split("(")[0];
+        try {
+            if (typeof error.stack === 'string') {
+                if (error.stack.split(">)").length > 1) {
+                    errorArea = error.stack.split(">)")[1].split("(")[0];
+                } else {
+                    errorArea = error.stack.split(")")[1].split("(")[0];
+                }
             }
+        } catch (err) {
+            errorArea = '';
+            console.log("Something went wrong in ErrorBoundary :(");
         }
-        
+
         return { error: true, errorMessage: error.toString(), devInfo: errorArea };
     }
 

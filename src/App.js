@@ -38,20 +38,28 @@ const App = () => {
   const style = useSelector(state => state.combat.Style);
   const con = useSelector(state => state.console.console);
 
+  // Google Analytics
   const handleAnalytics = () => {
-    analytics.page();
-    const userData = analytics.user();
-    if (analytics.user('anonymousId')) {
-      const userId = analytics.user('anonymousId').split("-")[0];
-      if (!analytics.user('userId')) {
-        analytics.identify(userId);
+    try {
+      analytics.page();
+      const state = analytics.getState();
+
+      if (analytics.user('anonymousId')) {
+        const userId = analytics.user('anonymousId').split("-")[0];
+        if (!analytics.user('userId')) {
+          analytics.identify(userId);
+        }
       }
+
+      setGaState(state);
+      return state;
+    } catch (err) {
+      console.log("Something went wrong with ga :(", err);
     }
-    const state = analytics.getState();
-    setGaState(state);
   }
 
   const saveGame = () => {
+    analytics.page();
     window.localStorage.setItem('Screen', JSON.stringify(screen));
     store.subscribe(() => {
       saveState({
@@ -63,14 +71,21 @@ const App = () => {
     });
     dispatch(push(`Game Saved!~`))
 
-    if (gaState.user) {
-      analytics.track('gameSaved', {
-        user: gaState.user.userId
-      });
-    } else {
-      analytics.track('gameSaved');
+    try {
+      if (gaState.user) {
+        analytics.track('gameSaved', {
+          userId: gaState.user.userId
+        });
+      } else {
+        let context = handleAnalytics();
+        analytics.track('gameSaved', {
+          userId: context.user.userId
+        });
+      }
+    } catch (err) {
+      console.log("Something went wrong with ga :(", err);
     }
-  }
+  };
 
   const handleStyles = event => {
     dispatch(currentStyle(event.target.innerText));
@@ -104,9 +119,29 @@ const App = () => {
     if (status !== null) {
       setTutorial(JSON.parse(status));
     };
-    saveTimer.current = setTimeout(saveGame, 60000);
+    saveTimer.current = setInterval(saveGame, 60000);
     return () => clearInterval(saveTimer.current);
   }, []);
+
+  useEffect(() => {
+    try {
+      analytics.page();
+      if (gaState.user) {
+        analytics.track('changeScreen', {
+          userId: gaState.user.userId,
+          screen: screen
+        })
+      } else {
+        let context = handleAnalytics();
+        analytics.track('changeScreen', {
+          userId: context.user.userId,
+          screen: screen
+        })
+      }
+    } catch (err) {
+      console.log("Something went wrong with ga :(", err);
+    }
+  }, [screen, gaState.user]);
 
   const components = {
     'bank': Bank,
