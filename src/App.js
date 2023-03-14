@@ -21,6 +21,8 @@ import Equipment from './features/components/Equipment';
 import Adventure from './features/components/Adventure';
 import './App.css';
 
+import analytics from './features/components/Analytics';
+
 const App = () => {
   const dispatch = useDispatch();
   const saveTimer = useRef();
@@ -29,11 +31,25 @@ const App = () => {
   const [stats, setStats] = useState();
   const [about, setAbout] = useState(false);
   const [tutorial, setTutorial] = useState(true);
+  const [gaState, setGaState] = useState({});
 
   const character = useSelector(state => state.character);
   const equipment = useSelector(state => state.equipment);
   const style = useSelector(state => state.combat.Style);
   const con = useSelector(state => state.console.console);
+
+  const handleAnalytics = () => {
+    analytics.page();
+    const userData = analytics.user();
+    if (analytics.user('anonymousId')) {
+      const userId = analytics.user('anonymousId').split("-")[0];
+      if (!analytics.user('userId')) {
+        analytics.identify(userId);
+      }
+    }
+    const state = analytics.getState();
+    setGaState(state);
+  }
 
   const saveGame = () => {
     window.localStorage.setItem('Screen', JSON.stringify(screen));
@@ -46,6 +62,14 @@ const App = () => {
       });
     });
     dispatch(push(`Game Saved!~`))
+
+    if (gaState.user) {
+      analytics.track('gameSaved', {
+        user: gaState.user.userId
+      });
+    } else {
+      analytics.track('gameSaved');
+    }
   }
 
   const handleStyles = event => {
@@ -69,6 +93,9 @@ const App = () => {
   };
 
   useEffect(() => {
+    handleAnalytics();
+    calculateBonus();
+
     let data = window.localStorage.getItem('Screen');
     let status = window.localStorage.getItem('Tutorial');
     if (data !== null) {
@@ -77,13 +104,8 @@ const App = () => {
     if (status !== null) {
       setTutorial(JSON.parse(status));
     };
-
     saveTimer.current = setTimeout(saveGame, 60000);
     return () => clearInterval(saveTimer.current);
-  }, [])
-
-  useEffect(() => {
-    calculateBonus();
   }, []);
 
   const components = {
