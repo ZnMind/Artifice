@@ -15,6 +15,7 @@
 }
 
 .bank-header {
+  width: 100%;
   padding: 0.5em;
   border-bottom: 1px solid white;
 }
@@ -75,7 +76,6 @@
   margin-bottom: 2em;
   color: white;
   text-align: center;
-  min-height: 20vh;
   display: flex;
   flex-direction: column;
 }
@@ -115,6 +115,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   flex-wrap: nowrap;
   width: 40vw;
   margin: 0.25em;
@@ -194,7 +195,23 @@
 }
 
 .pbars {
-  min-width: 47.5vw;
+  width: 47.5vw;
+}
+
+#woodcutting-tab, #woodworking-tab, #mining-tab {
+  width: 47.5vw;
+  z-index: 100;
+}
+
+.background {
+  background-color: #282c34;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  min-width: 68vw;
+  min-height: 73vh;
+  border-radius: 5px;
 }
 
 .skill-container {
@@ -355,7 +372,7 @@ small.save {
 }
 
 .food {
-  width: 95%;
+  width: 450px;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -388,7 +405,7 @@ small.save {
   display: none;
 }
 
-.console-box::-webkit-scrollbar {
+.console-box::-webkit-scrollbar, .box::-webkit-scrollbar {
   display: none;
 }
 
@@ -398,6 +415,7 @@ small.save {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  align-items: center;
   border: 1px solid #000;
   margin: 0.25em;
   cursor: pointer;
@@ -448,7 +466,7 @@ small.save {
   padding-right: 6px;
   outline: none;
   border: 2px solid transparent;
-  color: rgb(0, 76, 182);
+  color: lightblue;
   padding-bottom: 2px;
   cursor: pointer;
   background-color: rgba(116, 85, 177, 0.1);
@@ -457,6 +475,7 @@ small.save {
   margin-right: 0.25em;
   margin-left: 0.25em;
   margin-bottom: 0.5em;
+  margin-top: 1em;
 }
 
 .equip-btn:hover,
@@ -468,14 +487,22 @@ small.save {
   background-color: rgba(0, 76, 182, 0.2);
 }
 
+.adventure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .adventure-container {
   display: flex;
   justify-content: space-around;
   min-width: 450px;
+  width: 450px;
 }
 
 .battle-area {
   display: flex;
+  width: 47.5vw;
   flex-direction: column;
   align-items: center;
 }
@@ -605,11 +632,11 @@ small.save {
   right: 17.5%;
   top: calc(100vh - 85vh - 20px);
   background: transparent;
-  width: 30px;
-  height: 30px;
-  line-height: 25px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
   text-align: center;
-  font-size: 25px;
+  font-size: 40px;
 }
 
 .close-tutorial {
@@ -619,9 +646,22 @@ small.save {
   right: 25%;
   top: 70vh;
   background: transparent;
-  width: 30px;
-  height: 30px;
-  line-height: 25px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
   text-align: center;
-  font-size: 25px;
+  font-size: 40px;
+}
+
+#bank-tab {
+  background-color: #282c34;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 68%;
+  min-height: 73%;
+  border-radius: 5px;
+  z-index: 100;
 }

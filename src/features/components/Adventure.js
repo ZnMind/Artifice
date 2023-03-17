@@ -306,7 +306,6 @@ const BattleArea = ({ zone, area }) => {
 
     return (
         <>
-            
             <div className='battle-area'>
                 <div className='battle-screen'>
                     <div className='left'>
@@ -419,7 +418,7 @@ const Adventure = () => {
     }, [currentArea])
 
     return (
-        <div>
+        <div className='adventure'>
             <h2>Adventure</h2>
             <div className='adventure-container'>
                 <Select

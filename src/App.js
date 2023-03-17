@@ -11,7 +11,7 @@ import { Artifice } from './features/skills/Artifice';
 import { Cooking } from './features/skills/Cooking';
 import { Skills } from './features/skills/Skills';
 import { ModScreen } from './features/skills/Skills';
-import { About } from './features/components/About';
+import { About, Changes } from './features/components/About';
 import { Tutorial } from './features/components/Tutorial';
 import ErrorBoundary from './features/components/Error';
 import { push } from './features/slices/consoleSlice';
@@ -23,12 +23,16 @@ import './App.css';
 
 import analytics from './features/components/Analytics';
 
+//const Bank = React.lazy(() => import('./features/components/Bank'));
+//const Equipment = React.lazy(() => import('./features/components/Equipment'));
+
 const App = () => {
   const dispatch = useDispatch();
   const saveTimer = useRef();
   const [screen, setScreen] = useState('bank');
   const [mod, setMod] = useState('skills');
   const [stats, setStats] = useState();
+  const [changes, setChanges] = useState(false);
   const [about, setAbout] = useState(false);
   const [tutorial, setTutorial] = useState(true);
   const [gaState, setGaState] = useState({});
@@ -107,6 +111,22 @@ const App = () => {
     setStats([atk, def, str])
   };
 
+  const handleScreen = (tab) => {
+    if (tab === 'bank') {
+      document.getElementById("bank-tab").style.zIndex = 300;
+    } else {
+      document.getElementById("bank-tab").style.zIndex = 100;
+    }
+    /* let selectedTab = document.getElementById(`${tab}-tab`);
+    let otherTab = document.getElementById(`${screen}-tab`);
+    console.log(tab);
+    console.log(selectedTab)
+    selectedTab.style.zIndex = 300;
+    otherTab.style.zIndex = 100; */
+
+    setScreen(tab);
+  };
+
   useEffect(() => {
     handleAnalytics();
     calculateBonus();
@@ -144,7 +164,7 @@ const App = () => {
   }, [screen, gaState.user]);
 
   const components = {
-    'bank': Bank,
+    'bank': Equipment,
     'equipment': Equipment,
     'adventure': Adventure,
     'woodcutting': Woodcutting,
@@ -161,28 +181,34 @@ const App = () => {
     'modifiers': ModScreen
   }
 
-  const Display = components[screen]
+  let Display = components[screen]
   const ModDisplay = modifiers[mod]
 
   return (
     <>
       <div className='header'><h2>Artifice</h2></div>
-      {about ?
-        <About
-          onClose={() => setAbout(!about)}
-          onOpen={() => setTutorial(!tutorial)}
-        />
-        : ""}
-      {tutorial ?
-        <Tutorial
-          status={handleTutorial}
-        />
-        : ""}
+      <ErrorBoundary>
+        {about ?
+          <About
+            onClose={() => setAbout(!about)}
+            onOpen={() => setTutorial(!tutorial)}
+          />
+          : ""}
+        {changes ?
+          <Changes
+            onClose={() => setChanges(!changes)}
+          />
+          : ""}
+        {tutorial ?
+          <Tutorial
+            status={handleTutorial}
+          />
+          : ""}
+      </ErrorBoundary>
       <div className='app-container'>
         <div className='navigate'>
           <div className='character'>
-            <p>Me</p>
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
+            {/* <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1em' }}>
               <div className='face'>
                 <div className='eyeline'>
                   <div className='eye'></div>
@@ -192,35 +218,41 @@ const App = () => {
                   <div className='mouth'></div>
                 </div>
               </div>
-            </div>
-            <small>{`Training Style: `}<b>{style}</b></small>
+            </div> */}
             {['Attack', 'Strength', 'Defense'].map((data, index) => (
               data === style
                 ? <div key={index} className='div-button' onClick={handleStyles} style={{ backgroundColor: 'lightgray' }}>{data}</div>
                 : <div key={index} className='div-button' onClick={handleStyles}>{data}</div>
             ))}
+            <small>{`Training Style: `}<b>{style}</b></small>
           </div>
-          <div className='div-button' onClick={() => setScreen('bank')}>Bank</div>
-          <div className='div-button' onClick={() => setScreen('equipment')}>Equipment</div>
-          <div className='div-button space' onClick={() => setScreen('adventure')}>Adventure</div>
+          <div className='div-button' onClick={() => handleScreen('bank')}>Bank</div>
+          <div className='div-button' onClick={() => handleScreen('equipment')}>Equipment</div>
+          <div className='div-button space' onClick={() => handleScreen('adventure')}>Adventure</div>
 
           {/* {Object.keys(components).map((data, index) =>(
-            <div className='div-button' onClick={() => setScreen('woodcutting')}>{`${data} (${character.Woodcutting.level})`}</div>
+            <div className='div-button' onClick={() => handleScreen('woodcutting')}>{`${data} (${character.Woodcutting.level})`}</div>
           ))} */}
-          <div className='div-button' onClick={() => setScreen('woodcutting')}>{`Woodcutting (${character.Woodcutting.level})`}</div>
-          <div className='div-button' onClick={() => setScreen('woodworking')}>{`Woodworking (${character.Woodworking.level})`}</div>
-          <div className='div-button' onClick={() => setScreen('mining')}>{`Mining (${character.Mining.level})`}</div>
-          <div className='div-button' onClick={() => setScreen('smithing')}>{`Smithing (${character.Smithing.level})`}</div>
-          <div className='div-button' onClick={() => setScreen('crafting')}>{`Crafting (${character.Crafting.level})`}</div>
-          <div className='div-button' onClick={() => setScreen('cooking')}>{`Cooking (${character.Cooking.level})`}</div>
-          <div className='div-button space' onClick={() => setScreen('artifice')}>{`Artifice (${character.Artifice.level})`}</div>
+          <div className='div-button' onClick={() => handleScreen('woodcutting')}>{`Woodcutting (${character.Woodcutting.level})`}</div>
+          <div className='div-button' onClick={() => handleScreen('woodworking')}>{`Woodworking (${character.Woodworking.level})`}</div>
+          <div className='div-button' onClick={() => handleScreen('mining')}>{`Mining (${character.Mining.level})`}</div>
+          <div className='div-button' onClick={() => handleScreen('smithing')}>{`Smithing (${character.Smithing.level})`}</div>
+          <div className='div-button' onClick={() => handleScreen('crafting')}>{`Crafting (${character.Crafting.level})`}</div>
+          <div className='div-button' onClick={() => handleScreen('cooking')}>{`Cooking (${character.Cooking.level})`}</div>
+          <div className='div-button space' onClick={() => handleScreen('artifice')}>{`Artifice (${character.Artifice.level})`}</div>
 
+          <div className='div-button' onClick={() => setChanges(!changes)}>{`Changelog`}</div>
           <div className='div-button' onClick={() => setAbout(!about)}>{`About`}</div>
 
         </div>
         <div className="App">
           <ErrorBoundary>
-            <Display />
+            <Bank />
+            <div className='background'>
+              {/* <Woodcutting />
+              <Woodworking /> */}
+              <Display />
+            </div>
           </ErrorBoundary>
         </div>
         <div className='skill-screen'>
@@ -239,7 +271,11 @@ const App = () => {
             <div key={index}>{data}</div>
           ))}
         </div>
-        <button onClick={saveGame} className='save'>Save</button>
+        <button
+          onClick={() => {
+            saveGame()
+          }}
+          className='save'>Save</button>
         <small className='save'>Autosave every 60s</small>
       </div>
     </>

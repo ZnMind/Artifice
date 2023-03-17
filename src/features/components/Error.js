@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import analytics from './Analytics';
 
 class ErrorBoundary extends Component {
     constructor(props) {
@@ -21,6 +22,16 @@ class ErrorBoundary extends Component {
         } catch (err) {
             errorArea = '';
             console.log("Something went wrong in ErrorBoundary :(");
+        }
+
+        // Sending error info to Google Analytics for me
+        try {
+            analytics.track('errorBoundary', {
+                error: error.toString(),
+                area: errorArea
+            });
+        } catch (err) {
+            console.log("Something went wrong with ga :(");
         }
 
         return { error: true, errorMessage: error.toString(), devInfo: errorArea };

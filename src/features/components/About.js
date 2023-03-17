@@ -20,8 +20,41 @@ export function About({ onClose, onOpen }) {
                     <p>Developer: DKP</p>
                     <p>Contact me: Dkp.Artifice@gmail.com</p>
                     <button onClick={onOpen}>Tutorial</button>
+                    <button style={{ marginTop: '0.5em' }}>Credits</button>
                 </div>
             </div >
         </>
     )
 }
+
+export function Changes({ onClose }) {
+    let version = ['0.1', '0.1.1', '0.2'];
+    let changeList = [
+        ['Released early access game on Reddit', '11 skills to train', 'Weapons and armor up to dragon', 'Enemies to fight up to dragon'],
+        ['Added Changelog', 'Made color/style changes consistent with feedback', 'QoL changes', 'Got rid of stupid smiley face'],
+        ['Added images to all items!', 'Dynamic coloring of images', 'Reworked the way some components load in preperation for reworking the Progress Bar to run while on seperate tabs']
+    ];
+    changeList = changeList.reverse();
+    return (
+        <>
+            < div className="modal-box" >
+                <div className="box" style={{ alignItems: 'flex-start', justifyContent: 'flex-start', top: '8vh', minHeight: '65vh', overflow: 'scroll' }}>
+                    <h4 style={{ width: '100%', textAlign: 'center', borderBottom: '1px solid #fff', paddingBottom: '0.5em' }}>Changelog</h4>
+                    <span className="close-icon" style={{ top: '8vh' }} onClick={onClose}>x</span>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                        {version.reverse().map((data, index) => (
+                            <div key={index}>
+                                <h4 style={{ marginTop: '1em' }}>{`Version - ${data}`}</h4>
+                                {changeList[index].map((data, index) => (
+                                    <ul key={index}>
+                                        <li>{data}</li>
+                                    </ul>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div >
+        </>
+    )
+};

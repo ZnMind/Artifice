@@ -121,8 +121,9 @@ export function Artifice() {
     // Adding experience && items when bar is full
     useEffect(() => {
         if (bar.now >= 100) {
+            let newItem;
             if (action.split("+").length > 1) {
-                var grade = action.split("+")[1];
+                let grade = action.split("+")[1];
                 dispatch(decrement({ material: material, item: action, amount: 1 }));
                 dispatch(decrement({ material: material, item: mat, amount: req }));
                 dispatch(increment({ material: material, item: `${action.split("+")[0]}+${parseInt(grade) + 1}`, amount: 1 }));
@@ -139,6 +140,7 @@ export function Artifice() {
                 dispatch(push(`You ran out of ${material} ${action}.~`));
             }
             setMaterial(material);
+            setAction()
             dispatch(gainExp({ skill: 'Artifice', amount: expTable[material]['exp'] * req }));
         }
     }, [bar]);

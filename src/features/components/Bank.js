@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { sell } from '../slices/bankSlice';
 import { increment, decrement } from '../slices/bankSlice';
 import { equip, unequip } from '../slices/equipmentSlice';
 import Price from '../json/Pricing.json';
 import multipliers from '../json/Multipliers.json';
-//import { img, colorChange } from '../images/imageHelper';
+import { img, colorChange, loadSelect } from '../images/imageHelper';
 import '../../App.css';
 
 // Adding selection to each individual item
@@ -16,7 +16,7 @@ const Item = ({ data, index, select }) => {
   return (
     <div key={index} className='slot' onClick={select}>
       <small className='bank-text'>{`${data}`}</small>
-      {/* {img[type] ? <object className='color-svg' data={img[type]} alt='' height='30px' type='image/svg+xml'></object> : ""} */}
+      {img[type] ? <object className='color-svg' data={img[type]} alt='' height='30px' width='30px' type='image/svg+xml' onLoad={colorChange}></object> : ""}
       <small className='bank-text'>{`${bank[data.split(" ")[0]][data.split(" ")[1]]}`}</small>
     </div>
   )
@@ -52,7 +52,7 @@ const Bank = () => {
   }
 
   const handleSelect = event => {
-    var item;
+    let item;
     if (event.target.children.length === 0) {
       item = event.target.parentElement.firstChild.innerText;
     } else {
@@ -125,6 +125,7 @@ const Bank = () => {
       }
     }
     setSelect("");
+    setTimeout(colorChange, 100);
   }
 
   const gearBonus = () => {
@@ -191,16 +192,12 @@ const Bank = () => {
     setAmount(1);
   }, [select, style]);
 
-  /* useEffect(() => {
-    setLoading(!loading);
-  }, [inventory]);
-
   useEffect(() => {
     colorChange();
-  }, [loading]) */
+  }, [equipment]);
 
   return (
-    <div>
+    <div id='bank-tab'>
       <h2 className='bank-header'>Bank</h2>
       <div className='exp'>
         <small>{`Coins: ${bank.Coins}`}</small>
@@ -224,26 +221,38 @@ const Bank = () => {
           select !== ""
             ? <div className='selected'>
               <div className='inner-selected'>
-                <small>{select}</small>
-                <p>{select ? bank[select.split(" ")[0]][select.split(" ")[1]] : ""}</p>
-                  {
-                    weaponArray.some(element => select.includes(element))
-                      ? <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <small>{`Attack: ${stats[0]}`}</small>
-                        <small>{`Strength: ${stats[1]}`}</small>
-                        {stats[2] ? <small style={{ marginTop: "1em" }}>{`Gathering: +${stats[2]}%`}</small> : ""}
-                      </div>
-                      : ""
-                  }
-                  {
-                    armorArray.some(element => select.includes(element))
-                      ? <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <small>{`Defense: ${stats[0]}`}</small>
-                      </div>
-                      : ""
-                  }
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <small style={{ marginBottom: '1em' }}>{select}</small>
+                  {img[select.split("+")[0].split(" ")[1]] ?
+                    <object
+                      className='color-svg second'
+                      data={img[select.split("+")[0].split(" ")[1]]}
+                      alt=''
+                      height='50px'
+                      type='image/svg+xml'
+                      onLoad={e => loadSelect(e.target)}
+                      ></object>
+                    : ""}
+                  <p style={{ marginTop: '0.5em' }}>{select ? bank[select.split(" ")[0]][select.split(" ")[1]] : ""}</p>
+                </div>
+                {
+                  weaponArray.some(element => select.includes(element))
+                    ? <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <small>{`Attack: ${stats[0]}`}</small>
+                      <small>{`Strength: ${stats[1]}`}</small>
+                      {stats[2] ? <small style={{ marginTop: "1em" }}>{`Gathering: +${stats[2]}%`}</small> : ""}
+                    </div>
+                    : ""
+                }
+                {
+                  armorArray.some(element => select.includes(element))
+                    ? <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <small>{`Defense: ${stats[0]}`}</small>
+                    </div>
+                    : ""
+                }
 
-                  <small style={{ display: 'block' }}>{`Price: ${pricing}`}</small>
+                <small style={{ display: 'block' }}>{`Price: ${pricing}`}</small>
                 {/* Equip Button */}
                 {
                   weaponArray.some(element => select.includes(element))
@@ -264,14 +273,14 @@ const Bank = () => {
                 {/* Sell Button */}
                 <button className='equip-btn' onClick={sellItem}>Sell</button>
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '0.5em', marginBottom: '0.5em' }}>
-                <input
-                  value={amount}
-                  onChange={handleAmount}
-                  type="number"
-                  min={1}
-                  max={bank[select.split(" ")[0]][select.split(" ")[1]]}
-                  style={{ textAlign: 'center', borderRadius: '5px' }}
-                />
+                  <input
+                    value={amount}
+                    onChange={handleAmount}
+                    type="number"
+                    min={1}
+                    max={bank[select.split(" ")[0]][select.split(" ")[1]]}
+                    style={{ textAlign: 'center', borderRadius: '5px' }}
+                  />
                 </div>
               </div>
             </div>
