@@ -6,6 +6,7 @@ export function About({ onClose, onOpen }) {
     const dispatch = useDispatch();
     const select = useSelector(state => state.entities)
     const [data, setData] = useState();
+    const [credits, setCredits] = useState(false);
 
     useEffect(() => {
         //dispatch(fetchTodos());
@@ -20,7 +21,12 @@ export function About({ onClose, onOpen }) {
                     <p>Developer: DKP</p>
                     <p>Contact me: Dkp.Artifice@gmail.com</p>
                     <button onClick={onOpen}>Tutorial</button>
-                    <button style={{ marginTop: '0.5em' }}>Credits</button>
+                    <button style={{ marginTop: '0.5em', marginBottom: '0.5em' }} onClick={() => setCredits(!credits)}>Credits</button>
+                    {credits
+                        ? <p>Icons are provided under CC-BY license. All credit goes to the authors at
+                            <a href='https://game-icons.net/' target='_blank' rel='noreferrer' style={{ marginLeft: '0.5em', textDecoration: 'none' }}>Game-Icons</a>
+                        </p>
+                        : ""}
                 </div>
             </div >
         </>
