@@ -30,8 +30,8 @@ export function Tutorial({ status }) {
             <>
                 <p>[ Smithing ]</p>
                 <p>On the [ Smithing ] tab try smithing a Copper Bar with the ore you just gathered.</p>
-                <p>Once you have your bar you can then select your very first weapon</p>
-                <p>or tool to smith!</p>
+                <p>Once you have your bar, try smithing a Copper Knife.</p>
+                <p>This will be your first weapon!</p>
             </>
         )
     }
@@ -62,7 +62,7 @@ export function Tutorial({ status }) {
         return (
             <>
                 <p>[ Adventure ]</p>
-                <p>The adventure tab is where you can kill monsters for loot.</p>
+                <p>The [ Adventure ] tab is where you can kill monsters for loot.</p>
                 <p>There is a special place called the Grove where animals drop hides</p>
                 <p>which can be crafted into armor and upgraded the same as weapons!</p>
             </>
