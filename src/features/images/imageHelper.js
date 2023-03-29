@@ -25,6 +25,7 @@ import Boar from './Meat.svg';
 import Bear from './Meat.svg';
 import Croc from './Meat.svg';
 import Grizzly from './Meat.svg';
+import Scale from './Scale.svg';
 
 const colors = {
     Training: '#fff',
@@ -33,6 +34,7 @@ const colors = {
     Tin: '#638DA5',
     Bronze: '#8B4E18',
     Iron: '#4A4A4A',
+    Coal: '#2D3B1E',
     Steel: '#8C8CB0',
     Alumite: '#FC88FC',
     Bone: '#FFF2DC',
@@ -81,10 +83,9 @@ export const img = {
     Boar,
     Bear,
     Croc,
-    Grizzly
+    Grizzly,
+    Scale
 }
-
-//let svgColors = {};
 
 export const colorChange = () => {
     if (document.getElementsByClassName('color-svg').length > 0) {

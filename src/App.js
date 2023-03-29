@@ -139,6 +139,11 @@ const App = () => {
     if (status !== null) {
       setTutorial(JSON.parse(status));
     };
+    /* if (status === false) {
+      document.getElementById("bank-tab").style.zIndex = 300;
+    } else {
+      document.getElementById("bank-tab").style.zIndex = 100;
+    }; */
     saveTimer.current = setInterval(saveGame, 60000);
     return () => clearInterval(saveTimer.current);
   }, []);

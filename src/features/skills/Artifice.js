@@ -100,9 +100,12 @@ export function Artifice() {
 
     useEffect(() => {
         if (itemOptions) {
-            setAction(itemOptions[0])
-        } else {
-            setAction("");
+            if (action === "") {
+                setAction(itemOptions[0])
+            }
+            if (!itemOptions.some(element => element === action)) {
+                setAction(itemOptions[0])
+            }
         }
     }, [itemOptions]);
 
@@ -128,11 +131,13 @@ export function Artifice() {
                 dispatch(decrement({ material: material, item: mat, amount: req }));
                 dispatch(increment({ material: material, item: `${action.split("+")[0]}+${parseInt(grade) + 1}`, amount: 1 }));
                 dispatch(push(`Upgraded to ${material} ${action.split("+")[0]}+${parseInt(grade) + 1}! Amount: ${items[material] ? items[material][action] ? items[material][action] : 1 : 1}~`));
+                setAction(`${action.split("+")[0]}+${parseInt(grade) + 1}`)
             } else {
                 dispatch(decrement({ material: material, item: action, amount: 1 }));
                 dispatch(decrement({ material: material, item: mat, amount: req }));
                 dispatch(increment({ material: material, item: `${action}+1`, amount: 1 }));
                 dispatch(push(`Upgraded to ${material} ${action}+1! Amount: ${items[material] ? items[material][action] ? items[material][action] : 1 : 1}~`));
+                setAction(`${action}+1`)
             }
             // Stopping progress if out of materials
             if (items[material][action] <= 1 || items[material][mat] < req) {
@@ -140,7 +145,6 @@ export function Artifice() {
                 dispatch(push(`You ran out of ${material} ${action}.~`));
             }
             setMaterial(material);
-            setAction()
             dispatch(gainExp({ skill: 'Artifice', amount: expTable[material]['exp'] * req }));
         }
     }, [bar]);

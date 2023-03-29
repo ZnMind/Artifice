@@ -42,7 +42,7 @@ const Bank = () => {
     return Object.keys(bank).map(key => {
       // Array.prototype.flatMap is a way to add or remove items during a map
       return Object.keys(bank[key]).flatMap(k => {
-        if (bank[key][k] > 0) {
+        if (bank[key][k] > 0 && k !== 'undefined') {
           var temp = `${key} ${k}`
           return temp;
         }

@@ -34,11 +34,12 @@ export function About({ onClose, onOpen }) {
 }
 
 export function Changes({ onClose }) {
-    let version = ['0.1', '0.1.1', '0.2'];
+    let version = ['0.1', '0.1.1', '0.2', '0.2.1'];
     let changeList = [
         ['Released early access game on Reddit', '11 skills to train', 'Weapons and armor up to dragon', 'Enemies to fight up to dragon'],
         ['Added Changelog', 'Made color/style changes consistent with feedback', 'QoL changes', 'Got rid of stupid smiley face'],
-        ['Added images to all items!', 'Dynamic coloring of images', 'Reworked the way some components load in preperation for reworking the Progress Bar to run while on seperate tabs']
+        ['Added images to all items!', 'Dynamic coloring of images', 'Reworked the way some components load in preperation for reworking the Progress Bar to run while on seperate tabs'],
+        ['Fixed bug with smithing Dragon Scales', 'Artifice now stays on the same item when upgrading to make it easier', 'General bug fixes']
     ];
     changeList = changeList.reverse();
     return (

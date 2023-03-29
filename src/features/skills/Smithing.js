@@ -28,7 +28,7 @@ export function Smithing() {
         'Bronze': { 'exp': 40, 'req': 10, 'ore': { 'Copper Ore': 1, 'Tin Ore': 1 } },
         'Iron': { 'exp': 60, 'req': 20, 'ore': { 'Iron Ore': 1 } },
         'Steel': { 'exp': 90, 'req': 30, 'ore': { 'Iron Ore': 1, 'Coal': 1 } },
-        'Alumite': { 'exp': 150, 'req': 40, 'ore': { 'Alumite': 1, 'Iron Ore': 2, 'Coal': 2 } },
+        'Alumite': { 'exp': 150, 'req': 40, 'ore': { 'Alumite': 1, 'Iron Ore': 1, 'Coal': 1 } },
         'Dragon': { 'exp': 250, 'req': 60, 'ore': { 'Dragon Scale': 1 } },
     });
 
@@ -44,11 +44,18 @@ export function Smithing() {
         if (bar.now >= 100) {
             // Stopping progress if out of materials
             if (action === 'Bar') {
+                var mat;
+                /* REWORK THIS FOR DRAGON */
+                if (material === 'Dragon') {
+                    mat = 'Scale';
+                } else {
+                    mat = 'Ore'
+                }
                 var matReqs = Object.keys(expTable[material].ore);
                 for (let i = 0; i < matReqs.length; i++) {
                     var metal = matReqs[i].split(" ")[0];
-                    dispatch(decrement({ material: metal, item: 'Ore', amount: 1 }));
-                    if (items[metal]['Ore'] <= 1) {
+                    dispatch(decrement({ material: metal, item: mat, amount: 1 }));
+                    if (items[metal][mat] <= 1) {
                         setProgress('');
                         dispatch(push(`You ran out of ${metal} Ore.~`));
                     }
@@ -85,13 +92,21 @@ export function Smithing() {
     // Setting time for progress bar to fill
     const smith = type => {
         var materialCheck = [];
+        var mat, matU;
 
         if (action === 'Bar') {
-
+            console.log(material);
+            console.log(action);
+            if (material === 'Dragon') {
+                mat = 'Scale';
+            } else {
+                mat = 'Ore';
+            }
+            console.log(mat)
             Object.keys(expTable[type]['ore']).forEach(i => {
                 if (items[i.split(" ")[0]]) {
                     //if (items[i.split(" ")[0]]['Ore']) {
-                    if (items[i.split(" ")[0]]['Ore'] >= expTable[type]['ore'][i]) {
+                    if (items[i.split(" ")[0]][mat] >= expTable[type]['ore'][i]) {
                         materialCheck.push(true);
                     } else {
                         materialCheck.push(false);
@@ -141,20 +156,22 @@ export function Smithing() {
                 <small>Level: {`${character[skill] === undefined ? 1 : character[skill].level}`}</small>
                 <small>Exp: {character[skill] === undefined ? `0 / 75` : `${character[skill].experience} / ${character[skill].next}`}</small>
                 <div className='sm-container'>
-                    <div className={`arrow ${page === 1 ? 'disabled' : 'arrow-left'}`} style={{marginRight: '0.5em'}} onClick={() => setPage(page - 1)}></div>
+                    <div className={`arrow ${page === 1 ? 'disabled' : 'arrow-left'}`} style={{ marginRight: '0.5em' }} onClick={() => setPage(page - 1)}></div>
                     {Object.keys(expTable).slice(page * 4 - 4, page * 4).map((data, index) => (
-                        <button key={index} className={styles.button} style={{marginTop: '0'}} onClick={() => setMaterial(data)}>{data}</button>
+                        <button key={index} className={styles.button} style={{ marginTop: '0' }} onClick={() => setMaterial(data)}>{data}</button>
                     ))}
-                    <div className={`arrow ${page === 2 ? 'disabled' : 'arrow-right'}`} style={{marginLeft: '0.5em'}} onClick={() => setPage(page + 1)}></div>
+                    <div className={`arrow ${page === 2 ? 'disabled' : 'arrow-right'}`} style={{ marginLeft: '0.5em' }} onClick={() => setPage(page + 1)}></div>
                 </div>
 
                 {
-                    action === 'Bar'
-                        ? Object.keys(expTable[material]['ore']).map((d, i) => (
+                    action === 'Bar' ?
+                        Object.keys(expTable[material]['ore']).map((d, i) => (
                             <small key={i}>
                                 {
                                     items[d.split(" ")[0]]
-                                        ? `${d}: ${items[d.split(" ")[0]]['Ore']}`
+                                        ? d.split(" ")[0] === 'Dragon'
+                                            ? `${d}: ${items[d.split(" ")[0]]['Scale']}`
+                                            : `${d}: ${items[d.split(" ")[0]]['Ore']}`
                                         : `${d}: 0`
                                 }
                             </small>

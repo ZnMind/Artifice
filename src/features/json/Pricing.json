@@ -105,7 +105,8 @@
         "Chest": 10,
         "Gloves": 10,
         "Legs": 10,
-        "Boots": 10
+        "Boots": 10,
+        "Antlers": 25
     },
     "Boar": {
         "Hide": 5,
@@ -114,7 +115,8 @@
         "Chest": 20,
         "Gloves": 20,
         "Legs": 20,
-        "Boots": 20
+        "Boots": 20,
+        "Tusk": 50
     },
     "Bear": {
         "Hide": 10,
@@ -123,7 +125,8 @@
         "Chest": 25,
         "Gloves": 25,
         "Legs": 25,
-        "Boots": 25
+        "Boots": 25,
+        "Claw": 60
     },
     "Croc": {
         "Hide": 15,
@@ -132,7 +135,8 @@
         "Chest": 35,
         "Gloves": 35,
         "Legs": 35,
-        "Boots": 35
+        "Boots": 35,
+        "Claw": 75
     },
     "Grizzly": {
         "Hide": 20,
@@ -141,7 +145,8 @@
         "Chest": 50,
         "Gloves": 50,
         "Legs": 50,
-        "Boots": 50
+        "Boots": 50,
+        "Claw": 125
     },
     "Dragon": {
         "Bones": 50,
@@ -177,5 +182,8 @@
         "Bear": 20,
         "Croc": 50,
         "Grizzly": 100
+    },
+    "Ectoplasm": {
+        "Goo": 15
     }
 }
