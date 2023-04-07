@@ -92,7 +92,12 @@ export const colorChange = () => {
         let slots = document.getElementsByClassName('color-svg');
         for (let i = 0; i < slots.length; i++) {
             let item = slots[i].parentElement.firstChild.innerText;
+            console.log(slots[i].contentDocument)
             let svg = slots[i].contentDocument;
+            if (svg === null) {
+                setTimeout(colorChange, 50);
+                return;
+            }
             let att = svg.querySelectorAll("path[fill='#fff']");
             if (item === 'Normal Bones' || item === 'Normal Feathers') {
                 item = 'Bone Bones'
@@ -105,7 +110,7 @@ export const colorChange = () => {
             }
         }
     } else {
-        //setTimeout(colorChange, 10)
+        setTimeout(colorChange, 10)
     }
 }
 

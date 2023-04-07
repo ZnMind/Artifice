@@ -9,11 +9,11 @@ export const initialSkills = {
     Woodworking: { level: 1, experience: 0, last: 0, next: 75 },
     Mining: { level: 1, experience: 0, last: 0, next: 75 },
     Smithing: { level: 1, experience: 0, last: 0, next: 75 },
+    Crafting: { level: 1, experience: 0, last: 0, next: 75 },
     Fishing: { level: 1, experience: 0, last: 0, next: 75 },
     Cooking: { level: 1, experience: 0, last: 0, next: 75 },
     Artifice: { level: 1, experience: 0, last: 0, next: 75 },
     Lapidary: { level: 1, experience: 0, last: 0, next: 75 },
-    Crafting: { level: 1, experience: 0, last: 0, next: 75 },
 };
 
 const characterSlice = createSlice({

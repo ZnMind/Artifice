@@ -279,7 +279,7 @@ const Bank = () => {
                     type="number"
                     min={1}
                     max={bank[select.split(" ")[0]][select.split(" ")[1]]}
-                    style={{ textAlign: 'center', borderRadius: '5px' }}
+                    style={{ textAlign: 'center', borderRadius: '5px', maxWidth: '50%' }}
                   />
                 </div>
               </div>
